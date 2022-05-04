@@ -1,6 +1,7 @@
 // pages/products.js
 import commerce from "../lib/commerce";
 import ProductList from "../components/ProductList";
+import React from 'react';
 
 export async function getStaticProps() {
   const { data: products } = await commerce.products.list();
