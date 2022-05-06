@@ -12,6 +12,7 @@ export default function ProductList({ products }) {
         <div key={product.permalink}>
           <Link href={`/products/${product.permalink}`}>
             <a>
+              {/* {console.log(product)} */}
               <Product {...product} />
             </a>
           </Link>

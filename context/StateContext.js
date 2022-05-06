@@ -6,9 +6,7 @@ export const StateContext = ({children}) => {
     const [categories, setCategories] = useState([]);
 
     const getCategories = async () => {
-        commerce.categories.list().then(categories => setCategories(categories.data))
-        
-        
+        commerce.categories.list().then(categories => setCategories(categories.data))  
     }
 
     useEffect(() => {
