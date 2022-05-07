@@ -42,6 +42,7 @@ export default function ProductPage({ product }) {
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
 
+
   const addToCart = () => {
     commerce.cart.add(product.id).then(({cart}) => setCart(cart))
 
@@ -55,37 +56,47 @@ export default function ProductPage({ product }) {
     })  
   }
   const getOptions = async () => {
-    const colors = [];
-    const sizes = [];
+    const colorsArr = [];
+    const sizesArr = [];
+    
+    let color = {};
+    let size = {};
+
+    // [{size,color},...,{}] 
+    // [{ id: option.id, color/size: option.name },{},...,{}]
+
     product.variant_groups.map((details) => {
       //console.log(details);
       if(details.name == 'Color'){
         details.options.map((option) => {
-          colors.push(option.name);
-          
+          color.id = option.id;
+          color.color = option.name;
+          colorsArr.push(color);
+          color = {};
         })
       } else if(details.name == 'Size'){
         details.options.map((option) => {
-          sizes.push(option.name);
-          
+          size.id = option.id;
+          size.size = option.name;
+          sizesArr.push(size);
+          size = {};
         })
       }
     })
-    setSizes(sizes);
-    setColors(colors);
-
-
+    setSizes(sizesArr);
+    setColors(colorsArr);
   }
   useEffect(()=>{
     getVariants()
     getOptions()
-  },[])
+    console.log(sizes);
+    console.log(colors);
+  },[]);
 
   //console.log(variants);
-
   return (
     <React.Fragment>
-      {console.log(product)}
+      {/* {console.log(product)} */}
       <div className='product-detail-container'>
         <div className='image-container'>
           <img src={product.image.url} className="product-detail-image"/>         
@@ -93,14 +104,17 @@ export default function ProductPage({ product }) {
         <h1>{product.name}</h1>
         <p>{product.price.formatted_with_symbol}</p>
         <div>
-          {}
           {sizes.map((size) => (
-              <p>{size}</p>
+            <span>
+              <label><input type='radio' name='size' value={size.id} onChange=''/>&nbsp;{size.size}&nbsp;</label>
+            </span>
           ))}
         </div>
         <div>
           {colors.map((color) => (
-              <p>{color}</p>
+              <span>
+              <label><input type='radio' name='color' value={color.id} />&nbsp;{color.color}&nbsp;</label>
+            </span>
           ))}
         </div>
         <button onClick={addToCart}>Add to Cart</button>
