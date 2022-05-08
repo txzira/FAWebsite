@@ -16,7 +16,7 @@ function CartItem({ id, name, quantity, line_total, image }) {
     }
 
     const incrementQuantity = () => commerce.cart.update(id, {quantity: quantity + 1}).then(handleUpdateCart);
-
+    console.log(image);
 
     return (
         <div>
@@ -28,7 +28,7 @@ function CartItem({ id, name, quantity, line_total, image }) {
                 <button onClick={decrementQuantity}>-</button>
                 <button onClick={incrementQuantity}>+</button>
             </div>
-            <button onClick={removeItem}></button>
+            <button onClick={removeItem}>&times;</button>
         </div>
     )
 }

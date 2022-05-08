@@ -582,6 +582,21 @@ span.text-red {
   display: flex;
   gap: 30px;
 }
+.product-detail-desc .buttons .button{
+  width : 200px;
+  height: 200px;
+}
+
+input[type='radio'] {
+  display:none;
+}
+input[type="radio"]:checked + label {
+  border: solid 3px green;
+}
+ 
+.product-detail-desc .label {
+  border: solid 1px red;
+}
 
 .buttons .add-to-cart {
   padding: 10px 20px;

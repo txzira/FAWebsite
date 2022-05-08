@@ -1,18 +1,13 @@
 // pages/products/[permalink].js
 import commerce from "../../lib/commerce";
 import React, { useState, useEffect } from 'react';
-import { useCartDispatch } from "../../context/cart";
+import ProductDetail from "../../components/ProductDetail";
 
 export async function getStaticProps({ params }) {
   const { permalink } = params;
-  
-
   const product = await commerce.products.retrieve(permalink, {
     type: 'permalink',
   });
-
-
-
   return {
     props: {
       product,
@@ -34,27 +29,23 @@ export async function getStaticPaths() {
 }
 
 
-
-export default function ProductPage({ product }) {
-  
-  const {setCart} = useCartDispatch();
-  const [variants, setVariants] = useState([]);
+export default function ProductPage({ product }) {  
+  const [sizeOptionKey, setSizeOptionKey] = useState(null);
+  const [colorOptionKey, setColorOptionKey] = useState(null);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
 
 
-  const addToCart = () => {
-    commerce.cart.add(product.id).then(({cart}) => setCart(cart))
+  useEffect(()=>{
+    getOptions()
+  },[]);
 
-  }
+  // const getVariants = async () => {
+  //   commerce.products.getVariants(product.id,{limit:150}).then(variants => {
 
-  const getVariants = async () => {
-    commerce.products.getVariants(product.id,{limit:150}).then(variants => {
-      //console.log(variants)
-      setVariants(variants.data);
-      
-    })  
-  }
+  //     setVariants(variants.data);
+  //   })  
+  // }
   const getOptions = async () => {
     const colorsArr = [];
     const sizesArr = [];
@@ -62,23 +53,24 @@ export default function ProductPage({ product }) {
     let color = {};
     let size = {};
 
-    // [{size,color},...,{}] 
-    // [{ id: option.id, color/size: option.name },{},...,{}]
-
     product.variant_groups.map((details) => {
-      //console.log(details);
       if(details.name == 'Color'){
+        setColorOptionKey(details.id);
         details.options.map((option) => {
           color.id = option.id;
-          color.color = option.name;
+          color.name = option.name;
+          color.assets = option.assets;
           colorsArr.push(color);
+          // [{ id: option.id, color: option.name, assets: [option.assets] },{},...,{}]
           color = {};
         })
       } else if(details.name == 'Size'){
+        setSizeOptionKey(details.id);
         details.options.map((option) => {
           size.id = option.id;
-          size.size = option.name;
+          size.name = option.name;
           sizesArr.push(size);
+          // [{ id: option.id, size: option.name },{},...,{}]
           size = {};
         })
       }
@@ -86,40 +78,11 @@ export default function ProductPage({ product }) {
     setSizes(sizesArr);
     setColors(colorsArr);
   }
-  useEffect(()=>{
-    getVariants()
-    getOptions()
-    console.log(sizes);
-    console.log(colors);
-  },[]);
 
-  //console.log(variants);
+
   return (
     <React.Fragment>
-      {/* {console.log(product)} */}
-      <div className='product-detail-container'>
-        <div className='image-container'>
-          <img src={product.image.url} className="product-detail-image"/>         
-        </div>
-        <h1>{product.name}</h1>
-        <p>{product.price.formatted_with_symbol}</p>
-        <div>
-          {sizes.map((size) => (
-            <span>
-              <label><input type='radio' name='size' value={size.id} onChange=''/>&nbsp;{size.size}&nbsp;</label>
-            </span>
-          ))}
-        </div>
-        <div>
-          {colors.map((color) => (
-              <span>
-              <label><input type='radio' name='color' value={color.id} />&nbsp;{color.color}&nbsp;</label>
-            </span>
-          ))}
-        </div>
-        <button onClick={addToCart}>Add to Cart</button>
-        
-      </div>
+      <ProductDetail product={product} colors={colors} sizes={sizes} sizeOptionKey={sizeOptionKey} colorOptionKey={colorOptionKey} />
     </React.Fragment>
   );
 }
