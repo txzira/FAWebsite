@@ -1,8 +1,10 @@
 import { useCartDispatch, useCartState } from '../context/cart';
+import { AiOutlineMinus, AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
+
 
 import commerce from '../lib/commerce';
 
-function CartItem({ id, name, quantity, line_total, image }) {
+function CartItem({ id, name, quantity, line_total, image, selected_options }) {
     const { setCart } = useCartDispatch();
     
     const handleUpdateCart = ({cart}) => setCart(cart);
@@ -20,15 +22,22 @@ function CartItem({ id, name, quantity, line_total, image }) {
 
     return (
         <div>
-            <p>{name}</p>
+            <h4>{name}</h4>
+            {selected_options.map((option) => 
+                <p>{option.option_name}</p>
+            )
+
+            }
             <img src={image.url}/>
-            <p>{quantity}</p>
             <p>{line_total.formatted_with_symbol}</p>
-            <div>
-                <button onClick={decrementQuantity}>-</button>
-                <button onClick={incrementQuantity}>+</button>
+            <div className='quantity'>
+                <p className='quantity-desc'>
+                    <span className='minus' onClick={decrementQuantity}><AiOutlineMinus/></span>
+                    <span className='num'>{quantity}</span>
+                    <span className='plus' onClick={incrementQuantity}><AiOutlinePlus/></span>
+                    <span className='remove' onClick={removeItem}><AiOutlineCloseCircle size={16}/></span>
+                </p>
             </div>
-            <button onClick={removeItem}>&times;</button>
         </div>
     )
 }

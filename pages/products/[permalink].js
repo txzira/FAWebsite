@@ -8,6 +8,8 @@ export async function getStaticProps({ params }) {
   const product = await commerce.products.retrieve(permalink, {
     type: 'permalink',
   });
+
+
   return {
     props: {
       product,
@@ -40,13 +42,7 @@ export default function ProductPage({ product }) {
     getOptions()
   },[]);
 
-  // const getVariants = async () => {
-  //   commerce.products.getVariants(product.id,{limit:150}).then(variants => {
-
-  //     setVariants(variants.data);
-  //   })  
-  // }
-  const getOptions = async () => {
+  const getOptions = () => {
     const colorsArr = [];
     const sizesArr = [];
     

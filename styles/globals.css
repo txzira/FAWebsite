@@ -583,8 +583,8 @@ span.text-red {
   gap: 30px;
 }
 .product-detail-desc .buttons .button{
-  width : 200px;
-  height: 200px;
+  width : 100px;
+  height: 100px;
 }
 
 input[type='radio'] {
@@ -649,15 +649,23 @@ input[type="radio"]:checked + label {
 .quantity-desc .minus {
   border-right: 1px solid gray;
   color: #f02d34;
+  vertical-align: middle;
 }
 
 .quantity-desc .num {
   border-right: 1px solid gray;
   font-size: 20px;
+  vertical-align: middle;
 }
+.quantity-desc .remove {
+  color: #f02d34;
+  margin:auto;
+  vertical-align: middle;
 
+}
 .quantity-desc .plus {
   color: rgb(49, 168, 49);
+  vertical-align: middle;
 
 }
 
