@@ -42,7 +42,7 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
   }
   const getAssets = async () => {
     if (colors.length == 0) return;
-    const response = await fetch('/api/assets', {
+    const response = await fetch('/api/commercejs/assets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

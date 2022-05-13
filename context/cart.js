@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext, useEffect } from "react";
+import { createContext, useReducer, useContext, useEffect, useState } from "react";
 import commerce from '../lib/commerce';
 const CartStateContext = createContext();
 const CartDispatchContext = createContext();
@@ -32,7 +32,7 @@ export const CartProvider = ({children}) => {
         try {
             const cart = await commerce.cart.retrieve();
             setCart(cart);
-            
+
         } catch (err) {
             console.log(err);
         }

@@ -4,7 +4,7 @@ const Context = createContext();
 
 export const StateContext = ({children}) => {
     const [categories, setCategories] = useState([]);
-
+    const [showCart, setShowCart] = useState(false);
     const getCategories = async () => {
         commerce.categories.list().then(categories => setCategories(categories.data))  
     }
@@ -14,7 +14,10 @@ export const StateContext = ({children}) => {
     },[]);
     return (
         <Context.Provider value={{
-            categories
+            categories,
+            showCart,
+            setShowCart
+            
         }}>
             {children}
         </Context.Provider>

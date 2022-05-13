@@ -1,5 +1,6 @@
 import { useCartDispatch, useCartState } from '../context/cart';
 import { AiOutlineMinus, AiOutlinePlus, AiOutlineCloseCircle } from 'react-icons/ai';
+import Link from 'next/link';
 
 
 import commerce from '../lib/commerce';
@@ -43,7 +44,7 @@ function CartItem({ id, name, quantity, line_total, image, selected_options }) {
 }
 
 export default function CartPage() {
-    const {line_items, subtotal} = useCartState();
+    const {line_items, subtotal, id} = useCartState();
     console.log(line_items)
     const isEmpty = line_items.length === 0;
 
@@ -52,9 +53,11 @@ export default function CartPage() {
     return(
         <div>
             <h1>Cart</h1>
+            
             {line_items.map(item => <CartItem key={item.id} {...item}/>)}
             <hr />
             <p><strong>Sub total: </strong> {subtotal.formatted_with_symbol}</p>
+            <Link href={`/checkout/${id}`}>Hello </Link>
         </div>
     )
 }

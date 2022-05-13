@@ -9,7 +9,6 @@ export async function getStaticProps({ params }) {
     type: 'permalink',
   });
 
-
   return {
     props: {
       product,
@@ -30,13 +29,11 @@ export async function getStaticPaths() {
   };
 }
 
-
 export default function ProductPage({ product }) {  
   const [sizeOptionKey, setSizeOptionKey] = useState(null);
   const [colorOptionKey, setColorOptionKey] = useState(null);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
-
 
   useEffect(()=>{
     getOptions()
@@ -74,7 +71,6 @@ export default function ProductPage({ product }) {
     setSizes(sizesArr);
     setColors(colorsArr);
   }
-
 
   return (
     <React.Fragment>
