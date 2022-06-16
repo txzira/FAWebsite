@@ -3,7 +3,7 @@ import commerce from "../lib/commerce";
 import React, { useEffect, useState } from 'react';
 import { useCartDispatch } from "../context/cart";
 
-import { AiOutlineMinus, AiOutlinePlus} from 'react-icons/ai';
+import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
 export default function ProductDetail({ product, colors, sizes, sizeOptionKey, colorOptionKey }) {
   const { setCart } = useCartDispatch();
@@ -21,8 +21,8 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
   }
   const decQty = () => {
     setQty((prevQty) => {
-        if(prevQty - 1 < 1) return 1;
-        return prevQty - 1; 
+      if (prevQty - 1 < 1) return 1;
+      return prevQty - 1;
     });
   }
   const changeSize = (event) => {
@@ -89,9 +89,9 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
           <h1>{product.name}</h1>
           <h4>Details:</h4>
           <p className='price'>{product.price.formatted_with_symbol}</p>
-          
+
           <br />
-          
+
           <h1>Color:</h1>
           <div className='small-images-container'>
             {colors.map((color) => (

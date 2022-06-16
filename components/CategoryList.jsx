@@ -9,12 +9,12 @@ import Category from "./Category";
 
 export default function CategoryList() {
   const { categories } = useStateContext();
-  
+
 
   if (!categories) return null;
 
   return (
-    <React.Fragment> 
+    <React.Fragment>
       {categories.map((category) => (
         <div className='navbar-item' key={category.slug}>
           <Link href={`/categories/${category.slug}`}>

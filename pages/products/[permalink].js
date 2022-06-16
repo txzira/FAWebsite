@@ -18,7 +18,7 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
   const { data: products } = await commerce.products.list();
-  
+
   return {
     paths: products.map((product) => ({
       params: {
@@ -29,25 +29,25 @@ export async function getStaticPaths() {
   };
 }
 
-export default function ProductPage({ product }) {  
+export default function ProductPage({ product }) {
   const [sizeOptionKey, setSizeOptionKey] = useState(null);
   const [colorOptionKey, setColorOptionKey] = useState(null);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     getOptions()
-  },[]);
+  }, []);
 
   const getOptions = () => {
     const colorsArr = [];
     const sizesArr = [];
-    
+
     let color = {};
     let size = {};
 
     product.variant_groups.map((details) => {
-      if(details.name == 'Color'){
+      if (details.name == 'Color') {
         setColorOptionKey(details.id);
         details.options.map((option) => {
           color.id = option.id;
@@ -57,7 +57,7 @@ export default function ProductPage({ product }) {
           // [{ id: option.id, color: option.name, assets: [option.assets] },{},...,{}]
           color = {};
         })
-      } else if(details.name == 'Size'){
+      } else if (details.name == 'Size') {
         setSizeOptionKey(details.id);
         details.options.map((option) => {
           size.id = option.id;
