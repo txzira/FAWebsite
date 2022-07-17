@@ -25,7 +25,6 @@ const success = () => {
 
   return (
     <div>
-      {console.log(clientSecret)}
       {clientSecret && <Elements stripe={stripePromise} options={options} >
         <PaymentStatus clientSecret={clientSecret} />
       </Elements>}

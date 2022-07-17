@@ -7,16 +7,12 @@ import styles from '../styles/CheckoutForm.module.css';
 
 
 
-export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientSecret }) {
+export default function CheckoutForm({ checkoutTokenId, paymentIntentId }) {
   const stripe = useStripe();
   const elements = useElements();
-  const [message, setMessage] = useState(null);
-  const [succeeded, setSucceeded] = useState(false);
-  const [error, setError] = useState(null);
-  const [processing, setProcessing] = useState('');
-  const [disabled, setDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [shippingAsBillingAddress, setShippingAsBillingAddress] = useState(true);
   
   const [shippingCountries, setShippingCountries] = useState([]);
@@ -48,26 +44,6 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     setShippingOption(options[0].id);
 
   }
-
-  const cardStyle = {
-    style: {
-      base: {
-        color: "#32325d",
-        fontFamily: 'Arial, sans-serif',
-        fontSmoothing: "antialiased",
-        fontSize: "16px",
-        "::placeholder": {
-          color: "#32325d"
-        }
-      },
-      invalid: {
-        fontFamily: 'Arial, sans-serif',
-        color: "#fa755a",
-        iconColor: "#fa755a"
-      }
-    }
-  };
-
   useEffect(()=>{
     fetchShippingCountry(checkoutTokenId);
   },[])
@@ -148,91 +124,19 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
   };
   
 
+  const paymentElementOptions={
+    fields:{
+      billingDetails: {
+        address: {
+          country: 'never',
+          postalCode: 'never'
+        }
+      }
+    },
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
-      return;
-    }
-    setProcessing(true);
-    const card = elements.getElement(CardElement);
-    const paymentMethodResponse = await stripe.createPaymentMethod({ type: 'card', card });
-    
-    if (paymentMethodResponse.error) {
-      alert(paymentMethodResponse.error.message);
-      return;
-    }
-    try {
-      const order = await commerce.checkout.capture(checkoutTokenId, {
-        customer: {
-          email: e.target.shippingEmail.value
-        },
-        shipping: {
-          name: e.target.shippingName.value,
-          street: e.target.shippingLine1.value,
-          town_city: e.target.shippingCity.value,
-          country: e.target.shippingCountry.value,           
-        },
-        fulfillment:{
-          shipping_method: e.target.shippingOption.value
-        },
-        payment: {
-          gateway: 'stripe',
-          stripe: {
-            payment_method_id: paymentMethodResponse.paymentMethod.id,
-          }
-        }
-      });
-      return;
-    } catch (response){
-      if(response.statusCode !== 402 || response.data.error.type !== 'requires_verification') {
-        console.log(response);
-        return;
-      }
-      console.log(response.data.error.param)
-      const cardActionResult = await stripe.handleCardAction(response.data.error.param);
-
-      if(cardActionResult.error){
-        alert(cardActionResult.error.message);
-        return;
-      }
-      try{
-        console.log(e.target.shippingName.value);
-        const order = await commerce.checkout.capture(checkoutTokenId, {
-          customer: {
-            email: e.target.shippingEmail.value
-          },
-          shipping: {
-            name: e.target.shippingName.value,
-            street: e.target.shippingLine1.value,
-            town_city: e.target.shippingCity.value,
-            country: e.target.shippingCountry.value,           
-          },
-          fulfillment:{
-            shipping_method: e.target.shippingOption.value
-          },
-          payment: {
-            gateway: 'stripe',
-            stripe : {
-              payment_intent_id: cardActionResult.paymentIntent.id,
-            },
-          },
-        });
-        console.log(order);
-        return;
-      } catch(response) {
-        console.log(response);
-        alert(response.message);
-      }
-    }
-
-    // const payload = await stripe.confirmCardPayment(clientSecret, {
-    //   payment_method: {
-    //     card: elements.getElement(CardElement)
-    //   }
-    // })
     const shippingDetails = {
       name: e.target.shippingName.value,
       address: {
@@ -264,10 +168,14 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     }
     
 
-    
+    if (!stripe || !elements) {
+      // Stripe.js has not yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return;
+    }
 
     setIsLoading(true);
-    
+    console.log(elements)
     // const { error } = await stripe.confirmPayment({
     //   elements,
     //   confirmParams: {
@@ -293,7 +201,7 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     // }
     setIsLoading(false);
   };
-  
+  console.log(elements)
   
   return (
     <>
@@ -301,7 +209,7 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
         <ShippingDetails />
         <input type='checkbox' onChange={handleShowBilling} />
         {!shippingAsBillingAddress && <BillingDetails />}
-        <CardElement id="card-element" options={cardStyle} />
+        <PaymentElement id="payment-element" options={paymentElementOptions} />
         <button disabled={isLoading || !stripe || !elements} id="submit">
           <span id="button-text">
             {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}

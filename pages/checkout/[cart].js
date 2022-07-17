@@ -51,12 +51,12 @@ function checkoutPage({ checkoutToken }) {
     clientSecret,
     appearance,
   };
-
+  
   return (
     <React.Fragment>   
       {clientSecret && (
         <Elements stripe={stripePromise} options={options}>
-          <CheckoutForm checkoutTokenId={checkoutToken.id} paymentIntentId={paymentIntentId} />
+          <CheckoutForm checkoutTokenId={checkoutToken.id}  paymentIntentId={paymentIntentId} clientSecret={clientSecret}/>
         </Elements>
       )}
     </React.Fragment>

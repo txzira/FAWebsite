@@ -52,8 +52,7 @@ export default async function handler(req, res) {
                 payment_intent_id: paymentIntent.id,
               },
             }
-          });
-          console.log(order)
+          });         
           console.log(`PaymentIntent for ${paymentIntent.amount} was successful!`);
           break;
         } catch(err){
