@@ -26,7 +26,9 @@ function CartItem({ id, name, quantity, line_total, image, selected_options }) {
       {selected_options.map((option) =>
         <p key={option.option_id}>{option.option_name}</p>
       )}
-      <img src={image.url} />
+      <div className='small-images-container'>
+        <img className='medium-image' src={image.url} />
+      </div>
       <p>{line_total.formatted_with_symbol}</p>
       <div className='quantity'>
         <p className='quantity-desc'>

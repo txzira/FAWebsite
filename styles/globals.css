@@ -333,12 +333,20 @@ span.text-red {
   z-index: 100;
   /* will-change: transform; */
   transition: all 1s ease-in-out;
-
 }
+.cart-button{
+  height:100vh;
+  width:39vw;
+  background: rgba(0, 0, 0, 0);
+  border:none;
+  float:left;
+  left:0;
 
+  position: fixed; 
+}
 .cart-container {
   height: 100vh;
-  width: 600px;
+  width: 60vw;
   background-color: white;
   float: right;
   padding: 40px 10px;
@@ -529,6 +537,13 @@ span.text-red {
   background-color: #ebebeb;
   width: 70px;
   height: 70px;
+  cursor: pointer;
+}
+.medium-image{
+  border-radius: 8px;
+  background-color: #ebebeb;
+  width: 150px;
+  height: 150px;
   cursor: pointer;
 }
 

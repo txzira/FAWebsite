@@ -7,12 +7,17 @@ import { AiOutlineShopping } from 'react-icons/ai';
 import { useStateContext } from '../context/StateContext';
 import Cart from './Cart';
 import CategoryList from './CategoryList';
+import { useCartState } from '../context/cart';
+
 
 const Navbar = () => {
   const { categories, showCart, setShowCart } = useStateContext();
+  const { total_items } = useCartState();
 
   return (
     <div>
+
+   
       <div className='navbar-header'>1-877-FA-WORLD</div>
       <div className='navbar-container'>
 
@@ -24,7 +29,7 @@ const Navbar = () => {
         {categories && <CategoryList />}
         <button type='button' className='cart-icon' onClick={() => setShowCart(true)}>
           <AiOutlineShopping />
-          <span className='cart-item-qty'>0</span>
+          <span className='cart-item-qty'>{total_items}</span>
         </button>
 
         {showCart && <Cart />}
