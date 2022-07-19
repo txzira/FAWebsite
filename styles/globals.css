@@ -33,25 +33,6 @@ a {
 }
 
 
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  margin: 6px 18px;
-  position: relative;
-}
-.navbar-header{
-  text-align: center;
-  width:100%;
-  line-height: 1.7;
-  color: #ffffff ;
-  background:rgba(0, 0, 0, 1);
-  
-}
-
-.navbar-item{
-  margin:auto;
-}
-
 .marquee-text {
   font-size: 29px;
   font-weight: 600;
@@ -93,11 +74,7 @@ span.text-red {
   margin-left: 6px;
 }
 
-.logo {
-  color: gray;
-  font-size: 30px;
 
-}
 
 .cart-icon {
   font-size: 25px;

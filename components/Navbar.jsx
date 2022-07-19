@@ -1,13 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 
-
-
 import { AiOutlineShopping } from 'react-icons/ai';
 import { useStateContext } from '../context/StateContext';
 import Cart from './Cart';
 import CategoryList from './CategoryList';
 import { useCartState } from '../context/cart';
+
+import styles from '../styles/Navbar.module.css';
 
 
 const Navbar = () => {
@@ -18,21 +18,25 @@ const Navbar = () => {
     <div>
 
    
-      <div className='navbar-header'>1-877-FA-WORLD</div>
-      <div className='navbar-container'>
-
-        <p className='logo'>
-          <Link href='/'><a><img src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-compact_60x.png?v=3226128657452717568' /></a></Link>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <Link href='/'><a><img src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-hockey_200x.png?v=8765466146010894979' /></a></Link>
-        </p>
-        {categories && <CategoryList />}
-        <button type='button' className='cart-icon' onClick={() => setShowCart(true)}>
-          <AiOutlineShopping />
-          <span className='cart-item-qty'>{total_items}</span>
-        </button>
-
+      <div className={styles.navbarHeader}>1-877-FA-WORLD</div>
+      <div className={styles.navbarContainer}>
+        <ul>
+          <li>                  
+            <Link href='/'><a><img className={styles.navbarLogo} src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-compact_60x.png?v=3226128657452717568'/></a>
+            </Link>
+          </li>
+          <li>
+          <Link href='/'><a><img className={styles.navbarLogo} src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-hockey_200x.png?v=8765466146010894979' /></a></Link>
+          </li>
+          {categories && <CategoryList />}
+          <li>
+            <button type='button' className='cart-icon' onClick={() => setShowCart(true)}>
+              <AiOutlineShopping />
+              <span className={styles.navbarCartItemQty}>{total_items}</span>
+            </button>
+          </li>
         {showCart && <Cart />}
+        </ul>
       </div>
     </div>
   )

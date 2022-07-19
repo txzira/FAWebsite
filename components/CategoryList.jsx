@@ -5,7 +5,7 @@ import React from "react";
 import { useStateContext } from "../context/StateContext";
 
 import Category from "./Category";
-
+import styles from '../styles/Navbar.module.css'
 
 export default function CategoryList() {
   const { categories } = useStateContext();
@@ -16,13 +16,13 @@ export default function CategoryList() {
   return (
     <React.Fragment>
       {categories.map((category) => (
-        <div className='navbar-item' key={category.slug}>
+        <li>  
           <Link href={`/categories/${category.slug}`}>
             <a>
               <Category {...category} />
             </a>
-          </Link>
-        </div>
+          </Link>       
+        </li>
       ))}
     </React.Fragment>
   );
