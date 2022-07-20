@@ -20,13 +20,12 @@ const Navbar = () => {
    
       <div className={styles.navbarHeader}>1-877-FA-WORLD</div>
       <div className={styles.navbarContainer}>
-        <ul>
+        <ul className={styles.navbarLinks}>
           <li>                  
-            <Link href='/'><a><img className={styles.navbarLogo} src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-compact_60x.png?v=3226128657452717568'/></a>
-            </Link>
+            <Link href='/'><a><img className={styles.navbarLogo} src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-compact_60x.png?v=3226128657452717568'/></a></Link>
           </li>
           <li>
-          <Link href='/'><a><img className={styles.navbarLogo} src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-hockey_200x.png?v=8765466146010894979' /></a></Link>
+            <Link href='/'><a><img className={styles.navbarLogo} src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-hockey_200x.png?v=8765466146010894979'/></a></Link>
           </li>
           {categories && <CategoryList />}
           <li>
@@ -35,8 +34,8 @@ const Navbar = () => {
               <span className={styles.navbarCartItemQty}>{total_items}</span>
             </button>
           </li>
-        {showCart && <Cart />}
         </ul>
+        {showCart && <Cart />}
       </div>
     </div>
   )
