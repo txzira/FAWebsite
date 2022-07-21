@@ -199,7 +199,6 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
         return;
       }
       try{
-        console.log(e.target.shippingName.value);
         const order = await commerce.checkout.capture(checkoutTokenId, {
           customer: {
             email: e.target.shippingEmail.value

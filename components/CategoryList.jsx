@@ -16,7 +16,7 @@ export default function CategoryList() {
   return (
     <React.Fragment>
       {categories.map((category) => (
-        <li>  
+        <li key={category.id}>  
           <Link href={`/categories/${category.slug}`}>
             <a>
               <Category {...category} />

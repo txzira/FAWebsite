@@ -1,21 +1,28 @@
-.navbarItem{
-  margin:auto;
-  font-size: 2vw;
-}
-.navbarContainer {
-  display: flex;
-  width:100vw;
-  justify-content: center;
-
-  position: relative;
-}
 .navbarHeader{
   text-align: center;
   width:100vw;
   line-height: 1.7;
   color: #ffffff ;
   background:rgba(0, 0, 0, 1);
-  
+  position: relative;
+}
+.navbarContainer {
+  width:100vw;
+  justify-content: center;
+  position: relative;
+  flex-wrap:wrap;
+}
+.navbarLogo {
+  color: gray;
+  height:3vh;
+  width:5vw;
+  margin:auto;
+  font-size: 1vw;
+  padding:auto;
+}
+.navbarItem{
+  margin:auto;
+  font-size: 2vw;
 }
 .navbarCartItemQty {
   position: absolute;
@@ -28,32 +35,26 @@
   border-radius: 50%;
   text-align: center;
   font-weight: 600;
+}
 
+.navbarContainer li {
+  float: left;
+  margin:1vw;
 }
-.navbarLogo {
-  color: gray;
-  height:3vh;
-  width:5vw;
-  margin:auto;
-  font-size: 1vw;
-  padding:auto;
-}
-.navbarContainer ul {
-  list-style-type: none;
+
+.navbarLinks{
+  display: flex;
+  flex-grow:1;
   margin:0;
   padding:0;
+  list-style-type: none;
 
 }
-.navbarContainer li {
-  display: inline;
-  float: left;
-  padding: 14px 16px;
-  margin:1vw;
+.navbarLinks li{
+  flex-grow: 1;
+  align-items: center;
+  display:flex;
+}
+.navbarLinks li a{
 
-}
-.navbarContainer li a{
-  text-align: center;
-}
-.navbarLinks{
-  
 }

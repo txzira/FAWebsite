@@ -9,17 +9,14 @@ import { useCartState } from '../context/cart';
 
 import styles from '../styles/Navbar.module.css';
 
-
 const Navbar = () => {
   const { categories, showCart, setShowCart } = useStateContext();
   const { total_items } = useCartState();
 
   return (
-    <div>
-
-   
-      <div className={styles.navbarHeader}>1-877-FA-WORLD</div>
+    <div> 
       <div className={styles.navbarContainer}>
+        <div className={styles.navbarHeader}>1-877-FA-WORLD</div>
         <ul className={styles.navbarLinks}>
           <li>                  
             <Link href='/'><a><img className={styles.navbarLogo} src='https://cdn.shopify.com/s/files/1/0060/5952/t/127/assets/logo-compact_60x.png?v=3226128657452717568'/></a></Link>
@@ -35,8 +32,8 @@ const Navbar = () => {
             </button>
           </li>
         </ul>
-        {showCart && <Cart />}
       </div>
+      {showCart && <Cart />}
     </div>
   )
 }
