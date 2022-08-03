@@ -74,7 +74,7 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
       <div className='product-detail-container'>
         <div>
           <div className='image-container'>
-            <img src={image} className="product-detail-image" />
+            <Image width={500} height={500} src={image} className="product-detail-image" />
           </div>
           {assets.length != 0 &&
             <div className='small-images-container'>
