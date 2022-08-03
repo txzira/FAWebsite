@@ -2,6 +2,7 @@
 import commerce from "../lib/commerce";
 import React, { useEffect, useState } from 'react';
 import { useCartDispatch } from "../context/cart";
+import Image from 'next/image';
 
 import toast from 'react-hot-toast';
 
@@ -84,7 +85,7 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
                       if (asset.id === id) {
                         return (
                           <span key={id.toString()}>
-                            <img className='small-image' src={asset.url} />
+                            <Image width={500} height={500} className='small-image' src={asset.url} />
                           </span>
                         )
                       }
