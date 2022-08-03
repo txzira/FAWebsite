@@ -197,6 +197,7 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       return;
     } catch (response){
       if(response.statusCode !== 402 || response.data.error.type !== 'requires_verification') {
+        console.log(e.target);
         console.log(response);
         toast.dismiss();
 
@@ -235,7 +236,7 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
             },
           },
         });
-      console.log('2');
+        console.log('2');
 
         console.log(order);
         toast.dismiss();
@@ -285,6 +286,8 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     setIsLoading(true);
        
     setIsLoading(false);
+
+
   };
   
   

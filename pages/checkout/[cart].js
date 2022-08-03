@@ -19,7 +19,7 @@ export async function getServerSideProps({ params }) {
 }
 const stripePromise = getStripe();
 
-function checkoutPage({ checkoutToken }) {
+function CheckoutPage({ checkoutToken }) {
   const { line_items } = useCartState();
   const [clientSecret, setClientSecret] = useState('');
   const [paymentIntentId, setPaymentIntentId] = useState('');
@@ -63,4 +63,4 @@ function checkoutPage({ checkoutToken }) {
   )
 }
 
-export default checkoutPage;
+export default CheckoutPage;

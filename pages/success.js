@@ -7,7 +7,7 @@ import PaymentStatus from '../components/PaymentStatus';
 
 const stripePromise = getStripe();
 
-const success = () => {
+const Success = () => {
   const [clientSecret, setClientSecret] = useState('');
 
   useEffect(()=>{
@@ -32,4 +32,4 @@ const success = () => {
   )
 }
 
-export default success
+export default Success
