@@ -4,13 +4,25 @@ import Link from 'next/link';
 
 
 import commerce from '../lib/commerce';
+import toast from 'react-hot-toast';
 
 function CartItem({ id, name, quantity, line_total, image, selected_options }) {
   const { setCart } = useCartDispatch();
 
   const handleUpdateCart = ({ cart }) => setCart(cart);
 
-  const removeItem = () => commerce.cart.remove(id).then(handleUpdateCart);
+  const removeItem = () => {
+    let productName = name;
+    commerce.cart.remove(id).then(handleUpdateCart);
+    for(let i=0;i<selected_options.length;i++){
+      if(i===selected_options.length-1) {
+        productName = productName + selected_options[i].option_name;
+        break;
+      }
+      productName = productName + ' ' + selected_options[i].option_name + '/'
+    }
+    toast.success(`${productName} was removed from the cart.`)
+  }
 
   const decrementQuantity = () => {
     quantity > 1
@@ -21,7 +33,7 @@ function CartItem({ id, name, quantity, line_total, image, selected_options }) {
   const incrementQuantity = () => commerce.cart.update(id, { quantity: quantity + 1 }).then(handleUpdateCart);
 
   return (
-    <div>
+    <div className=''>
       <h4>{name}</h4>
       {selected_options.map((option) =>
         <p key={option.option_id}>{option.option_name}</p>

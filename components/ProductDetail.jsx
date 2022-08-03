@@ -3,6 +3,8 @@ import commerce from "../lib/commerce";
 import React, { useEffect, useState } from 'react';
 import { useCartDispatch } from "../context/cart";
 
+import toast from 'react-hot-toast';
+
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
 export default function ProductDetail({ product, colors, sizes, sizeOptionKey, colorOptionKey }) {
@@ -12,9 +14,14 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
   const [image, setImage] = useState(null);
   const [assetIds, setAssetIds] = useState([]);
   const [qty, setQty] = useState(1);
+  const [selectedColor,setSelectedColor] = useState('');
+  const [selectedSize,setSelectedSize] = useState('');
+
   //add product to cart
   const addToCart = () => {
     commerce.cart.add(product.id, qty, options).then(({ cart }) => setCart(cart))
+    console.log(options);
+    toast.success(`${product.name} ${selectedColor}/${selectedSize} was added to the cart`);
   }
   const incQty = () => {
     setQty((prevQty) => prevQty + 1);
@@ -25,20 +32,23 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
       return prevQty - 1;
     });
   }
-  const changeSize = (event) => {
+  const changeSize = (sizeName) => (event) => {
     options[sizeOptionKey] = event.target.value; //sizeOptionValue
-    setOptions(options)
+    setOptions(options);
+    setSelectedSize(sizeName);
   }
-  const changeColor = (colorOptionValue, assetIdList) => (e) => {
+  const changeColor = (colorOptionValue, assetIdList, colorName) => (e) => {
     options[colorOptionKey] = colorOptionValue;
-    setOptions(options)
+    setOptions(options);
     setImage(e.target.src);
     setAssetIds(assetIdList);
+    setSelectedColor(colorName);
   }
   const defaultColor = () => {
     if (colors.length == 0) return;
     options[colorOptionKey] = colors[0].id
     setAssetIds(colors[0].assets);
+    setSelectedColor(colors[0].name);
   }
   const getAssets = async () => {
     if (colors.length == 0) return;
@@ -99,7 +109,7 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
                 {assets.map((asset) => {
                   if (asset.id === color.assets[0]) {
                     return (
-                      <button key={asset.id} type='button' id={color.id} name='color' onClick={changeColor(color.id, color.assets)}>
+                      <button key={asset.id} type='button' id={color.id} name='color' onClick={changeColor(color.id, color.assets,color.name)}>
                         <img className='button' src={asset.url} />
                       </button>
                     )
@@ -112,9 +122,9 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
           <br />
 
           <h1>Size:</h1>
-          <div onChange={changeSize}>
+          <div>
             {sizes.map((size) => (
-              <span key={size.id} className='buttons'>
+              <span key={size.id} className='buttons' onChange={changeSize(size.name)}>
                 <input id={size.id} type='radio' name='size' value={size.id} />
                 <label className='label' htmlFor={size.id}>&nbsp;{size.name}&nbsp;</label>
               </span>

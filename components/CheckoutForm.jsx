@@ -4,6 +4,7 @@ import { PaymentElement, useStripe, useElements, CardElement } from "@stripe/rea
 import commerce from '../lib/commerce';
 import DOMPurify from "dompurify";
 import styles from '../styles/CheckoutForm.module.css';
+import toast from "react-hot-toast";
 
 
 
@@ -142,7 +143,6 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     )
   }
 
-
   const handleShowBilling = () => {
     setShippingAsBillingAddress(!shippingAsBillingAddress);
   };
@@ -157,11 +157,13 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       return;
     }
     setProcessing(true);
+    toast.loading("Payment Processing...")
     const card = elements.getElement(CardElement);
     const paymentMethodResponse = await stripe.createPaymentMethod({ type: 'card', card });
     
     if (paymentMethodResponse.error) {
       alert(paymentMethodResponse.error.message);
+      toast.dismiss();
       return;
     }
     try {
@@ -173,7 +175,10 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
           name: e.target.shippingName.value,
           street: e.target.shippingLine1.value,
           town_city: e.target.shippingCity.value,
-          country: e.target.shippingCountry.value,           
+          county_state: e.target.shippingState.value,
+          postal_zip_code: e.target.shippingZip.value,
+          country: e.target.shippingCountry.value,
+                     
         },
         fulfillment:{
           shipping_method: e.target.shippingOption.value
@@ -185,17 +190,25 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
           }
         }
       });
+      console.log('1');
+      console.log(order);
+      toast.dismiss();
+
       return;
     } catch (response){
       if(response.statusCode !== 402 || response.data.error.type !== 'requires_verification') {
         console.log(response);
+        toast.dismiss();
+
         return;
       }
-      console.log(response.data.error.param)
+
       const cardActionResult = await stripe.handleCardAction(response.data.error.param);
 
       if(cardActionResult.error){
         alert(cardActionResult.error.message);
+        toast.dismiss();
+
         return;
       }
       try{
@@ -207,7 +220,10 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
             name: e.target.shippingName.value,
             street: e.target.shippingLine1.value,
             town_city: e.target.shippingCity.value,
-            country: e.target.shippingCountry.value,           
+            county_state: e.target.shippingState.value,
+            postal_zip_code: e.target.shippingZip.value,
+            country: e.target.shippingCountry.value,   
+
           },
           fulfillment:{
             shipping_method: e.target.shippingOption.value
@@ -219,19 +235,20 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
             },
           },
         });
+      console.log('2');
+
         console.log(order);
+        toast.dismiss();
+        
         return;
       } catch(response) {
         console.log(response);
         alert(response.message);
+        toast.dismiss();
+
       }
     }
 
-    // const payload = await stripe.confirmCardPayment(clientSecret, {
-    //   payment_method: {
-    //     card: elements.getElement(CardElement)
-    //   }
-    // })
     const shippingDetails = {
       name: e.target.shippingName.value,
       address: {
@@ -266,30 +283,7 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     
 
     setIsLoading(true);
-    
-    // const { error } = await stripe.confirmPayment({
-    //   elements,
-    //   confirmParams: {
-    //     // Make sure to change this to your payment completion page
-    //     return_url: "http://localhost:3000/success",
-    //     receipt_email: e.target.shippingEmail.value,
-    //     shipping: shippingDetails,
-    //     payment_method_data: {
-    //       billing_details: billingDetails
-    //     }
-    //   },
-    // });
-
-    // // This point will only be reached if there is an immediate error when
-    // // confirming the payment. Otherwise, your customer will be redirected to
-    // // your `return_url`. For some payment methods like iDEAL, your customer will
-    // // be redirected to an intermediate site first to authorize the payment, then
-    // // redirected to the `return_url`.
-    // if (error.type === "card_error" || error.type === "validation_error") {
-    //   setMessage(error.message);
-    // } else {
-    //   setMessage("An unexpected error occured.");
-    // }
+       
     setIsLoading(false);
   };
   
