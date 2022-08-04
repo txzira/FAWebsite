@@ -74,7 +74,7 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
       <div className='product-detail-container'>
         <div>
           <div className='image-container'>
-            <Image width={500} height={500} src={image} className="product-detail-image" />
+            <img src={image} className="product-detail-image" />
           </div>
           {assets.length != 0 &&
             <div className='small-images-container'>
@@ -85,7 +85,7 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
                       if (asset.id === id) {
                         return (
                           <span key={id.toString()}>
-                            <Image width={500} height={500} className='small-image' src={asset.url} />
+                            <img className='small-image' src={asset.url} />
                           </span>
                         )
                       }
