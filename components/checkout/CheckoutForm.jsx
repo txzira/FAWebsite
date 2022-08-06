@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { PaymentElement, useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { ShippingDetails, BillingDetails } from "./ShippingBillingForms";
 
-import commerce from '../lib/commerce';
-import DOMPurify from "dompurify";
+import commerce from '../../lib/commerce';
+
 import styles from '../styles/CheckoutForm.module.css';
 import toast from "react-hot-toast";
-
-
 
 export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientSecret }) {
   const stripe = useStripe();
@@ -89,66 +88,11 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       body: JSON.stringify({shippingOption,paymentIntentId})
     });
   },[shippingOption])
-
-  function ShippingDetails() {
-    return (
-      <div className={styles.customerInfoContainer}>
-        <h1>Shipping Address</h1>
-        <label>Email<input required name='shippingEmail' type='text' placeholder='abc123@example.com' /></label>
-        <label>Name<input required name='shippingName' type='text' placeholder='John Doe' /></label>
-        <label>Country
-          <select value={shippingCountry} name='shippingCountry' onChange={(e) => setShippingCountry(e.target.value)}>
-            {countries.map((country) => (
-              <option value={country.id} key={country.id}>{country.label}</option>
-            ))}
-          </select>
-        </label>
-    
-        <label>State
-          <select value={shippingSubdivision} name='shippingState' onChange={(e) => setShippingSubdivision(e.target.value)}>
-            {subdivisions.map((subdivision) => (
-              <option value={subdivision.id} key={subdivision.id}>{subdivision.label}</option>
-            ))}
-          </select>
-        </label>    
-        <label>City<input required name='shippingCity' type='text' placeholder='Trenton' /></label>
-        <label>Postal Code<input required name='shippingZip' type='text' placeholder="08608"/></label>
-        <label>Address<input required name='shippingLine1' type='text' placeholder='20 S Montgomery St' /></label>
-        <label>Apartment, Suite, etc.. (Optional)<input name='shippingLine2' type='text' placeholder='Apt. 1' /></label>
-        <label>Shipping Option
-          <select value={shippingOption} name='shippingOption' onChange={(e) => setShippingOption(e.target.value)}>
-          {options.map((option) => (
-              <option value={option.id} key={option.id}>{option.label}</option>
-            ))}
-          </select>
-        </label>
-
-      </div>
-    )
-  }
   
-  function BillingDetails() {
-    return (
-      <div className={styles.customerInfoContainer}>
-        <h1>Billing Address</h1>
-        <label>Email<input required name='billingEmail' type='text' placeholder='abc123@example.com' /></label>
-        <label>Name<input required name='billingName' type='text' placeholder='John Doe' /></label>
-        <label>Country<input required name='billingCountry' type='text' placeholder='United States' /></label>
-        <label>State<input required name='billingState' type='text' placeholder='New Jersey' /></label>
-        <label>City<input required name='billingCity' type='text' placeholder='Trenton' /></label>
-        <label>Postal Code<input required name='billingZip' type='text' placeholder="08608"/></label>
-        <label>Address<input required name='billingLine1' type='text' placeholder='20 S Montgomery St' /></label>
-        <label>Apartment, Suite, etc.. (Optional)<input name='billingLine2' type='text' placeholder='Apt. 1' /></label>
-      </div>
-    )
-  }
-
   const handleShowBilling = () => {
     setShippingAsBillingAddress(!shippingAsBillingAddress);
   };
   
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) {
@@ -160,26 +104,44 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     toast.loading("Payment Processing...")
     const card = elements.getElement(CardElement);
     const paymentMethodResponse = await stripe.createPaymentMethod({ type: 'card', card });
-    
+    const shipping = {
+      name: e.target.shippingName.value,
+      street: e.target.shippingLine1.value,
+      street_2: e.target.shippingLine2.value? e.target.shippingLine2.value : null,
+      town_city: e.target.shippingCity.value,
+      county_state: e.target.shippingState.value,
+      postal_zip_code: e.target.shippingZip.value,
+      country: e.target.shippingCountry.value,        
+    };
+    let billing;
+    if(shippingAsBillingAddress){
+      billing={...shipping, email: e.target.shippingEmail.value };
+    } else {
+      billing = {
+        name: e.target.billingName.value,
+        email: e.target.billingEmail.value,
+        street: e.target.billingLine1.value,
+        street_2: e.target.billingLine2.value? e.target.billingLine2.value : null,
+        town_city: e.target.billingCity.value,
+        county_state: e.target.billingState.value,
+        postal_zip_code: e.target.billingZip.value,
+        country: e.target.billingCountry.value,          
+        }
+    };
+         
     if (paymentMethodResponse.error) {
       alert(paymentMethodResponse.error.message);
       toast.dismiss();
       return;
     }
+
     try {
       const order = await commerce.checkout.capture(checkoutTokenId, {
         customer: {
           email: e.target.shippingEmail.value
         },
-        shipping: {
-          name: e.target.shippingName.value,
-          street: e.target.shippingLine1.value,
-          town_city: e.target.shippingCity.value,
-          county_state: e.target.shippingState.value,
-          postal_zip_code: e.target.shippingZip.value,
-          country: e.target.shippingCountry.value,
-                     
-        },
+        shipping: shipping,
+        billing: billing,
         fulfillment:{
           shipping_method: e.target.shippingOption.value
         },
@@ -193,14 +155,11 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       console.log('1');
       console.log(order);
       toast.dismiss();
-
       return;
     } catch (response){
       if(response.statusCode !== 402 || response.data.error.type !== 'requires_verification') {
-        console.log(e.target);
         console.log(response);
         toast.dismiss();
-
         return;
       }
 
@@ -209,23 +168,16 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       if(cardActionResult.error){
         alert(cardActionResult.error.message);
         toast.dismiss();
-
         return;
       }
+
       try{
         const order = await commerce.checkout.capture(checkoutTokenId, {
           customer: {
             email: e.target.shippingEmail.value
           },
-          shipping: {
-            name: e.target.shippingName.value,
-            street: e.target.shippingLine1.value,
-            town_city: e.target.shippingCity.value,
-            county_state: e.target.shippingState.value,
-            postal_zip_code: e.target.shippingZip.value,
-            country: e.target.shippingCountry.value,   
-
-          },
+          shipping: shipping,
+          billing: billing,
           fulfillment:{
             shipping_method: e.target.shippingOption.value
           },
@@ -237,64 +189,23 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
           },
         });
         console.log('2');
-
         console.log(order);
-        toast.dismiss();
-        
+        toast.dismiss();        
         return;
       } catch(response) {
         console.log(response);
         alert(response.message);
         toast.dismiss();
-
       }
     }
-
-    const shippingDetails = {
-      name: e.target.shippingName.value,
-      address: {
-        country: e.target.shippingCountry.value,
-        state: e.target.shippingState.value,
-        city: e.target.shippingCity.value,
-        line1: e.target.shippingLine1.value,
-        line2: e.target.shippingLine2.value? e.target.shippingLine2.value : null,
-        postal_code: e.target.shippingZip.value
-      }
-    };
-
-    let billingDetails;
-    if(shippingAsBillingAddress){
-      billingDetails={...shippingDetails, email: e.target.shippingEmail.value };
-    } else {
-      billingDetails = {
-        name: e.target.billingName.value,
-        email: e.target.billingEmail.value,
-        address: {
-          country: e.target.billingCountry.value,          
-          state: e.target.billingState.value,
-          city: e.target.billingCity.value,
-          line1: e.target.billingLine1.value,
-          line2: e.target.billingLine2.value? e.target.billingLine2.value : null,
-          postal_code: e.target.billingZip.value
-        }
-      };
-    }
-    
-
-    
-
-    setIsLoading(true);
-       
+    setIsLoading(true);    
     setIsLoading(false);
-
-
   };
-  
   
   return (
     <>
       <form id="payment-form" onSubmit={handleSubmit}>
-        <ShippingDetails />
+        <ShippingDetails countries={countries} setShippingCountry={setShippingCountry} options={options} shippingCountry={shippingCountry} shippingSubdivision={shippingSubdivision} subdivisions={subdivisions} />
         <input type='checkbox' onChange={handleShowBilling} />
         {!shippingAsBillingAddress && <BillingDetails />}
         <CardElement id="card-element" options={cardStyle} />
