@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCartState } from '../../context/cart';
-import CheckoutForm from '../../components/CheckoutForm';
+import CheckoutForm from '../../components/checkout/CheckoutForm';
 
 import commerce from "../../lib/commerce";
 
