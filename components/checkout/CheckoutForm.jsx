@@ -4,7 +4,7 @@ import { ShippingDetails, BillingDetails } from "./ShippingBillingForms";
 
 import commerce from "../../lib/commerce";
 
-import styles from "../styles/CheckoutForm.module.css";
+import styles from "../../styles/CheckoutForm.module.css";
 import toast from "react-hot-toast";
 
 export default function CheckoutForm({
