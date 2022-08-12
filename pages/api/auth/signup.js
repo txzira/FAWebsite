@@ -1,36 +1,34 @@
-import { MongoClient } from 'mongodb';
-import { hash } from 'bcryptjs';
+import { connectToDatabase } from '../../../lib/mongodb';
+import { hashPassword } from '../../../lib/hash';
 
 async function handler(req, res) {
   if (req.method === 'POST') {
     //Get email and password from body
     const { email, password } = req.body;
-
     if(!email || !email.includes('@') || !password) {
       res.status(422).json({ message: 'Invalid Data' });
       return;
     }
     //Connect with database
-    const client = await MongoClient.connect(
-      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_CLUSTER}.n4tnm.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    );
+    const client = await connectToDatabase();
     const db = client.db();
     //Check existing
     const checkExisting = await db.collection('users').findOne({email:email});
     //Send error response if duplicate user is found
     if(checkExisting) {
-      res.staus(422).json({ message: 'User already exists'});
+      res.status(422).json({ message: 'User already exists'});
       client.close();
       return;
     }
     //Hash password
+    const hashedPassword = await hashPassword(password);
+    //Insert User into database
     const status = await db.collection('users').insertOne({
-      email, 
-      password: await hash(password, 12),
+      email: email, 
+      password: hashedPassword,
     });
     //Send success response
-    res.status(201).json({ message: 'User created', ...status });
+    res.status(201).json({ message: 'User created' });
     //Close DB connection
     client.close();
   } else {
