@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 
@@ -16,7 +16,7 @@ const Navbar = () => {
   const { total_items } = useCartState();
   const { data: session, status } = useSession();
   const loading = status === "loading";
-
+  const [dropdownIsActive, setDropdownIsActive] = useState(false);
   // const []
 
   function logoutHandler() {
@@ -60,15 +60,29 @@ const Navbar = () => {
           )}
           {session && (
             <li>
-              <button onClick="" className="">
+              <button onClick={() => setDropdownIsActive((prev)=> !prev)} className=""
+              aria-expanded={dropdownIsActive ? "true" : "false"}>
                 <span>{session.user.email}</span>
+                {console.log(dropdownIsActive)}
                 <CgProfile />
               </button>
-              <div>
-                <ul>
-                  <li>
-                    <button onClick={logoutHandler}>Logout</button>
+              <div >
+                <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
+                  <li >
+                    <ul className='menu-items'>
+                      <li className="menu-items">
+                        <Link href='/account'>
+                          <a>
+                            My Account
+                          </a>
+                        </Link>
+                      </li>
+                      <li className="menu-items">
+                        <button onClick={logoutHandler}>Logout</button>
+                      </li>
+                    </ul>
                   </li>
+                 
                 </ul>
               </div>
 

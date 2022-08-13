@@ -219,6 +219,30 @@ span.text-red {
   align-self: flex-end;
 }
 
+.dropdown{
+  display: none;
+  position: absolute;
+  left:auto;
+  right:0;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  text-align: left;
+  list-style: none;
+
+}
+.menu-items ul{
+  position: relative;  
+  display:flex;
+}
+
+.menu-items a, li,button{
+  float: left;
+  text-align: left;
+}
+.dropdown.show{
+  display:block;
+}
+
 .products-heading {
   text-align: center;
   margin: 40px 0px;

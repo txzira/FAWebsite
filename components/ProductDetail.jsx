@@ -24,20 +24,24 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
     console.log(options);
     toast.success(`${product.name} ${selectedColor}/${selectedSize} was added to the cart`);
   }
+  //increment product quantity
   const incQty = () => {
     setQty((prevQty) => prevQty + 1);
   }
+  //decrement product quantity
   const decQty = () => {
     setQty((prevQty) => {
       if (prevQty - 1 < 1) return 1;
       return prevQty - 1;
     });
   }
+  //change selected size
   const changeSize = (sizeName) => (event) => {
     options[sizeOptionKey] = event.target.value; //sizeOptionValue
     setOptions(options);
     setSelectedSize(sizeName);
   }
+  //change selected color and shown image
   const changeColor = (colorOptionValue, assetIdList, colorName) => (e) => {
     options[colorOptionKey] = colorOptionValue;
     setOptions(options);
@@ -45,12 +49,14 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
     setAssetIds(assetIdList);
     setSelectedColor(colorName);
   }
+  //set default color of shown image to first image from commercejs
   const defaultColor = () => {
     if (colors.length == 0) return;
     options[colorOptionKey] = colors[0].id
     setAssetIds(colors[0].assets);
     setSelectedColor(colors[0].name);
   }
+  
   const getAssets = async () => {
     if (colors.length == 0) return;
     const response = await fetch('/api/commercejs/assets', {
