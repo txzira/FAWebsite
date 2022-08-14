@@ -60,29 +60,25 @@ const Navbar = () => {
           )}
           {session && (
             <li>
-              <button onClick={() => setDropdownIsActive((prev)=> !prev)} className=""
-              aria-expanded={dropdownIsActive ? "true" : "false"}>
+              <button
+                onClick={() => setDropdownIsActive((prev) => !prev)}
+                className=""
+                aria-expanded={dropdownIsActive ? "true" : "false"}
+              >
                 <span>{session.user.email}</span>
                 {console.log(dropdownIsActive)}
                 <CgProfile />
               </button>
-              <div >
+              <div>
                 <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
-                  <li >
-                    <ul className='menu-items'>
-                      <li className="menu-items">
-                        <Link href='/account'>
-                          <a>
-                            My Account
-                          </a>
-                        </Link>
-                      </li>
-                      <li className="menu-items">
-                        <button onClick={logoutHandler}>Logout</button>
-                      </li>
-                    </ul>
+                  <li>
+                    <Link href="/account">
+                      <a>My Account</a>
+                    </Link>
                   </li>
-                 
+                  <li>
+                    <button onClick={logoutHandler}>Logout</button>
+                  </li>
                 </ul>
               </div>
 

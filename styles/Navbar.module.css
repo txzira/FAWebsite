@@ -1,29 +1,29 @@
-.navbarHeader{
+.navbarHeader {
   text-align: center;
-  width:100vw;
-  padding:10px;
+  width: 100vw;
+  padding: 10px;
   z-index: 120;
   line-height: 1.3;
-  color: #ffffff ;
-  background:rgba(0, 0, 0, 1);
+  color: #ffffff;
+  background: rgba(0, 0, 0, 1);
   position: relative;
 }
 .navbarContainer {
-  width:100vw;
+  width: 100vw;
   justify-content: center;
   position: relative;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 }
 .navbarLogo {
   color: gray;
-  height:3vh;
-  width:5vw;
-  margin:auto;
+  height: 3vh;
+  width: 5vw;
+  margin: auto;
   font-size: 1vw;
-  padding:auto;
+  padding: auto;
 }
-.navbarItem{
-  margin:auto;
+.navbarItem {
+  margin: auto;
   font-size: 2vw;
 }
 .navbarCartItemQty {
@@ -40,23 +40,19 @@
 }
 
 .navbarContainer li {
-  float: left;
-  margin:1vw;
+  margin: 1vw;
 }
 
-.navbarLinks{
+.navbarLinks {
   display: flex;
-  flex-grow:1;
-  margin:0;
-  padding:0;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
   list-style-type: none;
-
 }
-.navbarLinks li{
+.navbarLinks li {
   flex-grow: 1;
   align-items: center;
-  display:flex;
 }
-.navbarLinks li a{
-
+.navbarLinks li a {
 }
