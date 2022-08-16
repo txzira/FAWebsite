@@ -5,8 +5,10 @@ import ProductList from "../../components/ProductList";
 
 const dev = process.env.SERVER_ENV !== "production";
 
-const server = dev ? "http://localhost:3000" : process.env.VERCEL_URL;
-
+const server = dev
+  ? "http://localhost:3000"
+  : `https://${process.env.VERCEL_URL}`;
+console.log(dev);
 export async function getStaticProps({ params }) {
   const { slug } = params;
 
