@@ -32,12 +32,7 @@ export async function getStaticPaths() {
   // const { data: categories } = await commerce.categories.list();
 
   async function fetchCategories() {
-    const response = await fetch(`${server}/api/commercejs/categories`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(`${server}/api/commercejs/categories`);
 
     const cats = await response.json();
     return cats.categories;
