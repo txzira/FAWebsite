@@ -1,7 +1,11 @@
 // pages/categories/[slug].js
-import React from 'react';
+import React, { useState } from "react";
 import commerce from "../../lib/commerce";
 import ProductList from "../../components/ProductList";
+
+const dev = process.env.SERVER_ENV !== "production";
+
+const server = dev ? "http://localhost:3000" : process.env.VERCEL_URL;
 
 export async function getStaticProps({ params }) {
   const { slug } = params;
@@ -23,12 +27,26 @@ export async function getStaticProps({ params }) {
 }
 // pages/categories/[slug].js
 export async function getStaticPaths() {
-  const { data: categories } = await commerce.categories.list();
+  // const { data: categories } = await commerce.categories.list();
+
+  async function fetchCategories() {
+    const response = await fetch(`${server}/api/commercejs/categories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const cats = await response.json();
+    return cats.categories;
+  }
+  const allCategories = await fetchCategories();
+  // console.log(allCategories);
 
   return {
-    paths: categories.map((category) => ({
+    paths: allCategories.map((category) => ({
       params: {
-        slug: category.slug,
+        slug: category,
       },
     })),
     fallback: false,

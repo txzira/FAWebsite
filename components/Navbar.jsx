@@ -55,7 +55,6 @@ const Navbar = () => {
               <Link href="/auth">
                 <a>Login</a>
               </Link>
-              {console.log(session)}
             </li>
           )}
           {session && (
@@ -66,7 +65,6 @@ const Navbar = () => {
                 aria-expanded={dropdownIsActive ? "true" : "false"}
               >
                 <span>{session.user.email}</span>
-                {console.log(dropdownIsActive)}
                 <CgProfile />
               </button>
               <div>
@@ -81,8 +79,7 @@ const Navbar = () => {
                   </li>
                 </ul>
               </div>
-
-              {console.log(session)}
+              {/* {console.log(session)} */}
             </li>
           )}
           <li>
