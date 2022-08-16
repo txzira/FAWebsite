@@ -3,12 +3,6 @@ import React, { useState } from "react";
 import commerce from "../../lib/commerce";
 import ProductList from "../../components/ProductList";
 
-const dev = process.env.SERVER_ENV !== "production";
-
-const server = dev
-  ? "http://localhost:3000"
-  : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-console.log(dev);
 export async function getStaticProps({ params }) {
   const { slug } = params;
 
@@ -29,16 +23,44 @@ export async function getStaticProps({ params }) {
 }
 // pages/categories/[slug].js
 export async function getStaticPaths() {
-  // const { data: categories } = await commerce.categories.list();
+  const { data: categories } = await commerce.categories.list();
 
-  async function fetchCategories() {
-    const response = await fetch(`${server}/api/commercejs/categories`);
+  const allCategories = [];
 
-    const cats = await response.json();
-    return cats.categories;
+  async function getNthSubcategories(SubcategoryId) {
+    const nthSubcategory = await commerce.categories.retrieve(SubcategoryId);
+
+    if (nthSubcategory.children.length) {
+      return await nthSubcategory.children;
+    }
+    return 0;
   }
-  const allCategories = await fetchCategories();
-  // console.log(allCategories);
+
+  async function getSubcategories(parent) {
+    if (parent.length !== 0) {
+      const data = parent.map(async (child) => {
+        allCategories.push(child.slug);
+        const result = await getNthSubcategories(child.id);
+        if (result && result.length !== 0) {
+          return getSubcategories(result);
+        }
+        return 0;
+      });
+      await Promise.all(data);
+    } else {
+      return 0;
+    }
+  }
+  await getSubcategories(categories);
+
+  // async function fetchCategories() {
+  //   const response = await fetch(`${server}/api/commercejs/categories`);
+
+  //   const cats = await response.json();
+  //   return cats.categories;
+  // }
+  // const allCategories = await fetchCategories();
+  // // console.log(allCategories);
 
   return {
     paths: allCategories.map((category) => ({
