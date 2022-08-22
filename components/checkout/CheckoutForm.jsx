@@ -6,6 +6,7 @@ import commerce from "../../lib/commerce";
 
 import styles from "../../styles/CheckoutForm.module.css";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 export default function CheckoutForm({
   checkoutTokenId,
@@ -20,6 +21,7 @@ export default function CheckoutForm({
   const [processing, setProcessing] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const { data: session, status } = useSession();
 
   const [shippingAsBillingAddress, setShippingAsBillingAddress] =
     useState(true);
@@ -167,12 +169,12 @@ export default function CheckoutForm({
       toast.dismiss();
       return;
     }
-
+    const customer = session.customer_id
+      ? { id: session.customer_id }
+      : { email: e.target.shippingEmail.value };
     try {
       const order = await commerce.checkout.capture(checkoutTokenId, {
-        customer: {
-          email: e.target.shippingEmail.value,
-        },
+        customer: customer,
         shipping: shipping,
         billing: billing,
         fulfillment: {
@@ -185,8 +187,6 @@ export default function CheckoutForm({
           },
         },
       });
-      console.log("1");
-      console.log(order);
       toast.dismiss();
       return;
     } catch (response) {
@@ -194,7 +194,6 @@ export default function CheckoutForm({
         response.statusCode !== 402 ||
         response.data.error.type !== "requires_verification"
       ) {
-        console.log(response);
         toast.dismiss();
         return;
       }
@@ -212,7 +211,7 @@ export default function CheckoutForm({
       try {
         const order = await commerce.checkout.capture(checkoutTokenId, {
           customer: {
-            email: e.target.shippingEmail.value,
+            email: customer,
           },
           shipping: shipping,
           billing: billing,

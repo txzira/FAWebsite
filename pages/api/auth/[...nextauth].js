@@ -2,11 +2,34 @@ import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import { connectToDatabase } from "../../../lib/mongodb";
 import { verifyPassword } from "../../../lib/hash";
+import commerce from "../../../lib/commerce";
+
+async function getJwt(customerId) {
+  const url = new URL(
+    `https://api.chec.io/v1/customers/${customerId}/issue-token`
+  );
+
+  const headers = {
+    "X-Authorization": `${process.env.NEXT_PUBLIC_CHEC_SECRET_API_KEY}`,
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+
+  let commerceJsCustomer = await fetch(url, {
+    method: "POST",
+    headers: headers,
+  });
+  commerceJsCustomer = await commerceJsCustomer.json();
+
+  return commerceJsCustomer.jwt;
+}
 
 export default NextAuth({
   //Configure JWT
   session: {
     strategy: "jwt",
+    jwt: "true",
+    maxAge: 24 * 60 * 60,
   },
   providers: [
     CredentialProvider({
@@ -34,10 +57,28 @@ export default NextAuth({
           throw new Error("Password doesnt match");
         }
         //Else send success response
+        //get and attach commerceJs JWT for commerce.customer's function usage
+        user.jwt = await getJwt(user.customer_id);
+
         client.close();
-        return { email: user.email };
+        return user;
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.accessToken = user.jwt;
+        token.email = user.email;
+        token.customer_id = user.customer_id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.accessToken = token.accessToken;
+      session.customer_id = token.customer_id;
+      return session;
+    },
+  },
 });

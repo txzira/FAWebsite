@@ -1,0 +1,88 @@
+.hero-banner-container {
+  background-color: #dcdcdc;
+  border-radius: 15px;
+  height: 500px;
+  line-height: 0.9;
+  padding: 100px 40px;
+  position: relative;
+  width: 100%;
+}
+
+.hero-banner-container .beats-solo {
+  font-size: 20px;
+}
+
+.hero-banner-container button {
+  background-color: #f02d34;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 40px;
+  padding: 10px 16px;
+  z-index: 10000 !important;
+}
+.hero-banner-container h3 {
+  font-size: 4rem;
+  margin-top: 4px;
+}
+
+.hero-banner-container h1 {
+  color: white;
+  font-size: 10em;
+  margin-left: -20px;
+  text-transform: uppercase;
+}
+
+.hero-banner-image {
+  height: 450px;
+  position: absolute;
+  right: 20%;
+  top: 0%;
+  width: 450px;
+}
+.banner-desc {
+  display: flex;
+  justify-content: space-between;
+}
+
+.banner-desc button {
+  background-color: white;
+  border: none;
+  border-radius: 15px;
+  color: red;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 40px;
+  padding: 10px 16px;
+}
+
+.banner-desc .left h3 {
+  font-size: 80px;
+  font-weight: 900;
+  margin-left: 25px;
+}
+
+.banner-desc .left p {
+  margin: 18px;
+}
+.banner-desc .right {
+  line-height: 1.4;
+}
+
+.banner-desc .right h3 {
+  font-size: 60px;
+  font-weight: 800;
+}
+
+.banner-desc .right p {
+  font-size: 18px;
+}
+
+.banner-desc .right .company-desc {
+  font-size: 14px;
+  font-weight: 300;
+}

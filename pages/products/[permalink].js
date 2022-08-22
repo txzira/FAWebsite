@@ -1,12 +1,12 @@
 // pages/products/[permalink].js
 import commerce from "../../lib/commerce";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import ProductDetail from "../../components/ProductDetail";
 
 export async function getStaticProps({ params }) {
   const { permalink } = params;
   const product = await commerce.products.retrieve(permalink, {
-    type: 'permalink',
+    type: "permalink",
   });
 
   return {
@@ -36,18 +36,17 @@ export default function ProductPage({ product }) {
   const [colors, setColors] = useState([]);
 
   useEffect(() => {
-    getOptions()
+    getOptions();
   }, []);
 
   const getOptions = () => {
     const colorsArr = [];
-    const sizesArr = [];
-
     let color = {};
+    const sizesArr = [];
     let size = {};
 
     product.variant_groups.map((details) => {
-      if (details.name == 'Color') {
+      if (details.name == "Color") {
         setColorOptionKey(details.id);
         details.options.map((option) => {
           color.id = option.id;
@@ -56,8 +55,8 @@ export default function ProductPage({ product }) {
           colorsArr.push(color);
           // [{ id: option.id, color: option.name, assets: [option.assets] },{},...,{}]
           color = {};
-        })
-      } else if (details.name == 'Size') {
+        });
+      } else if (details.name == "Size") {
         setSizeOptionKey(details.id);
         details.options.map((option) => {
           size.id = option.id;
@@ -65,16 +64,22 @@ export default function ProductPage({ product }) {
           sizesArr.push(size);
           // [{ id: option.id, size: option.name },{},...,{}]
           size = {};
-        })
+        });
       }
-    })
+    });
     setSizes(sizesArr);
     setColors(colorsArr);
-  }
+  };
 
   return (
     <React.Fragment>
-      <ProductDetail product={product} colors={colors} sizes={sizes} sizeOptionKey={sizeOptionKey} colorOptionKey={colorOptionKey} />
+      <ProductDetail
+        product={product}
+        colors={colors}
+        sizes={sizes}
+        sizeOptionKey={sizeOptionKey}
+        colorOptionKey={colorOptionKey}
+      />
     </React.Fragment>
   );
 }

@@ -3,16 +3,18 @@ import Link from "next/link";
 
 import Product from "./Product";
 
+import styles from "../styles/Product.module.css";
+
 export default function ProductList({ products }) {
   if (!products) return null;
 
   return (
-    <div className="products-container">
+    <div className={styles["products-container"]}>
       {products.map((product) => (
         <div key={product.permalink}>
+          {/* {console.log(product)} */}
           <Link href={`/products/${product.permalink}`}>
             <a>
-              {/* {console.log(product)} */}
               <Product {...product} />
             </a>
           </Link>

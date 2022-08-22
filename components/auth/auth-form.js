@@ -5,10 +5,10 @@ import classes from "./auth-form.module.css";
 import toast from "react-hot-toast";
 import { useCartDispatch } from "../../context/cart";
 
-async function createUser(email, password, customer_id, jwt) {
+async function createUser(email, password, customer_id) {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
-    body: JSON.stringify({ email, password, customer_id, jwt }),
+    body: JSON.stringify({ email, password, customer_id }), //,jwt
     headers: {
       "Content-Type": "application/json",
     },
@@ -23,6 +23,7 @@ async function createUser(email, password, customer_id, jwt) {
 }
 
 function AuthForm() {
+  //form data
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const phoneInputRef = useRef();
@@ -61,21 +62,21 @@ function AuthForm() {
           firstname: firstNameInputRef.current.value,
           lastname: lastNameInputRef.current.value,
         };
-        let customerJwt = await fetch("/api/commercejs/createcustomer", {
+        let customerId = await fetch("/api/commercejs/createcustomer", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(customerDetails),
         });
-        customerJwt = await customerJwt.json();
+        customerId = await customerId.json();
         const result = await createUser(
           enteredEmail,
           enteredPassword,
-          customerJwt.customer_id,
-          customerJwt.jwt
+          customerId.customer_id
         );
         toast.success(result.message);
+        router.reload();
       } catch (error) {
         console.log(error);
       }
@@ -90,6 +91,7 @@ function AuthForm() {
           <label htmlFor="email">Your Email</label>
           <input required type="email" id="email" ref={emailInputRef} />
         </div>
+
         {!isLogin && (
           <>
             <div className={classes.control}>
@@ -131,7 +133,6 @@ function AuthForm() {
             ref={passwordInputRef}
           />
         </div>
-
         <div className={classes.actions}>
           <button>{isLogin ? "Login" : "Create Account"}</button>
           <button type="button" onClick={switchAuthModeHandler}>

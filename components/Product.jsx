@@ -1,11 +1,13 @@
-// components/Product.js
+import styles from "../styles/Product.module.css";
+
 export default function Product({ name, price, image }) {
   return (
-    <div className="product-card">
-      <p className="product-name">
-        {name}: <span className="product-price">{price.formatted_with_symbol}</span>
-      </p>
-      <img src={image.url} className='product-image' />
+    <div className={styles["product-card"]}>
+      <img src={image.url} className={styles["product-image"]} />
+      <p className={styles["product-name"]}>{name}: </p>
+      <span className={styles["product-price"]}>
+        {price.formatted_with_symbol}
+      </span>
     </div>
   );
 }
