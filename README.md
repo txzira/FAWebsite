@@ -1,3 +1,11 @@
+Next Js Webstore using:
+
+-Stripe SDK/API (Payment Gateway)
+-Next-Auth (Authentication)
+-MongoDb (Customer Login Data)
+-CommerceJs (Product Inventory/Customer Orders Database)
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
