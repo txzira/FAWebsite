@@ -1,4 +1,4 @@
-Next Js Webstore using:
+## Creates Next Js Webstore using:
 
 -Stripe SDK/API (Payment Gateway)
 
