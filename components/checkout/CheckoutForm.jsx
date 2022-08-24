@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-import { ShippingDetails, BillingDetails } from "./ShippingBillingForms";
+import { ShippingDetails, BillingDetails, ShippingMethod, ProgressView } from "./ShippingBillingForms";
+import { useRouter } from "next/router";
 
 import commerce from "../../lib/commerce";
 
@@ -8,13 +9,11 @@ import styles from "../../styles/CheckoutForm.module.css";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 
-export default function CheckoutForm({
-  checkoutTokenId,
-  paymentIntentId,
-  clientSecret,
-}) {
+export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientSecret }) {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
+  const [step, setStep] = useState(0);
   const [message, setMessage] = useState(null);
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
@@ -23,8 +22,7 @@ export default function CheckoutForm({
   const [isLoading, setIsLoading] = useState(false);
   const { data: session, status } = useSession();
 
-  const [shippingAsBillingAddress, setShippingAsBillingAddress] =
-    useState(true);
+  const [shippingAsBillingAddress, setShippingAsBillingAddress] = useState(true);
 
   const [shippingCountries, setShippingCountries] = useState([]);
   const [shippingCountry, setShippingCountry] = useState("");
@@ -32,33 +30,44 @@ export default function CheckoutForm({
   const [shippingSubdivision, setShippingSubdivision] = useState("");
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState("");
+  const [shippingOptionLabel, setShippingOptionLabel] = useState("");
+
+  const [shippingEmail, setShippingEmail] = useState("");
+  const [shippingFirstName, setShippingFirstName] = useState("");
+  const [shippingLastName, setShippingLastName] = useState("");
+  const [shippingCity, setShippingCity] = useState("");
+  const [shippingPostalCode, setShippingPostalCode] = useState("");
+  const [shippingLine1, setShippingLine1] = useState("");
+  const [shippingLine2, setShippingLine2] = useState("");
+
+  const [billingEmail, setBillingEmail] = useState("");
+  const [billingFirstName, setBillingFirstName] = useState();
+  const [billingLastName, setBillingLastName] = useState("");
+  const [billingCountry, setBillingCountry] = useState("");
+  const [billingSubdivision, setBillingSubdivision] = useState("");
+  const [billingCity, setBillingCity] = useState("");
+  const [billingPostalCode, setBillingPostalCode] = useState("");
+  const [billingLine1, setBillingLine1] = useState("");
+  const [billingLine2, setBillingLine2] = useState("");
 
   const countries = Object.entries(shippingCountries).map(([code, name]) => ({
     id: code,
     label: name,
   }));
-  const subdivisions = Object.entries(shippingSubdivisions).map(
-    ([code, name]) => ({ id: code, label: name })
-  );
+  const subdivisions = Object.entries(shippingSubdivisions).map(([code, name]) => ({ id: code, label: name }));
   const options = shippingOptions.map((sO) => ({
     id: sO.id,
     label: `${sO.description} - (${sO.price.formatted_with_symbol})`,
   }));
 
   const fetchShippingCountry = async (checkoutId) => {
-    const { countries } = await commerce.services.localeListShippingCountries(
-      checkoutId
-    );
+    const { countries } = await commerce.services.localeListShippingCountries(checkoutId);
     setShippingCountries(countries);
     setShippingCountry(Object.keys(countries)[0]);
   };
 
   const fetchSubdivision = async (countryCode) => {
-    const { subdivisions } =
-      await commerce.services.localeListShippingSubdivisions(
-        checkoutTokenId,
-        countryCode
-      );
+    const { subdivisions } = await commerce.services.localeListShippingSubdivisions(checkoutTokenId, countryCode);
     setShippingSubdivisions(subdivisions);
     setShippingSubdivision(Object.keys(subdivisions)[0]);
   };
@@ -100,12 +109,7 @@ export default function CheckoutForm({
   }, [shippingCountry]);
 
   useEffect(() => {
-    if (shippingSubdivision)
-      fetchShippingOptions(
-        checkoutTokenId,
-        shippingCountry,
-        shippingSubdivision
-      );
+    if (shippingSubdivision) fetchShippingOptions(checkoutTokenId, shippingCountry, shippingSubdivision);
   }, [shippingSubdivision]);
 
   useEffect(() => {
@@ -135,50 +139,46 @@ export default function CheckoutForm({
       type: "card",
       card,
     });
+    console.log(shippingFirstName);
     const shipping = {
-      name: e.target.shippingName.value,
-      street: e.target.shippingLine1.value,
-      street_2: e.target.shippingLine2.value
-        ? e.target.shippingLine2.value
-        : null,
-      town_city: e.target.shippingCity.value,
-      county_state: e.target.shippingState.value,
-      postal_zip_code: e.target.shippingZip.value,
-      country: e.target.shippingCountry.value,
+      name: shippingFirstName + " " + shippingLastName,
+      street: shippingLine1,
+      street_2: shippingLine2 ? shippingLine2 : null,
+      town_city: shippingCity,
+      county_state: shippingSubdivision,
+      postal_zip_code: shippingPostalCode,
+      country: shippingCountry,
     };
     let billing;
     if (shippingAsBillingAddress) {
-      billing = { ...shipping, email: e.target.shippingEmail.value };
+      billing = { ...shipping, email: shippingEmail };
     } else {
       billing = {
-        name: e.target.billingName.value,
+        name: e.target.billingFirstName.value + " " + e.target.billingLastName.value,
         email: e.target.billingEmail.value,
         street: e.target.billingLine1.value,
-        street_2: e.target.billingLine2.value
-          ? e.target.billingLine2.value
-          : null,
+        street_2: e.target.billingLine2.value ? e.target.billingLine2.value : null,
         town_city: e.target.billingCity.value,
         county_state: e.target.billingState.value,
         postal_zip_code: e.target.billingZip.value,
         country: e.target.billingCountry.value,
       };
     }
+    console.log(billing);
 
     if (paymentMethodResponse.error) {
-      alert(paymentMethodResponse.error.message);
+      console.log(paymentMethodResponse.error.message);
       toast.dismiss();
       return;
     }
-    const customer = session.customer_id
-      ? { id: session.customer_id }
-      : { email: e.target.shippingEmail.value };
+    const customer = session.customer_id ? { id: session.customer_id } : { email: e.target.shippingEmail.value };
     try {
       const order = await commerce.checkout.capture(checkoutTokenId, {
         customer: customer,
         shipping: shipping,
         billing: billing,
         fulfillment: {
-          shipping_method: e.target.shippingOption.value,
+          shipping_method: shippingOption,
         },
         payment: {
           gateway: "stripe",
@@ -187,20 +187,19 @@ export default function CheckoutForm({
           },
         },
       });
+      console.log("here");
       toast.dismiss();
+      await commerce.cart.refresh();
+      router.replace("/");
       return;
     } catch (response) {
-      if (
-        response.statusCode !== 402 ||
-        response.data.error.type !== "requires_verification"
-      ) {
+      if (response.statusCode !== 402 || response.data.error.type !== "requires_verification") {
+        console.log(response);
         toast.dismiss();
         return;
       }
 
-      const cardActionResult = await stripe.handleCardAction(
-        response.data.error.param
-      );
+      const cardActionResult = await stripe.handleCardAction(response.data.error.param);
 
       if (cardActionResult.error) {
         alert(cardActionResult.error.message);
@@ -216,7 +215,7 @@ export default function CheckoutForm({
           shipping: shipping,
           billing: billing,
           fulfillment: {
-            shipping_method: e.target.shippingOption.value,
+            shipping_method: shippingOption,
           },
           payment: {
             gateway: "stripe",
@@ -228,6 +227,8 @@ export default function CheckoutForm({
         console.log("2");
         console.log(order);
         toast.dismiss();
+        await commerce.cart.refresh();
+        router.replace("/");
         return;
       } catch (response) {
         console.log(response);
@@ -240,19 +241,93 @@ export default function CheckoutForm({
   };
 
   return (
-    <>
-      <form id="payment-form" onSubmit={handleSubmit}>
-        <ShippingDetails
-          countries={countries}
-          setShippingCountry={setShippingCountry}
-          options={options}
-          shippingCountry={shippingCountry}
-          shippingSubdivision={shippingSubdivision}
-          subdivisions={subdivisions}
+    <div>
+      {step > 0 && (
+        <ProgressView
+          step={step}
+          setStep={setStep}
+          email={shippingEmail}
+          line1={shippingLine1}
+          line2={shippingLine2}
+          city={shippingCity}
+          subdivision={shippingSubdivision}
+          postalCode={shippingPostalCode}
+          country={shippingCountry}
+          shippingOptionLabel={shippingOptionLabel}
         />
-        <input type="checkbox" onChange={handleShowBilling} />
+      )}
+
+      <div className={styles["form-container"]}>
+        <form className={styles["checkout-form"]} id="payment-form" onSubmit={handleSubmit}>
+          {step === 0 && (
+            <ShippingDetails
+              countries={countries}
+              setShippingCountry={setShippingCountry}
+              shippingCountry={shippingCountry}
+              subdivisions={subdivisions}
+              shippingSubdivision={shippingSubdivision}
+              setShippingSubdivision={setShippingSubdivision}
+              step={step}
+              setStep={setStep}
+              email={shippingEmail}
+              setEmail={setShippingEmail}
+              firstName={shippingFirstName}
+              setFirstName={setShippingFirstName}
+              lastName={shippingLastName}
+              setLastName={setShippingLastName}
+              city={shippingCity}
+              setCity={setShippingCity}
+              postalCode={shippingPostalCode}
+              setPostalCode={setShippingPostalCode}
+              shippingLine1={shippingLine1}
+              setShippingLine1={setShippingLine1}
+              shippingLine2={shippingLine2}
+              setShippingLine2={setShippingLine2}
+            />
+          )}
+          {step === 1 && (
+            <ShippingMethod
+              options={options}
+              setStep={setStep}
+              shippingOption={shippingOption}
+              setShippingOption={setShippingOption}
+              setShippingOptionLabel={setShippingOptionLabel}
+            />
+          )}
+          {step === 2 && (
+            <>
+              <BillingDetails
+                email={billingEmail}
+                setEmail={setBillingEmail}
+                firstName={billingFirstName}
+                setFirstName={setBillingFirstName}
+                lastName={billingLastName}
+                setLastName={setBillingLastName}
+                country={billingCountry}
+                setCountry={setBillingCountry}
+                subdivision={billingSubdivision}
+                setSubdivision={setBillingSubdivision}
+                city={billingCity}
+                setCity={setBillingCity}
+                postalCode={billingPostalCode}
+                setPostalCode={setBillingPostalCode}
+                billingLine1={billingLine1}
+                setBillingLine1={setBillingLine1}
+                billingLine2={billingLine2}
+                setBillingLine2={setBillingLine2}
+                setStep={setStep}
+                stripe={stripe}
+                elements={elements}
+                isLoading={isLoading}
+                handleShowBilling={handleShowBilling}
+                shippingAsBillingAddress={shippingAsBillingAddress}
+              />
+            </>
+          )}
+
+          {/* <input type="checkbox" onChange={handleShowBilling} />
         {!shippingAsBillingAddress && <BillingDetails />}
-        <CardElement id="card-element" options={cardStyle} />
+        
         <button disabled={isLoading || !stripe || !elements} id="submit">
           <span id="button-text">
             {isLoading ? (
@@ -261,10 +336,18 @@ export default function CheckoutForm({
               "Pay now"
             )}
           </span>
-        </button>
-        {/* Show any error or success messages */}
-        {message && <div id="payment-message">{message}</div>}
-      </form>
-    </>
+        </button> */}
+        </form>
+      </div>
+    </div>
   );
 }
+{
+  /* <div className={styles["test"]}>
+            <span onClick={() => setStep(1)}>{"<- Shipping"}</span>
+            {/* <span onClick={() => setStep(3)}>{"Pay Now ->"}</span> */
+}
+//   <button disabled={isLoading || !stripe || !elements} id="submit">
+//     <span id="button-text">{isLoading ? <div className="spinner" id="spinner"></div> : "Pay now ->"}</span>
+//   </button>
+// </div> */}

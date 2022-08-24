@@ -7,13 +7,7 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import toast from "react-hot-toast";
 import styles from "../styles/Product.module.css";
 
-export default function ProductDetail({
-  product,
-  colors,
-  sizes,
-  sizeOptionKey,
-  colorOptionKey,
-}) {
+export default function ProductDetail({ product, colors, sizes, sizeOptionKey, colorOptionKey }) {
   const { setCart } = useCartDispatch();
   const [options, setOptions] = useState({});
   const [assets, setAssets] = useState([]);
@@ -25,12 +19,8 @@ export default function ProductDetail({
 
   //add product to cart
   const addToCart = () => {
-    commerce.cart
-      .add(product.id, qty, options)
-      .then(({ cart }) => setCart(cart));
-    toast.success(
-      `${product.name} ${selectedColor}/${selectedSize} was added to the cart`
-    );
+    commerce.cart.add(product.id, qty, options).then(({ cart }) => setCart(cart));
+    toast.success(`${product.name} ${selectedColor}/${selectedSize} was added to the cart`);
   };
   //increment product quantity
   const incQty = () => {
@@ -78,7 +68,8 @@ export default function ProductDetail({
     const data = await response.json();
     setAssets(data);
     setImage(data[0].url);
-  }; //
+  };
+
   useEffect(() => {
     getAssets();
     defaultColor();
@@ -97,9 +88,9 @@ export default function ProductDetail({
                   {
                     if (asset.id === id) {
                       return (
-                        <span key={id.toString()}>
+                        <button type="button" onClick={() => setImage(asset.url)} key={id.toString()}>
                           <img className="small-image" src={asset.url} />
-                        </span>
+                        </button>
                       );
                     }
                   }
@@ -111,9 +102,7 @@ export default function ProductDetail({
         <div className={styles["product-detail-desc"]}>
           <div className="products-heading">
             <h2>{product.name}</h2>
-            <p className={styles["price"]}>
-              {product.price.formatted_with_symbol}
-            </p>
+            <p className={styles["price"]}>{product.price.formatted_with_symbol}</p>
           </div>
 
           <br />
@@ -130,11 +119,7 @@ export default function ProductDetail({
                         type="button"
                         id={color.id}
                         name="color"
-                        onClick={changeColor(
-                          color.id,
-                          color.assets,
-                          color.name
-                        )}
+                        onClick={changeColor(color.id, color.assets, color.name)}
                       >
                         <img className={styles["button"]} src={asset.url} />
                       </button>
@@ -148,12 +133,8 @@ export default function ProductDetail({
           <h1>Size:</h1>
           <div>
             {sizes.map((size) => (
-              <span
-                key={size.id}
-                className={styles["buttons"]}
-                onChange={changeSize(size.name)}
-              >
-                <input id={size.id} type="radio" name="size" value={size.id} />
+              <span key={size.id} className={styles["buttons"]} onChange={changeSize(size.name)}>
+                <input id={size.id} type="radio" name="size" value={size.id} style={{ display: "none" }} />
                 <label className={styles["label"]} htmlFor={size.id}>
                   &nbsp;{size.name}&nbsp;
                 </label>

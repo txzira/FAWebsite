@@ -8,10 +8,7 @@ export default function OrderHistory() {
 
   async function getOrders() {
     if (session) {
-      const orders = await commerce.customer.getOrders(
-        session.customer_id,
-        session.accessToken
-      );
+      const orders = await commerce.customer.getOrders(session.customer_id, session.accessToken);
       setOrders(orders.data);
       console.log(orders);
     }
@@ -31,7 +28,7 @@ export default function OrderHistory() {
             <table>
               <thead>
                 <tr>
-                  <th>Order #</th>
+                  <th>Order No.</th>
                   <th>Order Placed</th>
                   <th>Total Amount</th>
                   <th>Shipping Status</th>
@@ -42,10 +39,8 @@ export default function OrderHistory() {
                 {orders.map((order) => {
                   return (
                     <tr key={order.id}>
-                      <td>{order.id}</td>
-                      <td>
-                        {new Date(order.created * 1000).toLocaleDateString()}
-                      </td>
+                      <td>{order.customer_reference}</td>
+                      <td>{new Date(order.created * 1000).toLocaleDateString()}</td>
                       <td>{order.order_value.formatted_with_symbol}</td>
                       <td>View Details</td>
                     </tr>
