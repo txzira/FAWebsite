@@ -113,12 +113,12 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
   }, [shippingSubdivision]);
 
   useEffect(() => {
-    if (!shippingOption) return;
-    fetch("/api/stripe/update-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ shippingOption, paymentIntentId }),
-    });
+    if (shippingOption)
+      fetch("/api/stripe/update-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shippingOption, paymentIntentId }),
+      });
   }, [shippingOption]);
 
   const handleShowBilling = () => {
