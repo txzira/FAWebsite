@@ -72,7 +72,7 @@ export default NextAuth({
     },
     async session({ session, token }) {
       // session.accessToken = token.accessToken;
-      // session.customer_id = token.customer_id;
+      session.user.customer_id = token.customer_id;
       return session;
     },
   },

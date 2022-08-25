@@ -112,14 +112,14 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     if (shippingSubdivision) fetchShippingOptions(checkoutTokenId, shippingCountry, shippingSubdivision);
   }, [shippingSubdivision]);
 
-  useEffect(() => {
-    if (shippingOption)
-      fetch("/api/stripe/update-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shippingOption, paymentIntentId }),
-      });
-  }, [shippingOption]);
+  // useEffect(() => {
+  //   if (!shippingOption) console.log("hello");
+  //   fetch("/api/stripe/update-payment-intent", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ shippingOption, paymentIntentId }),
+  //   });
+  // }, [shippingOption]);
 
   const handleShowBilling = () => {
     setShippingAsBillingAddress(!shippingAsBillingAddress);
@@ -171,7 +171,7 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       toast.dismiss();
       return;
     }
-    const customer = session.customer_id ? { id: session.customer_id } : { email: e.target.shippingEmail.value };
+    const customer = session.user.customer_id ? { id: session.user.customer_id } : { email: shippingEmail };
     try {
       const order = await commerce.checkout.capture(checkoutTokenId, {
         customer: customer,
