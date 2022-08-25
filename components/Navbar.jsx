@@ -59,11 +59,7 @@ const Navbar = () => {
           )}
           {session && (
             <li>
-              <button
-                onClick={() => setDropdownIsActive((prev) => !prev)}
-                className=""
-                aria-expanded={dropdownIsActive ? "true" : "false"}
-              >
+              <button onClick={() => setDropdownIsActive((prev) => !prev)} className="" aria-expanded={dropdownIsActive ? "true" : "false"}>
                 {session.user.email}
                 <CgProfile />
               </button>
@@ -79,14 +75,11 @@ const Navbar = () => {
                   </li>
                 </ul>
               </div>
+              {console.log(session)}
             </li>
           )}
           <li>
-            <button
-              type="button"
-              className="cart-icon"
-              onClick={() => setShowCart(true)}
-            >
+            <button type="button" className="cart-icon" onClick={() => setShowCart(true)}>
               <AiOutlineShopping />
               <span className={styles.navbarCartItemQty}>{total_items}</span>
             </button>

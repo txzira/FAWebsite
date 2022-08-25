@@ -5,9 +5,7 @@ import { verifyPassword } from "../../../lib/hash";
 import commerce from "../../../lib/commerce";
 
 async function getJwt(customerId) {
-  const url = new URL(
-    `https://api.chec.io/v1/customers/${customerId}/issue-token`
-  );
+  const url = new URL(`https://api.chec.io/v1/customers/${customerId}/issue-token`);
 
   const headers = {
     "X-Authorization": `${process.env.NEXT_PUBLIC_CHEC_SECRET_API_KEY}`,
@@ -47,10 +45,7 @@ export default NextAuth({
           client.close();
           throw new Error("No user found with the email");
         }
-        const checkPassword = verifyPassword(
-          credentials.password,
-          user.password
-        );
+        const checkPassword = verifyPassword(credentials.password, user.password);
         //Incorrect password - send response
         if (!checkPassword) {
           client.close();
@@ -76,8 +71,8 @@ export default NextAuth({
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.customer_id = token.customer_id;
+      // session.accessToken = token.accessToken;
+      // session.customer_id = token.customer_id;
       return session;
     },
   },

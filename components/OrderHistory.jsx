@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import commerce from "../lib/commerce";
+import { getToken } from "next-auth/jwt";
 
 export default function OrderHistory() {
   const { data: session, status } = useSession();
@@ -8,9 +9,13 @@ export default function OrderHistory() {
 
   async function getOrders() {
     if (session) {
-      const orders = await commerce.customer.getOrders(session.customer_id, session.accessToken);
-      setOrders(orders.data);
-      console.log(orders);
+      fetch("/api/auth/get-token").then((response) =>
+        response
+          .json()
+          .then((customer) =>
+            commerce.customer.getOrders(customer.customer_id, customer.accessToken).then((orders) => setOrders(orders.data))
+          )
+      );
     }
   }
 
@@ -18,12 +23,10 @@ export default function OrderHistory() {
     getOrders();
   }, [session]);
 
-  console.log(session);
-  console.log(orders);
   if (orders) {
     return (
       <>
-        {orders && (
+        {
           <div>
             <table>
               <thead>
@@ -36,20 +39,21 @@ export default function OrderHistory() {
                 </tr>
               </thead>
               <tbody id="orderTable">
-                {orders.map((order) => {
-                  return (
-                    <tr key={order.id}>
-                      <td>{order.customer_reference}</td>
-                      <td>{new Date(order.created * 1000).toLocaleDateString()}</td>
-                      <td>{order.order_value.formatted_with_symbol}</td>
-                      <td>View Details</td>
-                    </tr>
-                  );
-                })}
+                {orders &&
+                  orders.map((order) => {
+                    return (
+                      <tr key={order.id}>
+                        <td>{order.customer_reference}</td>
+                        <td>{new Date(order.created * 1000).toLocaleDateString()}</td>
+                        <td>{order.order_value.formatted_with_symbol}</td>
+                        <td>View Details</td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
-        )}
+        }
       </>
     );
   } else {
