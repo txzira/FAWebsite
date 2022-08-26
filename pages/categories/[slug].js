@@ -23,44 +23,39 @@ export async function getStaticProps({ params }) {
 }
 // pages/categories/[slug].js
 export async function getStaticPaths() {
-  const { data: categories } = await commerce.categories.list();
-
+  const { data: categoryList } = await commerce.categories.list();
   const allCategories = [];
 
   async function getNthSubcategories(SubcategoryId) {
+    //retrieve category details using their "id"
     const nthSubcategory = await commerce.categories.retrieve(SubcategoryId);
-
     if (nthSubcategory.children.length) {
+      //if subcategories exist within the category details return them
       return await nthSubcategory.children;
     }
+    // else base case
     return 0;
   }
 
-  async function getSubcategories(parent) {
-    if (parent.length !== 0) {
-      const data = parent.map(async (child) => {
-        allCategories.push(child.slug);
-        const result = await getNthSubcategories(child.id);
+  async function getSubcategories(categories) {
+    if (categories.length !== 0) {
+      const data = categories.map(async (subcategories) => {
+        allCategories.push(subcategories.slug);
+        const result = await getNthSubcategories(subcategories.id);
         if (result && result.length !== 0) {
+          //recursive function call
           return getSubcategories(result);
         }
+        //base case
         return 0;
       });
       await Promise.all(data);
     } else {
+      //base case
       return 0;
     }
   }
-  await getSubcategories(categories);
-
-  // async function fetchCategories() {
-  //   const response = await fetch(`${server}/api/commercejs/categories`);
-
-  //   const cats = await response.json();
-  //   return cats.categories;
-  // }
-  // const allCategories = await fetchCategories();
-  // // console.log(allCategories);
+  await getSubcategories(categoryList);
 
   return {
     paths: allCategories.map((category) => ({

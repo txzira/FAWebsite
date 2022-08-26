@@ -1,9 +1,5 @@
 import { useCartDispatch, useCartState } from "../context/cart";
-import {
-  AiOutlineMinus,
-  AiOutlinePlus,
-  AiOutlineCloseCircle,
-} from "react-icons/ai";
+import { AiOutlineMinus, AiOutlinePlus, AiOutlineCloseCircle } from "react-icons/ai";
 import Link from "next/link";
 
 import commerce from "../lib/commerce";
@@ -28,15 +24,10 @@ function CartItem({ id, name, quantity, line_total, image, selected_options }) {
   };
 
   const decrementQuantity = () => {
-    quantity > 1
-      ? commerce.cart
-          .update(id, { quantity: quantity - 1 })
-          .then(handleUpdateCart)
-      : removeItem();
+    quantity > 1 ? commerce.cart.update(id, { quantity: quantity - 1 }).then(handleUpdateCart) : removeItem();
   };
 
-  const incrementQuantity = () =>
-    commerce.cart.update(id, { quantity: quantity + 1 }).then(handleUpdateCart);
+  const incrementQuantity = () => commerce.cart.update(id, { quantity: quantity + 1 }).then(handleUpdateCart);
 
   return (
     <div className="">
@@ -68,7 +59,6 @@ function CartItem({ id, name, quantity, line_total, image, selected_options }) {
 
 export default function CartPage() {
   const { line_items, subtotal, id } = useCartState();
-  console.log(line_items);
   const isEmpty = line_items.length === 0;
 
   if (isEmpty) return <p>Your cart is empty</p>;

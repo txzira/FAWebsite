@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import commerce from "../lib/commerce";
-import { getToken } from "next-auth/jwt";
 
-export default function OrderHistory() {
+import styles from "../styles/Orders.module.css";
+
+function Order() {}
+
+export default function OrderHistory({ orders }) {
   const { data: session, status } = useSession();
-  const [orders, setOrders] = useState([]);
-
-  async function getOrders() {
-    if (session) {
-      fetch("/api/auth/get-token").then((response) =>
-        response
-          .json()
-          .then((customer) =>
-            commerce.customer.getOrders(customer.customer_id, customer.accessToken).then((orders) => setOrders(orders.data))
-          )
-      );
-    }
+  // const [orders, setOrders] = useState([]);
+  console.log(orders);
+  // async function getOrders() {
+  //   if (session) {
+  //     fetch("/api/auth/get-token")
+  //       .then((response) => response.json())
+  //       .then((orders) => setOrders(orders.data));
+  //   }
+  // }
+  function getShippingStatus(paymentStatus, fulfillStatus) {
+    if (paymentStatus === "paid" && fulfillStatus === "fulfilled") {
+      return "Shipped";
+    } else if (paymentStatus === "paid") {
+      return "Pending";
+    } else return "Error";
   }
 
-  useEffect(() => {
-    getOrders();
-  }, [session]);
+  // useEffect(() => {
+  //   getOrders();
+  // }, [session]);
 
   if (orders) {
+    // console.log(orders);
     return (
       <>
         {
-          <div>
+          <div className={styles["orders"]}>
             <table>
               <thead>
                 <tr>
@@ -46,6 +52,7 @@ export default function OrderHistory() {
                         <td>{order.customer_reference}</td>
                         <td>{new Date(order.created * 1000).toLocaleDateString()}</td>
                         <td>{order.order_value.formatted_with_symbol}</td>
+                        <td>{getShippingStatus(order.status_payment, order.status_fulfillment)}</td>
                         <td>View Details</td>
                       </tr>
                     );

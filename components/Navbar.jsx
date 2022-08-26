@@ -75,7 +75,6 @@ const Navbar = () => {
                   </li>
                 </ul>
               </div>
-              {console.log(session)}
             </li>
           )}
           <li>

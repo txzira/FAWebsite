@@ -7,7 +7,6 @@ export default async function handler(req, res) {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
-    console.log(req.body);
 
     try {
       const createCustomer = await fetch(url, {

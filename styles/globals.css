@@ -792,3 +792,13 @@ input[type="radio"] {
     transform: rotate(360deg);
   }
 }
+
+table,
+th {
+  border: 1px solid;
+}
+th,
+td {
+  padding: 3px;
+  text-align: center;
+}

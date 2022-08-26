@@ -12,7 +12,6 @@ export default function ProductList({ products }) {
     <div className={styles["products-container"]}>
       {products.map((product) => (
         <div key={product.permalink}>
-          {/* {console.log(product)} */}
           <Link href={`/products/${product.permalink}`}>
             <a>
               <Product {...product} />

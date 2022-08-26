@@ -8,12 +8,11 @@ export default async function handler(req, res) {
       "Content-Type": "application/json",
     };
 
-    // console.log(req.body[0])
     try {
       req.body.map((asset) => {
         asset.assets.map((id) => {
           url = new URL(`https://api.chec.io/v1/assets/${id}`);
-          //console.log(url)
+
           dataArr.push(
             fetch(url, {
               method: "GET",

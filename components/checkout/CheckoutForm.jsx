@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-import { ShippingDetails, BillingDetails, ShippingMethod, ProgressView } from "./ShippingBillingForms";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { ShippingDetails, BillingDetails, ShippingMethod, ProgressView } from "./ShippingBillingForms";
 
 import commerce from "../../lib/commerce";
 
 import styles from "../../styles/CheckoutForm.module.css";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
 
 export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientSecret }) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
-  const [step, setStep] = useState(0);
-  const [message, setMessage] = useState(null);
-  const [succeeded, setSucceeded] = useState(false);
-  const [error, setError] = useState(null);
-  const [processing, setProcessing] = useState("");
-  const [disabled, setDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const { data: session, status } = useSession();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState(0);
 
   const [shippingAsBillingAddress, setShippingAsBillingAddress] = useState(true);
 
@@ -81,25 +77,6 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     setShippingOption(options[0].id);
   };
 
-  const cardStyle = {
-    style: {
-      base: {
-        color: "#32325d",
-        fontFamily: "Arial, sans-serif",
-        fontSmoothing: "antialiased",
-        fontSize: "16px",
-        "::placeholder": {
-          color: "#32325d",
-        },
-      },
-      invalid: {
-        fontFamily: "Arial, sans-serif",
-        color: "#fa755a",
-        iconColor: "#fa755a",
-      },
-    },
-  };
-
   useEffect(() => {
     fetchShippingCountry(checkoutTokenId);
   }, []);
@@ -112,19 +89,6 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
     if (shippingSubdivision) fetchShippingOptions(checkoutTokenId, shippingCountry, shippingSubdivision);
   }, [shippingSubdivision]);
 
-  // useEffect(() => {
-  //   if (!shippingOption) console.log("hello");
-  //   fetch("/api/stripe/update-payment-intent", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ shippingOption, paymentIntentId }),
-  //   });
-  // }, [shippingOption]);
-
-  const handleShowBilling = () => {
-    setShippingAsBillingAddress(!shippingAsBillingAddress);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) {
@@ -132,14 +96,9 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
-    setProcessing(true);
+
+    setIsLoading(true);
     toast.loading("Payment Processing...");
-    const card = elements.getElement(CardElement);
-    const paymentMethodResponse = await stripe.createPaymentMethod({
-      type: "card",
-      card,
-    });
-    console.log(shippingFirstName);
     const shipping = {
       name: shippingFirstName + " " + shippingLastName,
       street: shippingLine1,
@@ -154,18 +113,33 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
       billing = { ...shipping, email: shippingEmail };
     } else {
       billing = {
-        name: e.target.billingFirstName.value + " " + e.target.billingLastName.value,
-        email: e.target.billingEmail.value,
-        street: e.target.billingLine1.value,
-        street_2: e.target.billingLine2.value ? e.target.billingLine2.value : null,
-        town_city: e.target.billingCity.value,
-        county_state: e.target.billingState.value,
-        postal_zip_code: e.target.billingZip.value,
-        country: e.target.billingCountry.value,
+        name: billingFirstName + " " + billingLastName,
+        email: billingEmail,
+        street: billingLine1,
+        street_2: billingLine2 ? billingLine2 : null,
+        town_city: billingCity,
+        county_state: billingSubdivision,
+        postal_zip_code: billingPostalCode,
+        country: billingCountry,
       };
     }
-    console.log(billing);
-
+    const card = elements.getElement(CardElement);
+    const paymentMethodResponse = await stripe.createPaymentMethod({
+      type: "card",
+      card,
+      billing_details: {
+        email: billing.email,
+        name: billing.name,
+        address: {
+          city: billing.town_city,
+          country: billing.country,
+          line1: billing.street,
+          line2: billing.street2 ? billing.street2 : null,
+          postal_code: billing.postal_zip_code,
+          state: billing.county_state,
+        },
+      },
+    });
     if (paymentMethodResponse.error) {
       console.log(paymentMethodResponse.error.message);
       toast.dismiss();
@@ -187,8 +161,8 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
           },
         },
       });
-      console.log("here");
       toast.dismiss();
+      order.status_payment === "paid" ? toast.success("Payment Successful") : toast.error("Payment Failed");
       await commerce.cart.refresh();
       router.replace("/");
       return;
@@ -198,15 +172,12 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
         toast.dismiss();
         return;
       }
-
       const cardActionResult = await stripe.handleCardAction(response.data.error.param);
-
       if (cardActionResult.error) {
         alert(cardActionResult.error.message);
         toast.dismiss();
         return;
       }
-
       try {
         const order = await commerce.checkout.capture(checkoutTokenId, {
           customer: {
@@ -224,19 +195,17 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
             },
           },
         });
-        console.log("2");
-        console.log(order);
+
         toast.dismiss();
+        order.status_payment === "paid" ? toast.success("Payment Successful") : toast.error("Payment Failed");
         await commerce.cart.refresh();
         router.replace("/");
         return;
       } catch (response) {
-        console.log(response);
         alert(response.message);
         toast.dismiss();
       }
     }
-    setIsLoading(true);
     setIsLoading(false);
   };
 
@@ -289,7 +258,6 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
             <ShippingMethod
               options={options}
               setStep={setStep}
-              shippingOption={shippingOption}
               setShippingOption={setShippingOption}
               setShippingOptionLabel={setShippingOptionLabel}
             />
@@ -315,39 +283,18 @@ export default function CheckoutForm({ checkoutTokenId, paymentIntentId, clientS
                 setBillingLine1={setBillingLine1}
                 billingLine2={billingLine2}
                 setBillingLine2={setBillingLine2}
+                countries={countries}
                 setStep={setStep}
                 stripe={stripe}
                 elements={elements}
                 isLoading={isLoading}
-                handleShowBilling={handleShowBilling}
                 shippingAsBillingAddress={shippingAsBillingAddress}
+                setShippingAsBillingAddress={setShippingAsBillingAddress}
               />
             </>
           )}
-
-          {/* <input type="checkbox" onChange={handleShowBilling} />
-        {!shippingAsBillingAddress && <BillingDetails />}
-        
-        <button disabled={isLoading || !stripe || !elements} id="submit">
-          <span id="button-text">
-            {isLoading ? (
-              <div className="spinner" id="spinner"></div>
-            ) : (
-              "Pay now"
-            )}
-          </span>
-        </button> */}
         </form>
       </div>
     </div>
   );
 }
-{
-  /* <div className={styles["test"]}>
-            <span onClick={() => setStep(1)}>{"<- Shipping"}</span>
-            {/* <span onClick={() => setStep(3)}>{"Pay Now ->"}</span> */
-}
-//   <button disabled={isLoading || !stripe || !elements} id="submit">
-//     <span id="button-text">{isLoading ? <div className="spinner" id="spinner"></div> : "Pay now ->"}</span>
-//   </button>
-// </div> */}

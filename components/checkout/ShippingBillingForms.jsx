@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import styles from "../../styles/CheckoutForm.module.css";
+import React from "react";
 import { CardElement } from "@stripe/react-stripe-js";
+import styles from "../../styles/CheckoutForm.module.css";
 
 export function ShippingDetails({
   countries,
@@ -150,9 +150,9 @@ export function ShippingDetails({
     </div>
   );
 }
-export function ShippingMethod({ options, setStep, shippingOption, setShippingOption, setShippingOptionLabel }) {
+
+export function ShippingMethod({ options, setStep, setShippingOption, setShippingOptionLabel }) {
   function handleShippingOption(event, label) {
-    // const optionLabel = document.getElementById(event.target.value);
     setShippingOptionLabel(label);
     setShippingOption(event.target.value);
   }
@@ -160,11 +160,6 @@ export function ShippingMethod({ options, setStep, shippingOption, setShippingOp
   return (
     <div style={{ width: "100%" }}>
       <h1 className={styles["form-title"]}>Shipping Method</h1>
-      {/* <div className={styles["input-line"]}> */}
-      {/* <select type="radio" id="shippingOption" name="shippingOption" defaultValue={"none"} onChange={(e) => handleShippingOption(e)}>
-          <option value="none" id="none" defaultValue>
-            --Select Shipping Method--
-          </option> */}
       {options.map((option) => (
         <div className={styles["group"]} key={option.id}>
           <input
@@ -176,10 +171,7 @@ export function ShippingMethod({ options, setStep, shippingOption, setShippingOp
           />
           <label htmlFor={option.id}>{option.label}</label>
         </div>
-        // </input>
       ))}
-      {/* </select> */}
-      {/* </div> */}
       <div className={styles["test"]}>
         <span onClick={() => setStep(0)}>{"<- Contact"}</span>
         <span onClick={() => setStep(2)}>{"Billing ->"}</span>
@@ -207,12 +199,13 @@ export function BillingDetails({
   setBillingLine1,
   billingLine2,
   setBillingLine2,
+  countries,
   setStep,
   stripe,
   elements,
   isLoading,
-  handleShowBilling,
   shippingAsBillingAddress,
+  setShippingAsBillingAddress,
 }) {
   const cardStyle = {
     style: {
@@ -233,6 +226,10 @@ export function BillingDetails({
     },
   };
 
+  function handleShowBilling(event) {
+    event.target.value === "yes" ? setShippingAsBillingAddress(true) : setShippingAsBillingAddress(false);
+  }
+
   return (
     <>
       <h1 className={styles["form-title"]}>Payment</h1>
@@ -244,13 +241,13 @@ export function BillingDetails({
       <div className="">
         <h1 className={styles["form-title"]}>Billing Address</h1>
         {/* <input type="checkbox" onChange={handleShowBilling} /> */}
-        <div className={styles["group"]} style={{ width: "100%", display: "block" }}>
+        <div className={styles["group"]} style={{ width: "100%", display: "block" }} onChange={(e) => handleShowBilling(e)}>
           <div className={styles["group"]}>
-            <input type="radio" name="useShipping" onChange={handleShowBilling} />
+            <input type="radio" name="shipAsBill" value="yes" defaultChecked />
             <label>Same as shipping address</label>
           </div>
           <div className={styles["group"]}>
-            <input type="radio" name="useShipping" onChange={handleShowBilling} />
+            <input type="radio" name="shipAsBill" value="no" />
             <label>Use a different billing address</label>
           </div>
         </div>
@@ -294,14 +291,13 @@ export function BillingDetails({
             </div>
 
             <label>Country</label>
-            <input
-              required
-              name="billingCountry"
-              type="text"
-              placeholder="United States"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-            />
+            <select name="billingCountry" value={country} onChange={(e) => setCountry(e.target.value)}>
+              {countries.map((country) => (
+                <option value={country.id} key={country.id}>
+                  {country.label}
+                </option>
+              ))}
+            </select>
 
             <div className={styles["row"]}>
               <div className={styles["col-25"]}>
@@ -364,7 +360,7 @@ export function BillingDetails({
         <div className={styles["test"]}>
           <span onClick={() => setStep(1)}>{"<- Shipping"}</span>
           {/* <span onClick={() => setStep(3)}>{"Pay Now ->"}</span> */}
-          <button disabled={isLoading || !stripe || !elements} id="submit">
+          <button disabled={!stripe || !elements} id="submit">
             <span id="button-text">{isLoading ? <div className="spinner" id="spinner"></div> : "Pay now ->"}</span>
           </button>
         </div>
