@@ -1,42 +1,38 @@
 .navbarHeader {
+  background: rgba(0, 0, 0, 1);
+  color: #ffffff;
+  line-height: 1.3;
+  padding: 10px;
+  position: relative;
   text-align: center;
   width: 100vw;
-  padding: 10px;
   z-index: 120;
-  line-height: 1.3;
-  color: #ffffff;
-  background: rgba(0, 0, 0, 1);
-  position: relative;
 }
 .navbarContainer {
-  width: 100vw;
+  flex-wrap: wrap;
   justify-content: center;
   position: relative;
-  flex-wrap: wrap;
+  width: 100vw;
 }
 .navbarLogo {
-  color: gray;
-  height: 3vh;
-  width: 5vw;
-  margin: auto;
-  font-size: 1vw;
-  padding: auto;
+  display: flex;
+  /* padding-right: 15vw; */
 }
 .navbarItem {
-  margin: auto;
   font-size: 2vw;
+  margin: auto;
 }
 .navbarCartItemQty {
+  background-color: #f02d34;
+  border-radius: 50%;
+  color: #eee;
+  font-size: 12px;
+  font-weight: 600;
+  height: 18px;
   position: absolute;
   right: -8px;
-  font-size: 12px;
-  color: #eee;
-  background-color: #f02d34;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
   text-align: center;
-  font-weight: 600;
+  width: 18px;
 }
 
 .navbarContainer li {
@@ -45,14 +41,20 @@
 
 .navbarLinks {
   display: flex;
-  flex-grow: 1;
+  flex-grow: 0;
+  justify-content: space-between;
+  list-style-type: none;
   margin: 0;
   padding: 0;
-  list-style-type: none;
+  width: 100vw;
 }
 .navbarLinks li {
-  flex-grow: 1;
   align-items: center;
+  /* flex-grow: 1; */
+  width: auto;
 }
-.navbarLinks li a {
+.navbarButtons {
+  align-items: center;
+  display: flex;
+  /* padding-left: 15vw; */
 }

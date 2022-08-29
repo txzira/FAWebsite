@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-const Dropdown = ({ dropdownName, submenuItems }) => {
+const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
   const [dropdownIsActive, setDropdownIsActive] = useState(false);
 
   return (
-    <div>
-      <span
-        onMouseEnter={() => setDropdownIsActive((prev) => !prev)}
-        className=""
-        aria-expanded={dropdownIsActive ? "true" : "false"}
-      >
-        <h3>{dropdownName}</h3>
+    <div onMouseLeave={() => setDropdownIsActive(false)}>
+      <span onMouseEnter={() => setDropdownIsActive((prev) => !prev)} className="" aria-expanded={dropdownIsActive ? "true" : "false"}>
+        <Link href={`${path}/${dropdownSlug}`}>
+          <a>{dropdownName}</a>
+        </Link>
       </span>
       <div>
         <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
           {submenuItems.map((item) => (
             <li key={item.id}>
-              <Link href={`/categories/${item.slug}`}>
+              <Link href={`${path}/${item.slug}`}>
                 <a>{item.name}</a>
               </Link>
             </li>

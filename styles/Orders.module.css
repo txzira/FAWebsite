@@ -1,8 +1,36 @@
-.orders table th {
-  border: 1px solid;
+.title {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 2.5rem;
+}
+.subtitle {
+  font-size: 20px;
+  font-weight: 500;
 }
 
-.orders th td {
-  padding: 3px;
+.orders table {
+  background-color: rgb(235, 217, 217);
+  border: 1px solid black;
+  border-collapse: separate;
+  border-radius: 20px;
+  border-spacing: 0px;
+}
+
+.orders td,
+.orders th {
+  border-left: solid black 1px;
+  border-top: solid black 1px;
+  padding: 10px;
   text-align: center;
+}
+
+.orders th {
+  border-top: none;
+  padding: 10px;
+}
+
+.orders td:first-child,
+.orders th:first-child {
+  border-left: none;
+  padding: 10px;
 }

@@ -2,7 +2,8 @@ import { useSession, getSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
 import OrderHistory from "../components/OrderHistory";
 import { getToken } from "next-auth/jwt";
-
+import Link from "next/link";
+import styles from "../styles/Orders.module.css";
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
   // console.log(session);
@@ -24,11 +25,10 @@ export async function getServerSideProps({ req }) {
       headers: headers,
     });
     orders = await orders.json();
-    orders = orders.data;
 
     return {
       props: {
-        orders,
+        orders: orders.data,
       },
     };
   } else {
@@ -42,6 +42,26 @@ export async function getServerSideProps({ req }) {
 
 export default function AccountPage({ orders }) {
   const { data: session, status } = useSession();
+  console.log(session);
+  if (session) {
+    return (
+      <div>
+        <h1 className={styles["title"]}>My Account</h1>
 
-  return <div>{session && <OrderHistory orders={orders} />}</div>;
+        <h1 className={styles["subtitle"]}>Welcome {session.user.email}</h1>
+        <OrderHistory orders={orders} />
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <span>Unauthorized User. Please </span>
+        <button style={{ border: "0px", background: "none" }}>
+          <Link href="/auth">
+            <a style={{ "text-decoration": "underline" }}>login</a>
+          </Link>
+        </button>
+      </div>
+    );
+  }
 }

@@ -9,16 +9,13 @@ import styles from "../styles/Navbar.module.css";
 
 export default function CategoryList() {
   const { categories } = useStateContext();
-
   if (!categories) return null;
 
   return (
     <React.Fragment>
       {categories.map((category) => (
-        <li key={category.id}>
-          {/* <Link href={`/categories/${category.slug}`}> */}
+        <li key={category.id} className="category">
           <Category {...category} />
-          {/* </Link> */}
         </li>
       ))}
     </React.Fragment>

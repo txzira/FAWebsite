@@ -4,14 +4,14 @@ import Dropdown from "./Dropdown";
 import Link from "next/link";
 export default function Category({ name, children, slug }) {
   return (
-    <div>
+    <>
       {children.length > 0 ? (
-        <Dropdown dropdownName={name} submenuItems={children} />
+        <Dropdown dropdownName={name} dropdownSlug={slug} submenuItems={children} path={"/categories"} />
       ) : (
         <Link href={`/categories/${slug}`}>
           <a>{name}</a>
         </Link>
       )}
-    </div>
+    </>
   );
 }

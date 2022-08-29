@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import Modal from "./Modal";
 
 import styles from "../styles/Orders.module.css";
 
-function Order() {}
-
 export default function OrderHistory({ orders }) {
-  const { data: session, status } = useSession();
-  // const [orders, setOrders] = useState([]);
-  console.log(orders);
-  // async function getOrders() {
-  //   if (session) {
-  //     fetch("/api/auth/get-token")
-  //       .then((response) => response.json())
-  //       .then((orders) => setOrders(orders.data));
-  //   }
-  // }
+  const [showModal, setShowModal] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
   function getShippingStatus(paymentStatus, fulfillStatus) {
     if (paymentStatus === "paid" && fulfillStatus === "fulfilled") {
       return "Shipped";
@@ -23,17 +13,17 @@ export default function OrderHistory({ orders }) {
       return "Pending";
     } else return "Error";
   }
-
-  // useEffect(() => {
-  //   getOrders();
-  // }, [session]);
+  function showOrderDetails(orderDetails) {
+    setOrderDetails(orderDetails);
+    setShowModal(true);
+  }
 
   if (orders) {
-    // console.log(orders);
     return (
       <>
         {
           <div className={styles["orders"]}>
+            <Modal show={showModal} setShow={setShowModal} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />
             <table>
               <thead>
                 <tr>
@@ -41,7 +31,7 @@ export default function OrderHistory({ orders }) {
                   <th>Order Placed</th>
                   <th>Total Amount</th>
                   <th>Shipping Status</th>
-                  <th></th>
+                  <th>Details</th>
                 </tr>
               </thead>
               <tbody id="orderTable">
@@ -53,7 +43,9 @@ export default function OrderHistory({ orders }) {
                         <td>{new Date(order.created * 1000).toLocaleDateString()}</td>
                         <td>{order.order_value.formatted_with_symbol}</td>
                         <td>{getShippingStatus(order.status_payment, order.status_fulfillment)}</td>
-                        <td>View Details</td>
+                        <td>
+                          <button onClick={() => showOrderDetails(order)}>View</button>
+                        </td>
                       </tr>
                     );
                   })}

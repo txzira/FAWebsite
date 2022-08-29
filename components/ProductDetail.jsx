@@ -1,5 +1,6 @@
 // components/ProductDetail.js
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useCartDispatch } from "../context/cart";
 import commerce from "../lib/commerce";
 
@@ -7,20 +8,57 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import toast from "react-hot-toast";
 import styles from "../styles/Product.module.css";
 
-export default function ProductDetail({ product, colors, sizes, sizeOptionKey, colorOptionKey }) {
+export default function ProductDetail({ product, variants, variantGroups }) {
   const { setCart } = useCartDispatch();
   const [options, setOptions] = useState({});
-  const [assets, setAssets] = useState([]);
-  const [image, setImage] = useState(null);
-  const [assetIds, setAssetIds] = useState([]);
+  const [image, setImage] = useState(product.image.url);
+  const [assetImages, setAssetImages] = useState([]);
   const [qty, setQty] = useState(1);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
 
+  //set default color of shown image to first image from commercejs
+  function defaultColor() {
+    if (document.getElementById("color0")) {
+      document.getElementById("color0").click();
+    }
+  }
+  //change selected color and shown image
+  function handleColor(name, mainImage, colorLabelId, colorId) {
+    const images = [];
+
+    variants.map((variant) => {
+      if (variant.options[colorLabelId] === colorId) {
+        variant.assets.map((asset) => {
+          if (!images.includes(asset.url)) images.push(asset.url);
+        });
+      }
+    });
+
+    options[colorLabelId] = colorId;
+    setOptions(options);
+    setAssetImages(images);
+    setImage(mainImage);
+    setSelectedColor(name);
+  }
+  //change selected size
+  function handleSize(name, sizeLabelId, sizeId) {
+    options[sizeLabelId] = sizeId;
+    setOptions(options);
+    setSelectedSize(name);
+  }
   //add product to cart
   const addToCart = () => {
-    commerce.cart.add(product.id, qty, options).then(({ cart }) => setCart(cart));
-    toast.success(`${product.name} ${selectedColor}/${selectedSize} was added to the cart`);
+    if (!(Object.keys(options).length === 0)) {
+      commerce.cart.add(product.id, qty, options).then(({ cart }) => setCart(cart));
+      toast.success(
+        `${product.name} \n${selectedColor ? `Color: ${selectedColor}` : ""}${selectedColor && selectedSize ? " | " : " "}${
+          selectedSize ? `Size: ${selectedSize}` : ""
+        }\nwas added to the cart`
+      );
+    } else {
+      toast.error(`Failed to add to cart:\n${product.name}\nPlease select product options.`);
+    }
   };
   //increment product quantity
   const incQty = () => {
@@ -33,68 +71,26 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
       return prevQty - 1;
     });
   };
-  //change selected size
-  const changeSize = (sizeName) => (event) => {
-    options[sizeOptionKey] = event.target.value; //sizeOptionValue
-    setOptions(options);
-    setSelectedSize(sizeName);
-  };
-  //change selected color and shown image
-  const changeColor = (colorOptionValue, assetIdList, colorName) => (e) => {
-    options[colorOptionKey] = colorOptionValue;
-    setOptions(options);
-    setImage(e.target.src);
-    setAssetIds(assetIdList);
-    setSelectedColor(colorName);
-  };
-  //set default color of shown image to first image from commercejs
-  const defaultColor = () => {
-    if (colors.length == 0) return;
-    options[colorOptionKey] = colors[0].id;
-    setAssetIds(colors[0].assets);
-    setSelectedColor(colors[0].name);
-  };
-
-  const getAssets = async () => {
-    if (colors.length == 0) return;
-    const response = await fetch("/api/commercejs/assets", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(colors),
-    });
-    if (response.statusCode === 500) return;
-    const data = await response.json();
-    setAssets(data);
-    setImage(data[0].url);
-  };
 
   useEffect(() => {
-    getAssets();
     defaultColor();
-  }, [colors]);
+  }, []);
+
   return (
     <React.Fragment>
       <div className={styles["product-detail-container"]}>
         <div>
           <div className="image-container">
-            <img src={image} className={styles["product-detail-image"]} />
+            <Image className={styles["product-detail-image"]} src={image} height={400} width={400} />
           </div>
-          {assets.length != 0 && (
+          {assetImages.length != 0 && (
             <div className="small-images-container">
-              {assets.map(function (asset) {
-                return assetIds.map((id) => {
-                  {
-                    if (asset.id === id) {
-                      return (
-                        <button type="button" onClick={() => setImage(asset.url)} key={id.toString()}>
-                          <img className="small-image" src={asset.url} />
-                        </button>
-                      );
-                    }
-                  }
-                });
+              {assetImages.map((image) => {
+                return (
+                  <button type="button" onClick={() => setImage(image)}>
+                    <Image className="small-image" src={image} height={70} width={70} />
+                  </button>
+                );
               })}
             </div>
           )}
@@ -104,43 +100,31 @@ export default function ProductDetail({ product, colors, sizes, sizeOptionKey, c
             <h2>{product.name}</h2>
             <p className={styles["price"]}>{product.price.formatted_with_symbol}</p>
           </div>
-
           <br />
-
-          <h1>Color:</h1>
-          <div className="small-images-container">
-            {colors.map((color) => (
-              <span key={color.id} className={styles["buttons"]}>
-                {assets.map((asset) => {
-                  if (asset.id === color.assets[0]) {
-                    return (
-                      <button
-                        key={asset.id}
-                        type="button"
-                        id={color.id}
-                        name="color"
-                        onClick={changeColor(color.id, color.assets, color.name)}
-                      >
-                        <img className={styles["button"]} src={asset.url} />
-                      </button>
+          {variantGroups.map((variantGroup) => {
+            return (
+              <div>
+                <h2 id={variantGroup.id}>{variantGroup.name}:</h2>
+                <ul style={{ listStyle: "none", display: "flex" }} className="small-images-container">
+                  {variantGroup.options.map((option, i) => {
+                    return variantGroup.name === "Color" ? (
+                      <li id={option.id} key={option.id} className={styles["buttons"]}>
+                        <button id={`color${i}`} onClick={() => handleColor(option.name, option.assets[0].url, variantGroup.id, option.id)}>
+                          <Image className={styles["button"]} src={option.assets[0].url} height={100} width={100} alt={option.name} />
+                        </button>
+                      </li>
+                    ) : (
+                      <li id={option.id} key={option.id}>
+                        <button onClick={() => handleSize(option.name, variantGroup.id, option.id)}>{option.name}</button>
+                      </li>
                     );
-                  }
-                })}
-              </span>
-            ))}
-          </div>
-          <br />
-          <h1>Size:</h1>
-          <div>
-            {sizes.map((size) => (
-              <span key={size.id} className={styles["buttons"]} onChange={changeSize(size.name)}>
-                <input id={size.id} type="radio" name="size" value={size.id} style={{ display: "none" }} />
-                <label className={styles["label"]} htmlFor={size.id}>
-                  &nbsp;{size.name}&nbsp;
-                </label>
-              </span>
-            ))}
-          </div>
+                  })}
+                </ul>
+                <span></span>
+              </div>
+            );
+          })}
+          {/* highlight selected colors/sizes... */}
           <br />
           <hr />
           <br />

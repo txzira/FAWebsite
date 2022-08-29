@@ -13,9 +13,7 @@ async function handler(req, res) {
     const client = await connectToDatabase();
     const db = client.db();
     //Check existing
-    const checkExisting = await db
-      .collection("users")
-      .findOne({ email: email });
+    const checkExisting = await db.collection("users").findOne({ email: email });
     //Send error response if duplicate user is found
     if (checkExisting) {
       res.status(422).json({ message: "User already exists" });
@@ -29,7 +27,7 @@ async function handler(req, res) {
       email: email,
       password: hashedPassword,
       customer_id: customer_id,
-      // jwt: jwt,
+      role: "customer",
     });
     //Send success response
     res.status(201).json({ message: "User created" });

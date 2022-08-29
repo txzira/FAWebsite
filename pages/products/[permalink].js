@@ -8,10 +8,42 @@ export async function getStaticProps({ params }) {
   const product = await commerce.products.retrieve(permalink, {
     type: "permalink",
   });
+  const variants = await commerce.products.getVariants(product.id);
+  let variantGroups = await product.variant_groups.sort((a, b) => a.name.localeCompare(b.name));
+
+  const headers = {
+    "X-Authorization": `${process.env.NEXT_PUBLIC_CHEC_SECRET_API_KEY}`,
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+
+  variantGroups = await Promise.all(
+    variantGroups.map(async (variantGroup) => {
+      const options = await Promise.all(
+        variantGroup.options.map(async (option) => {
+          const assets = await Promise.all(
+            option.assets.map(async (asset) => {
+              const url = new URL(`https://api.chec.io/v1/assets/${asset}`);
+              let response = await fetch(url, {
+                method: "GET",
+                headers: headers,
+              });
+              response = await response.json();
+              return { id: asset, url: response.url ? response.url : "" };
+            })
+          );
+          return { ...option, assets: assets };
+        })
+      );
+      return { ...variantGroup, options: options };
+    })
+  );
 
   return {
     props: {
       product,
+      variants,
+      variantGroups,
     },
   };
 }
@@ -29,57 +61,10 @@ export async function getStaticPaths() {
   };
 }
 
-export default function ProductPage({ product }) {
-  const [sizeOptionKey, setSizeOptionKey] = useState(null);
-  const [colorOptionKey, setColorOptionKey] = useState(null);
-  const [sizes, setSizes] = useState([]);
-  const [colors, setColors] = useState([]);
-
-  useEffect(() => {
-    getOptions();
-  }, []);
-
-  const getOptions = () => {
-    const colorsArr = [];
-    let color = {};
-    const sizesArr = [];
-    let size = {};
-
-    product.variant_groups.map((details) => {
-      if (details.name == "Color") {
-        setColorOptionKey(details.id);
-        details.options.map((option) => {
-          color.id = option.id;
-          color.name = option.name;
-          color.assets = option.assets;
-          colorsArr.push(color);
-          // [{ id: option.id, color: option.name, assets: [option.assets] },{},...,{}]
-          color = {};
-        });
-      } else if (details.name == "Size") {
-        setSizeOptionKey(details.id);
-        details.options.map((option) => {
-          size.id = option.id;
-          size.name = option.name;
-          sizesArr.push(size);
-          // [{ id: option.id, size: option.name },{},...,{}]
-          size = {};
-        });
-      }
-    });
-    setSizes(sizesArr);
-    setColors(colorsArr);
-  };
-
+export default function ProductPage({ product, variants, variantGroups }) {
   return (
     <React.Fragment>
-      <ProductDetail
-        product={product}
-        colors={colors}
-        sizes={sizes}
-        sizeOptionKey={sizeOptionKey}
-        colorOptionKey={colorOptionKey}
-      />
+      <ProductDetail product={product} variants={variants.data} variantGroups={variantGroups} />
     </React.Fragment>
   );
 }

@@ -67,12 +67,14 @@ export default NextAuth({
         token.accessToken = user.jwt;
         token.email = user.email;
         token.customer_id = user.customer_id;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       // session.accessToken = token.accessToken;
       session.user.customer_id = token.customer_id;
+      session.user.role = token.role;
       return session;
     },
   },

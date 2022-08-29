@@ -5,7 +5,7 @@ import Link from "next/link";
 import commerce from "../lib/commerce";
 import toast from "react-hot-toast";
 
-function CartItem({ id, name, quantity, line_total, image, selected_options }) {
+export function CartItem({ id, name, quantity, line_total, image, selected_options }) {
   const { setCart } = useCartDispatch();
 
   const handleUpdateCart = ({ cart }) => setCart(cart);
@@ -75,7 +75,9 @@ export default function CartPage() {
         <strong>Sub total: </strong>
         {subtotal.formatted_with_symbol}
       </p>
-      <Link href={`/checkout/${id}`}>Checkout</Link>
+      <Link href={`/checkout/${id}`}>
+        <a>Checkout</a>
+      </Link>
     </div>
   );
 }

@@ -22,7 +22,7 @@ export async function getStaticProps() {
 const IndexPage = ({ merchant, categories, products }) => {
   return (
     <>
-      <h1>{merchant.data[0].name}</h1>
+      {/* <h1>{merchant.data[0].name}</h1> */}
       <ProductList products={products} />
     </>
   );
