@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import Image from "next/image";
 import { CSSTransition } from "react-transition-group";
 
 const Modal = ({ show, setShow, orderDetails, setOrderDetails }) => {
@@ -70,17 +71,17 @@ const Modal = ({ show, setShow, orderDetails, setOrderDetails }) => {
                     <tbody>
                       {orderDetails.order.line_items.map((line_item) => {
                         return (
-                          <tr>
+                          <tr key={line_item.id}>
                             <td>
                               {" "}
-                              <img className="small-image" src={line_item.image.url} />
+                              <Image className="small-image" src={line_item.image.url} height={70} width={70} alt="Product Image" />
                             </td>
                             <td>
                               {" "}
                               <h1>{line_item.product_name} </h1>
                               {line_item.selected_options.map((option) => {
                                 return (
-                                  <p>
+                                  <p key={option.option_id}>
                                     {option.group_name} : {option.option_name}
                                   </p>
                                 );

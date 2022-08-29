@@ -81,14 +81,14 @@ export default function ProductDetail({ product, variants, variantGroups }) {
       <div className={styles["product-detail-container"]}>
         <div>
           <div className="image-container">
-            <Image className={styles["product-detail-image"]} src={image} height={400} width={400} />
+            <Image className={styles["product-detail-image"]} src={image} height={400} width={400} alt="selected-variant" />
           </div>
           {assetImages.length != 0 && (
             <div className="small-images-container">
-              {assetImages.map((image) => {
+              {assetImages.map((image, i) => {
                 return (
-                  <button type="button" onClick={() => setImage(image)}>
-                    <Image className="small-image" src={image} height={70} width={70} />
+                  <button key={i} type="button" onClick={() => setImage(image)}>
+                    <Image className="small-image" src={image} height={70} width={70} alt="variant-image" />
                   </button>
                 );
               })}
@@ -103,7 +103,7 @@ export default function ProductDetail({ product, variants, variantGroups }) {
           <br />
           {variantGroups.map((variantGroup) => {
             return (
-              <div>
+              <div key={variantGroup.id}>
                 <h2 id={variantGroup.id}>{variantGroup.name}:</h2>
                 <ul style={{ listStyle: "none", display: "flex" }} className="small-images-container">
                   {variantGroup.options.map((option, i) => {

@@ -1,6 +1,7 @@
 import { useCartDispatch, useCartState } from "../context/cart";
 import { AiOutlineMinus, AiOutlinePlus, AiOutlineCloseCircle } from "react-icons/ai";
 import Link from "next/link";
+import Image from "next/image";
 
 import commerce from "../lib/commerce";
 import toast from "react-hot-toast";
@@ -36,7 +37,7 @@ export function CartItem({ id, name, quantity, line_total, image, selected_optio
         <p key={option.option_id}>{option.option_name}</p>
       ))}
       <div className="small-images-container">
-        <img className="medium-image" src={image.url} />
+        <Image className="medium-image" src={image.url} height={150} width={150} alt="Product Image" />
       </div>
       <p>{line_total.formatted_with_symbol}</p>
       <div className="quantity">

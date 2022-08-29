@@ -6,9 +6,7 @@ import Link from "next/link";
 import styles from "../styles/Orders.module.css";
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
-  // console.log(session);
   if (session) {
-    console.log(session);
     const token = await getToken({
       req,
       secret: process.env.NEXTAUTH_SECRET,
@@ -42,7 +40,6 @@ export async function getServerSideProps({ req }) {
 
 export default function AccountPage({ orders }) {
   const { data: session, status } = useSession();
-  console.log(session);
   if (session) {
     return (
       <div>
