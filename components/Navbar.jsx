@@ -31,7 +31,7 @@ const Navbar = () => {
           <li className={styles.navbarLogo}>
             <Link href="/">
               <a>
-                <Image alt="logo" width="120" height="60" src="/images/logo_size.jpg" />
+                <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />
               </a>
             </Link>
           </li>
@@ -46,7 +46,7 @@ const Navbar = () => {
             {categories && <CategoryList />}
           </div>
 
-          <div className={styles.navbarButtons}>
+          <div className={styles.navbarButtons} onMouseLeave={() => setDropdownIsActive(false)}>
             {!session && !loading && (
               <li>
                 <Link href="/auth">
@@ -58,7 +58,7 @@ const Navbar = () => {
               <li>
                 <button
                   onClick={() => setDropdownIsActive((prev) => !prev)}
-                  className=""
+                  className={styles.login}
                   aria-expanded={dropdownIsActive ? "true" : "false"}
                 >
                   {session.user.email}

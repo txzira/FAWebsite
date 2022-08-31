@@ -27,7 +27,12 @@ const Modal = ({ show, setShow, orderDetails, setOrderDetails }) => {
           {orderDetails && (
             <>
               <div className="modal-header">
-                <h4 className="modal-title">Order - {orderDetails.customer_reference}</h4>
+                <div style={{ justifyContent: "space-between", display: "flex", "align-items": "center" }}>
+                  <span className="modal-title">Order - {orderDetails.customer_reference}</span>{" "}
+                  <span>
+                    <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />
+                  </span>
+                </div>
                 <div className="date">
                   <p>Order Placed:</p>
                   <p>{new Date(orderDetails.created * 1000).toLocaleDateString()}</p>
@@ -125,7 +130,7 @@ const Modal = ({ show, setShow, orderDetails, setOrderDetails }) => {
                   </table>
                 </div>
               </div>
-              <div className="modal=footer">
+              <div className="modal-footer">
                 <button className="button" onClick={() => closeOrderDetails()}>
                   Close
                 </button>

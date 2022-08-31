@@ -40,8 +40,10 @@
 }
 
 .navbarLinks {
+  background-color: rgb(240, 240, 240);
   display: flex;
   flex-grow: 0;
+  height: 60px;
   justify-content: space-between;
   list-style-type: none;
   margin: 0;
@@ -51,6 +53,7 @@
 .navbarLinks li {
   align-items: center;
   /* flex-grow: 1; */
+
   width: auto;
 }
 .navbarButtons {
@@ -58,3 +61,10 @@
   display: flex;
   /* padding-left: 15vw; */
 }
+.login {
+  background-color: Transparent;
+  border: none;
+}
+/* .navbarLinks a {
+  font-weight: 900;
+} */

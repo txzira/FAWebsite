@@ -8,7 +8,7 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
     <div onMouseLeave={() => setDropdownIsActive(false)}>
       <span onMouseEnter={() => setDropdownIsActive((prev) => !prev)} className="" aria-expanded={dropdownIsActive ? "true" : "false"}>
         <Link href={`${path}/${dropdownSlug}`}>
-          <a>{dropdownName}</a>
+          <a>{dropdownName}+</a>
         </Link>
       </span>
       <div>

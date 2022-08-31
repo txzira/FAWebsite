@@ -109,13 +109,23 @@ export default function ProductDetail({ product, variants, variantGroups }) {
                   {variantGroup.options.map((option, i) => {
                     return variantGroup.name === "Color" ? (
                       <li id={option.id} key={option.id} className={styles["buttons"]}>
-                        <button id={`color${i}`} onClick={() => handleColor(option.name, option.assets[0].url, variantGroup.id, option.id)}>
-                          <Image className={styles["button"]} src={option.assets[0].url} height={100} width={100} alt={option.name} />
+                        <button
+                          id={`color${i}`}
+                          className={styles["button"]}
+                          onClick={() => handleColor(option.name, option.assets[0].url, variantGroup.id, option.id)}
+                        >
+                          <Image src={option.assets[0].url} height={100} width={100} alt={option.name} />
                         </button>
                       </li>
                     ) : (
-                      <li id={option.id} key={option.id}>
-                        <button onClick={() => handleSize(option.name, variantGroup.id, option.id)}>{option.name}</button>
+                      <li key={option.id} className={styles["buttons"]}>
+                        <input
+                          id={option.id}
+                          type="radio"
+                          name={variantGroup.name}
+                          onClick={() => handleSize(option.name, variantGroup.id, option.id)}
+                        />
+                        <label htmlFor={option.id}>{option.name}</label>
                       </li>
                     );
                   })}

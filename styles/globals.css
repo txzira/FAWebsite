@@ -405,6 +405,7 @@ input[type="radio"]:checked + label {
 }
 input[type="radio"] {
   margin: 0px 10px;
+  padding: 10px;
 }
 
 .buttons .add-to-cart {
@@ -836,11 +837,29 @@ input[type="radio"] {
 
 .modal-header,
 .modal-footer {
+  display: flex;
   padding: 10px;
 }
-
+.modal-header {
+  flex-direction: column;
+}
+.modal-footer {
+  justify-content: center;
+}
+.modal-footer button {
+  border: 2px solid black;
+  border-radius: 20px;
+  font-weight: bold;
+  padding: 4px;
+  width: 100px;
+}
+.modal-footer button:active {
+  background-color: black;
+  color: #fff;
+}
 .modal-title {
   font-size: 20px;
+  font-weight: bolder;
   margin: 0;
 }
 .modal-body {

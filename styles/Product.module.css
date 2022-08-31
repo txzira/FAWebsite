@@ -80,9 +80,15 @@
   gap: 30px;
 }
 .product-detail-desc .buttons .button {
-  height: 100px;
-  width: 100px;
+  border: 1px solid;
 }
+.product-detail-desc .buttons input {
+  display: none;
+}
+.product-detail-desc .buttons .button:checked {
+  background: #fff;
+}
+
 .product-detail-desc .label {
   border: solid 1px red;
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 
-import styles from "../styles/Orders.module.css";
+import styles from "../../styles/Orders.module.css";
 
 export default function OrderHistory({ orders }) {
   const [showModal, setShowModal] = useState(false);
