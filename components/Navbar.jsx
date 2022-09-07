@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
@@ -18,10 +18,40 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   const loading = status === "loading";
   const [dropdownIsActive, setDropdownIsActive] = useState(false);
-
   function logoutHandler() {
     signOut();
   }
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path == "/") {
+      //reset nav link colors
+      const linksElement = document.getElementById("links").childNodes;
+      linksElement.forEach((link) => {
+        link.style.backgroundColor = "rgb(240, 240, 240)";
+        link.style.color = "black";
+      });
+    } else {
+      const linksElement = document.getElementById("links").childNodes;
+      linksElement.forEach((link) => {
+        link.style.backgroundColor = "rgb(240, 240, 240)";
+        link.style.color = "black";
+        // console.log(link.getElementById);
+      });
+      // console.log(linksElement);
+      const pathSlug = path.split("/")[2];
+      let navBtn = document.getElementById(pathSlug);
+      // console.log(navBtn.name);
+      if (navBtn) {
+        if (navBtn.getAttribute("name")) {
+          navBtn = document.getElementById(navBtn.getAttribute("name"));
+        }
+        console.log(navBtn);
+        navBtn.style.backgroundColor = "black";
+        navBtn.style.color = "white";
+      }
+    }
+  });
 
   return (
     <div>
@@ -35,14 +65,7 @@ const Navbar = () => {
               </a>
             </Link>
           </li>
-          <div className="links">
-            {session && session.user.role === "admin" && (
-              <li className="category">
-                <Link href="/admin">
-                  <a>Admin</a>
-                </Link>
-              </li>
-            )}
+          <div className={styles.links} id="links">
             {categories && <CategoryList />}
           </div>
 
@@ -61,8 +84,8 @@ const Navbar = () => {
                   className={styles.login}
                   aria-expanded={dropdownIsActive ? "true" : "false"}
                 >
-                  {session.user.email}
                   <CgProfile />
+                  {session.user.email}
                 </button>
                 <div>
                   <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>

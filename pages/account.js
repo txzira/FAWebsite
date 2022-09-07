@@ -45,6 +45,7 @@ export async function getServerSideProps({ req }) {
 export default function AccountPage({ orders }) {
   const { data: session, status } = useSession();
   const [viewState, setViewState] = useState("account-details");
+  console.log(orders);
   if (session) {
     return (
       <div>

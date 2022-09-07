@@ -11,24 +11,24 @@ async function handler(req, res) {
     const user = await users.findOne({
       email: req.body.email,
     });
-    //Not found - send error res
-    if (!user) {
-      client.close();
-      throw new Error("No user found with the email");
-    }
     //check sent old password matches password in database
     const checkPassword = await verifyPassword(req.body.oldPassword, user.password);
     //Incorrect password - send response
     if (!checkPassword) {
+      res.status(403).json({ message: "Incorrect Password" });
       client.close();
-      throw new Error("Password doesnt match");
     } else {
       const hashedPassword = await hashPassword(req.body.newPassword);
       await client
         .db()
         .collection("users")
         .updateOne({ email: req.body.email }, { $set: { password: hashedPassword } });
+      res.status(200).json({ message: "success" });
+      client.close();
     }
+  } else {
+    //Response for other than POST method
+    res.status(500).json({ message: "Route not valid" });
   }
 }
 export default handler;

@@ -74,6 +74,7 @@
 .test {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 .form-control {
   border: 1px solid black;
@@ -98,4 +99,8 @@
 .group {
   display: flex;
   width: 100%;
+}
+
+.form-error {
+  color: red;
 }

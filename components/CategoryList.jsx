@@ -1,6 +1,6 @@
 // components/CategoryList.js
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useStateContext } from "../context/StateContext";
 
@@ -14,7 +14,7 @@ export default function CategoryList() {
   return (
     <React.Fragment>
       {categories.map((category) => (
-        <li key={category.id} className="category">
+        <li key={category.id} className="category" id={category.slug}>
           <Category {...category} />
         </li>
       ))}

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import Image from "next/image";
 import { CSSTransition } from "react-transition-group";
 
-const Modal = ({ show, setShow, orderDetails, setOrderDetails }) => {
+const OrderModal = ({ show, setShow, orderDetails, setOrderDetails }) => {
   function closeOrderDetails() {
     setOrderDetails(null);
     setShow(false);
@@ -144,4 +144,4 @@ const Modal = ({ show, setShow, orderDetails, setOrderDetails }) => {
   );
 };
 
-export default Modal;
+export default OrderModal;

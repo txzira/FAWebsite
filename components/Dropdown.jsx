@@ -5,7 +5,7 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
   const [dropdownIsActive, setDropdownIsActive] = useState(false);
 
   return (
-    <div onMouseLeave={() => setDropdownIsActive(false)}>
+    <div onMouseLeave={() => setDropdownIsActive(false)} style={{ display: "flex", flexDirection: "column" }}>
       <span onMouseEnter={() => setDropdownIsActive((prev) => !prev)} className="" aria-expanded={dropdownIsActive ? "true" : "false"}>
         <Link href={`${path}/${dropdownSlug}`}>
           <a>{dropdownName}+</a>
@@ -14,7 +14,7 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
       <div>
         <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
           {submenuItems.map((item) => (
-            <li key={item.id}>
+            <li key={item.id} id={item.slug} name={dropdownSlug}>
               <Link href={`${path}/${item.slug}`}>
                 <a>{item.name}</a>
               </Link>

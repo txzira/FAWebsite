@@ -1,22 +1,29 @@
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { AiOutlineEdit } from "react-icons/ai";
+import { validatePassword } from "../../lib/formvalidation";
+
 export default function AccountDetails() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState("");
   const { data: session, status } = useSession();
 
-  const emailRegex = new RegExp(
-    "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])"
-  );
-  const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/);
+  console.log(session);
+  function validateEmail(email) {
+    const emailRegex = new RegExp(
+      "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])"
+    );
+    if (emailRegex.test(email)) return true;
+    return false;
+  }
 
   async function handleChangePassword(e) {
     e.preventDefault();
     //Validate new password as acceptable password
-    //Password contains at least 1 uppercase letter, number, and symbol
-    if (passwordRegex.test(newPassword)) {
+    //Password contains at least 1 uppercase letter, lowercase letter, number, and symbol
+    if (validatePassword(newPassword)) {
       //check new password and retyped new password match
       if (newPassword === retypePassword) {
         //send old and new password to server if old password matches password on record then change password and return status:accepted
@@ -28,7 +35,7 @@ export default function AccountDetails() {
           body: JSON.stringify({ email: session.user.email, oldPassword: oldPassword, newPassword: newPassword }),
         });
         status = await status.json();
-        console.log(status);
+        status.message === "success" ? toast.success("Password Successfully Changed") : toast.error(status.message);
       } else {
         toast.error("Mismatched passwords");
       }
@@ -45,7 +52,10 @@ export default function AccountDetails() {
       <label htmlFor="name">Full Name</label>
       <input id="name" type="text" name="name" value="ronnie" />
       <label htmlFor="email">Email Address</label>
-      <input id="email" type="email" name="email" value="example@123.com" />
+      <input id="email" type="email" name="email" value="" placeholder={session.user.email} />
+      <button>
+        <AiOutlineEdit />
+      </button>
       <div className="password">
         <form>
           <h2>Change Password</h2>

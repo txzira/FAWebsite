@@ -9,14 +9,26 @@
 }
 
 .orders table {
-  background-color: rgb(240, 240, 240);
   border: 1px solid black;
   border-collapse: separate;
-  border-radius: 20px;
   border-spacing: 0px;
+  text-align: center;
 }
-
+.orders thead tr {
+  background-color: rgb(160, 160, 160);
+  color: black;
+}
+.orders tbody {
+  background-color: white;
+}
 .orders td,
+.orders th {
+  padding: 10px;
+}
+.orders th {
+  font-size: 20px;
+}
+/* .orders td,
 .orders th {
   border-left: solid black 1px;
   border-top: solid black 1px;
@@ -33,4 +45,4 @@
 .orders th:first-child {
   border-left: none;
   padding: 10px;
-}
+} */

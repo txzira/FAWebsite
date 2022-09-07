@@ -36,7 +36,18 @@
 }
 
 .navbarContainer li {
-  margin: 1vw;
+  /* margin: 1vw; */
+  padding: 1vw;
+}
+.links a {
+  padding: 4px;
+}
+.links li:hover {
+  background-color: black !important;
+  color: white !important;
+}
+.links {
+  display: flex;
 }
 
 .navbarLinks {

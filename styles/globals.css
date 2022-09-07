@@ -127,6 +127,7 @@ span.text-red {
   background-color: #fff;
   border: solid black;
   border-radius: 0.5rem;
+  color: black;
   display: none;
   left: auto;
   min-width: inherit;
@@ -890,8 +891,5 @@ td {
 }
 
 .category {
-  display: flex;
-}
-.links {
   display: flex;
 }
