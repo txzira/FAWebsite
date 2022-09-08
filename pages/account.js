@@ -16,7 +16,9 @@ export async function getServerSideProps({ req }) {
       secret: process.env.NEXTAUTH_SECRET,
       encryption: true,
     });
-    const url = new URL(`https://api.chec.io/v1/customers/${token.customer_id}/orders`);
+    const url = new URL(
+      `https://api.chec.io/v1/customers/${token.customer_id}/orders`
+    );
     const headers = {
       "X-Authorization": `${process.env.NEXT_PUBLIC_CHEC_SECRET_API_KEY}`,
       Accept: "application/json",
@@ -42,10 +44,10 @@ export async function getServerSideProps({ req }) {
   }
 }
 
-export default function AccountPage({ orders }) {
+export default function AccountPage() {
   const { data: session, status } = useSession();
   const [viewState, setViewState] = useState("account-details");
-  console.log(orders);
+  // console.log(orders);
   if (session) {
     return (
       <div>
@@ -54,7 +56,9 @@ export default function AccountPage({ orders }) {
 
         <ul className={styles.navigation}>
           <li>
-            <button onClick={() => setViewState("account-details")}>Account Details</button>
+            <button onClick={() => setViewState("account-details")}>
+              Account Details
+            </button>
           </li>
           <li>
             <button onClick={() => setViewState("my-orders")}>My Orders</button>
@@ -62,7 +66,7 @@ export default function AccountPage({ orders }) {
         </ul>
 
         {viewState === "account-details" && <AccountDetails />}
-        {viewState === "my-orders" && <OrderHistory orders={orders} />}
+        {viewState === "my-orders" && <OrderHistory />}
       </div>
     );
   } else {
