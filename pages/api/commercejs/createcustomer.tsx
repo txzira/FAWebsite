@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+import type { NextApiRequest, NextApiResponse } from "next";
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const url = new URL("https://api.chec.io/v1/customers");
 
@@ -9,7 +11,7 @@ export default async function handler(req, res) {
     };
 
     try {
-      const createCustomer = await fetch(url, {
+      const createCustomer = await fetch(url.toString(), {
         method: "POST",
         headers: headers,
         body: JSON.stringify(req.body),
@@ -24,4 +26,4 @@ export default async function handler(req, res) {
     res.setHeader("Allow", "POST");
     res.status(405).end("Method Not Allowed");
   }
-}
+};

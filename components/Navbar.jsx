@@ -28,13 +28,13 @@ const Navbar = () => {
       //reset nav link colors
       const linksElement = document.getElementById("links").childNodes;
       linksElement.forEach((link) => {
-        link.style.backgroundColor = "rgb(240, 240, 240)";
+        link.style.backgroundColor = "#f3f3f3";
         link.style.color = "black";
       });
     } else {
       const linksElement = document.getElementById("links").childNodes;
       linksElement.forEach((link) => {
-        link.style.backgroundColor = "rgb(240, 240, 240)";
+        link.style.backgroundColor = "#f3f3f3";
         link.style.color = "black";
         // console.log(link.getElementById);
       });

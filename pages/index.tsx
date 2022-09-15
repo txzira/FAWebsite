@@ -4,8 +4,9 @@ import ProductList from "../components/ProductList";
 import CategoryList from "../components/CategoryList";
 import Link from "next/link";
 import React from "react";
+import { GetStaticProps } from "next";
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const merchant = await commerce.merchants.about();
   const { data: categories } = await commerce.categories.list();
   const { data: products } = await commerce.products.list();
@@ -17,7 +18,7 @@ export async function getStaticProps() {
       products,
     },
   };
-}
+};
 
 const IndexPage = ({ merchant, categories, products }) => {
   return (

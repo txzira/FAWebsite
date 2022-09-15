@@ -1,34 +1,29 @@
 import React, { useEffect, useState } from "react";
 import OrderModal from "./OrderModal";
 import { BiDetail } from "react-icons/bi";
+import { ImArrowRight, ImArrowLeft } from "react-icons/im";
+import { HiOutlineArrowLongUp, HiOutlineArrowLongDown } from "react-icons/hi";
 import styles from "../../styles/Orders.module.css";
 import next from "next";
+import useSWR from "swr";
 
 export default function OrderHistory() {
   const [showModal, setShowModal] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [previousBtn, setPreviousBtn] = useState("");
   const [orders, setOrders] = useState(null);
-  const [nextOrder, setNextOrder] = useState({ state: false });
-  const [previousOrder, setPreviousOrder] = useState({ state: false });
   const [limit, setLimit] = useState(10);
   const [pageNum, setPageNum] = useState(1);
 
-  useEffect(() => {
-    fetch(`/api/commercejs/getorders?page=${pageNum}&limit=${limit}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((orders) => setOrders(orders));
-  }, []);
-  useEffect(() => {
-    if (orders) {
-      console.log(orders);
-      // if(previousOrder.state){
+  const fetcher = (url) => fetch(url).then((res) => res.json());
 
-      // }
-    }
-  }, [orders]);
+  const { data, error } = useSWR(`/api/commercejs/getorders?page=${pageNum}&limit=${limit}`, fetcher);
+  // const { nextData, nextError } = useSWR(nextOrder ? `/api/commercejs/getorders?page=${pageNum}&limit=${limit}` : null, fetcher);
+  // const { prevData, prevError } = useSWR(previousOrder ? `/api/commercejs/getorders?page=${pageNum}&limit=${limit}` : null, fetcher);
+  useEffect(() => {
+    console.log(data);
+    if (data) setOrders(data);
+  }, [data]);
 
   function getShippingStatus(paymentStatus, fulfillStatus) {
     if (paymentStatus === "paid" && fulfillStatus === "fulfilled") {
@@ -41,24 +36,24 @@ export default function OrderHistory() {
     setOrderDetails(orderDetails);
     setShowModal(true);
   }
-  const handleNextOrder = () => {
-    fetch(`/api/commercejs/getorders?page=${pageNum + 1}&limit=${limit}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((orders) => setOrders(orders));
+  const handleNextPage = () => {
     setPageNum(pageNum + 1);
   };
-  const handlePreviousOrder = () => {
-    fetch(`/api/commercejs/getorders?page=${pageNum - 1}&limit=${limit}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((orders) => setOrders(orders));
+  const handlePreviousPage = () => {
     setPageNum(pageNum - 1);
   };
+  const changeLimit = (e) => {
+    e.preventDefault();
+    const lmt = e.target.value;
+    setPageNum(1);
+    setLimit(lmt);
+  };
 
-  const sortTable = (n, btnId, sortType = "") => {
+  const sortTable = (event, n, btnId, sortType = "") => {
+    console.log(event.target);
+    const content = event.target.innerHTML;
+    event.target.innerHTML = content + "&#129045;";
+
     var table,
       rows,
       switching,
@@ -74,7 +69,7 @@ export default function OrderHistory() {
     btn = document.getElementById(btnId);
     prevBtn = document.getElementById(previousBtn);
     if (prevBtn) {
-      prevBtn.style.backgroundColor = "rgb(160, 160, 160)";
+      prevBtn.style.backgroundColor = "#f3f3f3";
       prevBtn.style.color = "black";
     }
     setPreviousBtn(btnId);
@@ -94,17 +89,12 @@ export default function OrderHistory() {
         y = rows[i + 1].getElementsByTagName("TD")[n];
         if (dir == "asc") {
           if (sortType === "number") {
-            if (
-              Number(x.textContent.replace("$", "")) >
-              Number(y.textContent.replace("$", ""))
-            ) {
+            if (Number(x.textContent.replace(/\D/g, "")) > Number(y.textContent.replace(/\D/g, ""))) {
               shouldSwitch = true;
               break;
             }
           } else if (sortType === "date") {
-            if (
-              Number(new Date(x.textContent)) > Number(new Date(y.textContent))
-            ) {
+            if (Number(new Date(x.textContent)) > Number(new Date(y.textContent))) {
               shouldSwitch = true;
               break;
             }
@@ -116,17 +106,12 @@ export default function OrderHistory() {
           }
         } else if (dir == "desc") {
           if (sortType === "number") {
-            if (
-              Number(x.textContent.replace("$", "")) <
-              Number(y.textContent.replace("$", ""))
-            ) {
+            if (Number(x.textContent.replace(/\D/g, "")) < Number(y.textContent.replace(/\D/g, ""))) {
               shouldSwitch = true;
               break;
             }
           } else if (sortType === "date") {
-            if (
-              Number(new Date(x.textContent)) < Number(new Date(y.textContent))
-            ) {
+            if (Number(new Date(x.textContent)) < Number(new Date(y.textContent))) {
               shouldSwitch = true;
               break;
             }
@@ -145,103 +130,99 @@ export default function OrderHistory() {
       } else {
         if (switchcount == 0 && dir == "asc") {
           dir = "desc";
+          event.target.innerHTML = content + "&#129047;";
           switching = true;
         }
       }
     }
   };
-  if (orders) {
-    return (
-      <>
-        {
-          <div className={styles["orders"]}>
-            <OrderModal
-              show={showModal}
-              setShow={setShowModal}
-              orderDetails={orderDetails}
-              setOrderDetails={setOrderDetails}
-            />
-            <table id="orderTable">
-              <thead>
-                <tr>
-                  <th id="orderNo" onClick={() => sortTable(0, "orderNo")}>
-                    Order No.
-                  </th>
-                  <th
-                    id="orderDate"
-                    onClick={() => sortTable(1, "orderDate", "date")}
-                  >
-                    Order Placed
-                  </th>
-                  <th id="shipTo" onClick={() => sortTable(2, "shipTo")}>
-                    ShipTo
-                  </th>
-                  <th
-                    id="orderTotal"
-                    onClick={() => sortTable(3, "orderTotal", "number")}
-                  >
-                    Total Amount
-                  </th>
-                  <th
-                    id="orderStatus"
-                    onClick={() => sortTable(4, "orderStatus")}
-                  >
-                    Shipping Status
-                  </th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
 
+  return (
+    <>
+      {
+        <div className={styles["orders"]}>
+          <OrderModal show={showModal} setShow={setShowModal} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />
+          <table id="orderTable">
+            <thead>
+              <tr>
+                <th id="orderNo" onClick={(event) => sortTable(event, 0, "orderNo", "number")}>
+                  Order No.
+                </th>
+                <th id="orderDate" onClick={(event) => sortTable(event, 1, "orderDate", "date")}>
+                  Order Placed
+                </th>
+                <th id="shipTo" onClick={(event) => sortTable(event, 2, "shipTo")}>
+                  ShipTo
+                </th>
+                <th id="orderTotal" onClick={(event) => sortTable(event, 3, "orderTotal", "number")}>
+                  Total Amount
+                </th>
+                <th id="orderStatus" onClick={(event) => sortTable(event, 4, "orderStatus")}>
+                  Shipping Status
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            {orders ? (
               <tbody id="orderTable">
-                {orders &&
-                  orders.data.map((order) => {
-                    return (
-                      <tr key={order.id}>
-                        <td>{order.customer_reference}</td>
-                        <td>
-                          {new Date(order.created * 1000).toLocaleDateString()}
-                        </td>
-                        <td>{order.shipping.name}</td>
-                        <td>{order.order_value.formatted_with_symbol}</td>
-                        <td>
-                          {getShippingStatus(
-                            order.status_payment,
-                            order.status_fulfillment
-                          )}
-                        </td>
-                        <td>
-                          <button onClick={() => showOrderDetails(order)}>
-                            <BiDetail size={16} />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                {orders.data.map((order) => {
+                  return (
+                    <tr key={order.id}>
+                      <td>{order.customer_reference}</td>
+                      <td>{new Date(order.created * 1000).toLocaleDateString()}</td>
+                      <td>{order.shipping.name}</td>
+                      <td>{order.order_value.formatted_with_symbol}</td>
+                      <td>{getShippingStatus(order.status_payment, order.status_fulfillment)}</td>
+                      <td>
+                        <button onClick={() => showOrderDetails(order)}>
+                          <BiDetail size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
                 <tr>
                   <td>
                     {orders.meta.pagination.links.previous && (
-                      <button onClick={() => handlePreviousOrder()}>
+                      <button onClick={() => handlePreviousPage()} style={{ display: "flex", alignItems: "center", padding: "3px" }}>
+                        <ImArrowLeft />
                         prev
                       </button>
                     )}
                   </td>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <td>
+                    <label htmlFor="changeLimit">Orders Per Page</label>
+                    <select id="changeLimit" onChange={changeLimit}>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </td>
                   <td></td>
                   <td>
                     {orders.meta.pagination.links.next && (
-                      <button onClick={() => handleNextOrder()}>next</button>
+                      <button onClick={() => handleNextPage()} style={{ display: "flex", alignItems: "center", padding: "3px" }}>
+                        next
+                        <ImArrowRight />
+                      </button>
                     )}
                   </td>
                 </tr>
               </tbody>
-            </table>
-          </div>
-        }
-      </>
-    );
-  } else {
-    return <div>Loading...</div>;
-  }
+            ) : (
+              <tbody>
+                <tr>
+                  <td>Loading...</td>
+                </tr>
+              </tbody>
+            )}
+          </table>
+        </div>
+      }
+    </>
+  );
 }

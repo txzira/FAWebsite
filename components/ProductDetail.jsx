@@ -97,7 +97,7 @@ export default function ProductDetail({ product, variants, variantGroups }) {
         </div>
         <div className={styles["product-detail-desc"]}>
           <div className="products-heading">
-            <h2>{product.name}</h2>
+            <h2>{product.name.toUpperCase()}</h2>
             <p className={styles["price"]}>{product.price.formatted_with_symbol}</p>
           </div>
           <br />

@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import Footer from "./Footer";
 
 import Navbar from "./Navbar";
 import { useStateContext } from "../context/StateContext";
@@ -17,6 +18,7 @@ const Layout = ({ children }) => {
         <Navbar />
       </header>
       <main className="main-container">{children}</main>
+      <Footer />
     </div>
   );
 };

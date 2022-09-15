@@ -1,6 +1,7 @@
 import commerce from "../../../lib/commerce";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req, res) {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const categories = await commerce.categories.list();
 
@@ -8,4 +9,4 @@ export default async function handler(req, res) {
   } catch (err) {
     res.status(err.statusCode || 500).json(err.message);
   }
-}
+};

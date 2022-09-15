@@ -124,28 +124,28 @@ span.text-red {
 }
 
 .dropdown {
-  background-color: #fff;
-  border: solid black;
-  border-radius: 0.5rem;
+  background-color: #f3f3f3;
   color: black;
   display: none;
   left: auto;
+  margin: 0;
+  margin-top: -1px;
   min-width: inherit;
   padding: 0;
   position: absolute;
   text-align: left;
-  z-index: 2;
+  z-index: 1;
 }
 .dropdown li {
-  display: block;
   flex-direction: column;
+  list-style: none;
 }
 .dropdown.show {
   display: block;
 }
 
 .products-heading {
-  color: #324d67;
+  color: black;
   margin: 40px 0px;
   text-align: left;
 }
@@ -410,9 +410,9 @@ input[type="radio"] {
 }
 
 .buttons .add-to-cart {
-  background-color: white;
-  border: 1px solid #f02d34;
-  color: #f02d34;
+  background-color: black;
+  border: 1px solid black;
+  color: white;
   cursor: pointer;
   font-size: 18px;
   font-weight: 500;
@@ -892,4 +892,9 @@ td {
 
 .category {
   display: flex;
+  /* padding: 20px; */
+}
+.category a {
+  display: block;
+  padding: 2vw 1vw;
 }

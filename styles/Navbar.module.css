@@ -35,10 +35,10 @@
   width: 18px;
 }
 
-.navbarContainer li {
-  /* margin: 1vw; */
+/* .navbarContainer li {
+  margin: 1vw;
   padding: 1vw;
-}
+} */
 .links a {
   padding: 4px;
 }
@@ -51,7 +51,7 @@
 }
 
 .navbarLinks {
-  background-color: rgb(240, 240, 240);
+  background-color: #f3f3f3;
   display: flex;
   flex-grow: 0;
   height: 60px;

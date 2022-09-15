@@ -1,7 +1,8 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectToDatabase } from "../../../lib/mongodb";
 import { hashPassword, verifyPassword } from "../../../lib/hash";
 
-async function handler(req, res) {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     //Connect to DB
     const client = await connectToDatabase();
@@ -30,5 +31,4 @@ async function handler(req, res) {
     //Response for other than POST method
     res.status(500).json({ message: "Route not valid" });
   }
-}
-export default handler;
+};

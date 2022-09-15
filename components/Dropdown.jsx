@@ -11,7 +11,7 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
           <a>{dropdownName}+</a>
         </Link>
       </span>
-      <div>
+      <div style={{ margin: "0px", padding: "0px", top: "1", height: "0px", width: "0px" }}>
         <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
           {submenuItems.map((item) => (
             <li key={item.id} id={item.slug} name={dropdownSlug}>

@@ -30,9 +30,7 @@ export default function AccountDetails() {
           }),
         });
         status = await status.json();
-        status.message === "success"
-          ? toast.success("Password Successfully Changed")
-          : toast.error(status.message);
+        status.message === "success" ? toast.success("Password Successfully Changed") : toast.error(status.message);
       } else {
         toast.error("Mismatched passwords");
       }
@@ -45,17 +43,11 @@ export default function AccountDetails() {
 
   return (
     <div>
-      {console.log(session)}
       <h1>AccountDetails</h1>
       <label htmlFor="name">Full Name</label>
       <input id="name" type="text" name="name" placeholder="session name" />
       <label htmlFor="email">Email Address</label>
-      <input
-        id="email"
-        type="email"
-        name="email"
-        placeholder={session.user.email}
-      />
+      <input id="email" type="email" name="email" placeholder={session.user.email} />
       <button>
         <AiOutlineEdit />
       </button>
@@ -63,21 +55,9 @@ export default function AccountDetails() {
         <form>
           <h2>Change Password</h2>
           <label htmlFor="oldPassword">Old Password</label>
-          <input
-            id="oldPassword"
-            type="password"
-            name="oldPassword"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
+          <input id="oldPassword" type="password" name="oldPassword" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} />
           <label htmlFor="newPassword">New Password</label>
-          <input
-            id="newPassword"
-            type="password"
-            name="newPassword"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
+          <input id="newPassword" type="password" name="newPassword" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
           <label htmlFor="retypePassword">Retype New Password</label>
           <input
             id="retypePassword"
