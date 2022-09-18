@@ -1,7 +1,7 @@
 // components/ProductList.js
 import Link from "next/link";
 
-import Product from "./Product";
+import ProductCard from "./ProductCard";
 
 import styles from "../styles/Product.module.css";
 
@@ -14,7 +14,7 @@ export default function ProductList({ products }) {
         <div key={product.permalink}>
           <Link href={`/products/${product.permalink}`}>
             <a>
-              <Product {...product} />
+              <ProductCard {...product} />
             </a>
           </Link>
         </div>

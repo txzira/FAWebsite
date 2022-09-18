@@ -144,22 +144,6 @@ span.text-red {
   display: block;
 }
 
-.products-heading {
-  color: black;
-  margin: 40px 0px;
-  text-align: left;
-}
-
-.products-heading h2 {
-  font-size: 40px;
-  font-weight: 800;
-}
-
-.products-heading p {
-  font-size: 16px;
-  font-weight: 200;
-}
-
 .footer-banner-container {
   background-color: #f02d34;
   border-radius: 15px;
@@ -402,7 +386,16 @@ span.text-red {
   display: none;
 } */
 input[type="radio"]:checked + label {
-  border: solid 3px green;
+  background-color: black;
+  border: solid 3px black;
+  color: white;
+}
+input[type="radio"] + label {
+  background-color: white;
+  border: solid 3px rgb(230, 220, 220);
+  border-radius: 20px;
+  color: black;
+  padding: 5px;
 }
 input[type="radio"] {
   margin: 0px 10px;

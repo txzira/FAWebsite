@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import { connectToDatabase } from "../../../lib/mongodb";
 import { verifyPassword } from "../../../lib/hash";
-import commerce from "../../../lib/commerce";
 
 // async function http(url: URL, init: RequestInit): Promise<any> {
 //   const response = await fetch(url, init);
