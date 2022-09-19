@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styles from "../../styles/Product.module.css";
 import type { ProductVariantGroup } from "@chec/commerce.js/types/product-variant-group";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 export const ProductImg = ({ image }: { image: string }) => (
   <div>

@@ -27,13 +27,13 @@ const Navbar = () => {
     if (path == "/") {
       //reset nav link colors
       const linksElement = document.getElementById("links").childNodes;
-      linksElement.forEach((link) => {
+      linksElement.forEach((link: HTMLElement) => {
         link.style.backgroundColor = "#f3f3f3";
         link.style.color = "black";
       });
     } else {
       const linksElement = document.getElementById("links").childNodes;
-      linksElement.forEach((link) => {
+      linksElement.forEach((link: HTMLElement) => {
         link.style.backgroundColor = "#f3f3f3";
         link.style.color = "black";
         // console.log(link.getElementById);
@@ -46,7 +46,6 @@ const Navbar = () => {
         if (navBtn.getAttribute("name")) {
           navBtn = document.getElementById(navBtn.getAttribute("name"));
         }
-        console.log(navBtn);
         navBtn.style.backgroundColor = "black";
         navBtn.style.color = "white";
       }

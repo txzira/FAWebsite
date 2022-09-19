@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           const assets = await Promise.all(
             option.assets.map(async (asset) => {
               const url = new URL(`https://api.chec.io/v1/assets/${asset}`);
-              let response = await fetch(url, {
+              let response = await fetch(url.toString(), {
                 method: "GET",
                 headers: headers,
               });
