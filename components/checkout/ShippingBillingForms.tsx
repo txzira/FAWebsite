@@ -281,7 +281,7 @@ export function BillingDetails({
     }
     const card = elements.getElement(CardElement);
     //handle input validation errors
-    const errors = {};
+    let errors = {};
 
     if (!card._implementation._complete) {
       errors = { payment: "\u2022Invalid payment information" };
@@ -316,7 +316,7 @@ export function BillingDetails({
       return;
     }
     const orderDetails = {
-      customer: session ? { id: session.user.customer_id } : { email: shippingFormValues.email },
+      customer: session ? { id: session.user.customer_id, email: shippingFormValues.email } : { email: shippingFormValues.email },
       shipping: shipping,
       billing: billing,
       fulfillment: {
@@ -353,7 +353,7 @@ export function BillingDetails({
       }
       try {
         const order = await commerce.checkout.capture(checkoutTokenId, {
-          orderDetails,
+          ...orderDetails,
           payment: {
             gateway: "stripe",
             stripe: {

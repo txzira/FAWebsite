@@ -1,5 +1,15 @@
 import toast from "react-hot-toast";
 
+type FormErrors = {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  street?: string;
+  city?: string;
+  postalCode?: string;
+  subdivision?: string;
+};
+
 export const validatePassword = (password) => {
   const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/);
   if (passwordRegex.test(password)) return true;
@@ -14,7 +24,7 @@ export const validateEmail = (email) => {
 };
 
 export const validateContactForm = (values, type) => {
-  const errors = {};
+  const errors: FormErrors = {};
 
   if (values.email) {
     if (!validateEmail(values.email)) errors.email = "\u2022Invalid email.";

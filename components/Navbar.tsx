@@ -43,8 +43,8 @@ const Navbar = () => {
       let navBtn = document.getElementById(pathSlug);
       // console.log(navBtn.name);
       if (navBtn) {
-        if (navBtn.getAttribute("name")) {
-          navBtn = document.getElementById(navBtn.getAttribute("name"));
+        if (navBtn.getAttribute("title")) {
+          navBtn = document.getElementById(navBtn.getAttribute("title"));
         }
         navBtn.style.backgroundColor = "black";
         navBtn.style.color = "white";

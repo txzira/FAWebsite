@@ -1,15 +1,15 @@
 import { createContext, useReducer, useContext, useEffect, useState } from "react";
-import commerce from '../lib/commerce';
-const CartStateContext = createContext();
-const CartDispatchContext = createContext();
+import commerce from "../lib/commerce";
+const CartStateContext = createContext(null);
+const CartDispatchContext = createContext(null);
 
 const SET_CART = "SET_CART";
 
 const initialState = {
   total_items: 0,
   total_unique_items: 0,
-  line_items: []
-}
+  line_items: [],
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,7 +24,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     getCart();
-  }, [])
+  }, []);
 
   const setCart = (payload) => dispatch({ type: SET_CART, payload });
 
@@ -32,20 +32,16 @@ export const CartProvider = ({ children }) => {
     try {
       const cart = await commerce.cart.retrieve();
       setCart(cart);
-
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   return (
     <CartDispatchContext.Provider value={{ setCart }}>
-      <CartStateContext.Provider value={state}>
-        {children}
-      </CartStateContext.Provider>
+      <CartStateContext.Provider value={state}>{children}</CartStateContext.Provider>
     </CartDispatchContext.Provider>
   );
-
 };
 export const useCartState = () => useContext(CartStateContext);
 export const useCartDispatch = () => useContext(CartDispatchContext);

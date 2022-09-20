@@ -39,7 +39,7 @@ function CheckoutPage({ checkoutToken }) {
         setPaymentIntentId(data.paymentIntentId);
       });
   }, [line_items]);
-  const appearance = {
+  const appearance: { theme: "stripe" | "night" | "flat" | "none" } = {
     theme: "stripe",
   };
   const options = {
@@ -51,7 +51,7 @@ function CheckoutPage({ checkoutToken }) {
     <React.Fragment>
       {clientSecret && (
         <Elements stripe={stripePromise} options={options}>
-          <CheckoutForm checkoutTokenId={checkoutToken.id} paymentIntentId={paymentIntentId} clientSecret={clientSecret} />
+          <CheckoutForm checkoutTokenId={checkoutToken.id} />
         </Elements>
       )}
     </React.Fragment>

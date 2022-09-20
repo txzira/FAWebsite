@@ -17,15 +17,15 @@ export async function getServerSideProps() {
     "Content-Type": "application/json",
   };
 
-  let orders = await fetch(url, {
+  const orders = await fetch(url, {
     method: "GET",
     headers: headers,
   });
-  orders = await orders.json();
+  const ordersData = await orders.json();
 
   return {
     props: {
-      orders: orders.data,
+      orders: ordersData.data,
     },
   };
 }
@@ -38,7 +38,7 @@ export default function Admin({ orders }) {
     return (
       <div>
         <h1>Welcome {session.user.email}</h1>
-        <OrderHistory orders={orders} />
+        <OrderHistory />
       </div>
     );
   } else {

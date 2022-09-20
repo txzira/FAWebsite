@@ -4,6 +4,10 @@ import { useRouter } from "next/router";
 import classes from "./auth-form.module.css";
 import toast from "react-hot-toast";
 import { useCartDispatch } from "../../context/cart";
+import type { NextApiResponse } from "next";
+type Data = {
+  customer_id: string;
+};
 
 async function createUser(email, password, customer_id) {
   const response = await fetch("/api/auth/signup", {
@@ -24,11 +28,11 @@ async function createUser(email, password, customer_id) {
 
 function AuthForm() {
   //form data
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
-  const phoneInputRef = useRef();
-  const firstNameInputRef = useRef();
-  const lastNameInputRef = useRef();
+  const emailInputRef = useRef<HTMLInputElement>();
+  const passwordInputRef = useRef<HTMLInputElement>();
+  const phoneInputRef = useRef<HTMLInputElement>();
+  const firstNameInputRef = useRef<HTMLInputElement>();
+  const lastNameInputRef = useRef<HTMLInputElement>();
 
   const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
@@ -39,7 +43,7 @@ function AuthForm() {
 
   async function submitHandler(e) {
     e.preventDefault();
-    const enteredEmail = emailInputRef.current.value;
+    const enteredEmail: string = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
     if (isLogin) {
@@ -62,19 +66,16 @@ function AuthForm() {
           firstname: firstNameInputRef.current.value,
           lastname: lastNameInputRef.current.value,
         };
-        let customerId = await fetch("/api/commercejs/createcustomer", {
+        const customerId = await fetch("/api/commercejs/createcustomer", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(customerDetails),
         });
-        customerId = await customerId.json();
-        const result = await createUser(
-          enteredEmail,
-          enteredPassword,
-          customerId.customer_id
-        );
+        const customerJSON = await customerId.json();
+
+        const result = await createUser(enteredEmail, enteredPassword, customerJSON.customer_id);
         toast.success(result.message);
         router.reload();
       } catch (error) {
@@ -96,42 +97,22 @@ function AuthForm() {
           <>
             <div className={classes.control}>
               <label htmlFor="firstName">First Name:</label>
-              <input
-                required
-                id="firstName"
-                type="text"
-                ref={firstNameInputRef}
-              />
+              <input required id="firstName" type="text" ref={firstNameInputRef} />
             </div>
             <div className={classes.control}>
               <label htmlFor="lastName">Last Name:</label>
-              <input
-                required
-                id="lastName"
-                type="text"
-                ref={lastNameInputRef}
-              />
+              <input required id="lastName" type="text" ref={lastNameInputRef} />
             </div>
             <div className={classes.control}>
               <label htmlFor="phone">Phone Number:</label>
-              <input
-                id="phone"
-                type="tel"
-                ref={phoneInputRef}
-                placeholder="(optional)"
-              />
+              <input id="phone" type="tel" ref={phoneInputRef} placeholder="(optional)" />
             </div>
           </>
         )}
 
         <div className={classes.control}>
           <label htmlFor="password">Your Password</label>
-          <input
-            required
-            type="password"
-            id="password"
-            ref={passwordInputRef}
-          />
+          <input required type="password" id="password" ref={passwordInputRef} />
         </div>
         <div className={classes.actions}>
           <button>{isLogin ? "Login" : "Create Account"}</button>

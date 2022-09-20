@@ -18,7 +18,7 @@ export default function AccountDetails() {
       //check new password and retyped new password match
       if (newPassword === retypePassword) {
         //send old and new password to server if old password matches password on record then change password and return status:accepted
-        let status = await fetch("/api/auth/changepassword", {
+        const status = await fetch("/api/auth/changepassword", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -29,8 +29,8 @@ export default function AccountDetails() {
             newPassword: newPassword,
           }),
         });
-        status = await status.json();
-        status.message === "success" ? toast.success("Password Successfully Changed") : toast.error(status.message);
+        const statusJSON = await status.json();
+        statusJSON.message === "success" ? toast.success("Password Successfully Changed") : toast.error(statusJSON.message);
       } else {
         toast.error("Mismatched passwords");
       }

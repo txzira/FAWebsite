@@ -14,8 +14,8 @@ export default function CheckoutForm({ checkoutTokenId }) {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
 
-  const [shippingCountries, setShippingCountries] = useState([]);
-  const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
+  const [shippingCountries, setShippingCountries] = useState({});
+  const [shippingSubdivisions, setShippingSubdivisions] = useState({});
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState("");
   const [shippingOptionLabel, setShippingOptionLabel] = useState("");
@@ -47,6 +47,7 @@ export default function CheckoutForm({ checkoutTokenId }) {
 
   const fetchShippingCountry = async (checkoutId) => {
     const { countries } = await commerce.services.localeListShippingCountries(checkoutId);
+    console.log(countries);
     setShippingCountries(countries);
     shippingFormValues.country = Object.keys(countries)[0];
     setShippingFormValues(shippingFormValues);

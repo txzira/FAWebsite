@@ -11,11 +11,6 @@ type Data = {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
   if (session) {
-    // const token = await getToken({
-    //   req,
-    //   secret: process.env.NEXTAUTH_SECRET,
-    //   encryption: true,
-    // });
     const query: object = req.query;
     const url = new URL(`https://api.chec.io/v1/customers/${session.user.customer_id}/orders`);
     Object.keys(query).forEach((key) => url.searchParams.append(key, query[key]));

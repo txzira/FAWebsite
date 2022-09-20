@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import commerce from "../../lib/commerce";
 import ProductList from "../../components/ProductList";
+import { GetStaticProps, GetStaticPaths } from "next";
 
-export async function getStaticProps({ params }) {
-  const { slug } = params;
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const slug: string = params.slug.toString();
 
   const category = await commerce.categories.retrieve(slug, {
     type: "slug",
@@ -20,18 +21,19 @@ export async function getStaticProps({ params }) {
       products,
     },
   };
-}
+};
 // pages/categories/[slug].js
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const { data: categoryList } = await commerce.categories.list();
   const allCategories = [];
 
   async function getNthSubcategories(SubcategoryId) {
     //retrieve category details using their "id"
     const nthSubcategory = await commerce.categories.retrieve(SubcategoryId);
+    console.log(nthSubcategory);
     if (nthSubcategory.children.length) {
       //if subcategories exist within the category details return them
-      return await nthSubcategory.children;
+      return nthSubcategory.children;
     }
     // else base case
     return 0;
@@ -65,7 +67,7 @@ export async function getStaticPaths() {
     })),
     fallback: false,
   };
-}
+};
 // pages/categories/[slug].js
 export default function CategoryPage({ category, products }) {
   return (

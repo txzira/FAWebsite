@@ -6,13 +6,14 @@
   position: relative;
   text-align: center;
   width: 100vw;
-  z-index: 120;
+  z-index: 1;
 }
 .navbarContainer {
   flex-wrap: wrap;
   justify-content: center;
   position: relative;
   width: 100vw;
+  z-index: 1;
 }
 .navbarLogo {
   display: flex;

@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+type Data = {
+  customer_id: string;
+};
+export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   if (req.method === "POST") {
     const url = new URL("https://api.chec.io/v1/customers");
 

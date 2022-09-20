@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import OrderModal from "./OrderModal";
 import { BiDetail } from "react-icons/bi";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
-import { HiOutlineArrowLongUp, HiOutlineArrowLongDown } from "react-icons/hi";
 import styles from "../../styles/Orders.module.css";
-import next from "next";
 import useSWR from "swr";
 
 export default function OrderHistory() {
@@ -18,10 +16,7 @@ export default function OrderHistory() {
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data, error } = useSWR(`/api/commercejs/getorders?page=${pageNum}&limit=${limit}`, fetcher);
-  // const { nextData, nextError } = useSWR(nextOrder ? `/api/commercejs/getorders?page=${pageNum}&limit=${limit}` : null, fetcher);
-  // const { prevData, prevError } = useSWR(previousOrder ? `/api/commercejs/getorders?page=${pageNum}&limit=${limit}` : null, fetcher);
   useEffect(() => {
-    console.log(data);
     if (data) setOrders(data);
   }, [data]);
 
