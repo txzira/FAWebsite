@@ -17,7 +17,7 @@ export async function getServerSideProps() {
     "Content-Type": "application/json",
   };
 
-  const orders = await fetch(url, {
+  const orders = await fetch(url.toString(), {
     method: "GET",
     headers: headers,
   });
