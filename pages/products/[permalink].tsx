@@ -26,7 +26,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     type: "permalink",
   });
   const variants = await commerce.products.getVariants(product.id);
-  let variantGroups = await product.variant_groups.sort((a, b) => a.name.localeCompare(b.name));
+  let variantGroups: any = await product.variant_groups.sort((a, b) => a.name.localeCompare(b.name));
 
   const headers = {
     "X-Authorization": `${process.env.NEXT_PUBLIC_CHEC_SECRET_API_KEY}`,
