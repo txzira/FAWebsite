@@ -9,6 +9,7 @@ import { useStateContext } from "../context/StateContext";
 import CartModal from "./CartModal";
 import CategoryList from "./CategoryList";
 import { useCartState } from "../context/cart";
+import { NavContainer, NavHead, NavList, NavLogo } from "./Nav";
 
 import styles from "../styles/Navbar.module.css";
 
@@ -53,72 +54,65 @@ const Navbar = () => {
   });
 
   return (
-    <div className="fl">
-      <div className={styles.navbarContainer}>
-        <div className={styles.navbarHeader}>1-800-JESTER</div>
-        <ul className={styles.navbarLinks}>
-          <li className={styles.navbarLogo} style={{ marginLeft: "1vw" }}>
-            <Link href="/">
-              <a>
-                <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />
-              </a>
-            </Link>
-          </li>
-          <div className={styles.links} id="links">
-            {categories && <CategoryList />}
-          </div>
+    <NavContainer>
+      <NavHead>1-800-JESTER</NavHead>
+      <NavList>
+        <NavLogo logoSrc="/images/logo_size.png" />
+        <div className={styles.links} id="links">
+          {categories && <CategoryList />}
+        </div>
 
-          <div className={styles.navbarButtons} onMouseLeave={() => setDropdownIsActive(false)} style={{ marginRight: "1vw" }}>
-            {!session && !loading && (
-              <li>
-                <Link href="/auth">
-                  <a>Login</a>
-                </Link>
-              </li>
-            )}
-            {session && (
-              <li style={{ height: "100%" }}>
-                <button
-                  onClick={() => setDropdownIsActive((prev) => !prev)}
-                  className={styles.login}
-                  aria-expanded={dropdownIsActive ? "true" : "false"}
-                  style={{ height: "100%" }}
-                >
-                  <CgProfile />
-                  {session.user.email}
-                </button>
-                <div style={{ display: "flex" }}>
-                  <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
-                    {session.user.role === "admin" && (
-                      <li className="category" style={{ height: "60px", width: "100%" }}>
-                        <Link href="/admin">
-                          <a style={{ width: "100%", textAlign: "center" }}>Admin</a>
-                        </Link>
-                      </li>
-                    )}
-                    <li style={{ height: "60px" }}>
-                      <Link href="/account">
-                        <a style={{ height: "60px" }}>My Account</a>
+        <div className={styles.navbarButtons} onMouseLeave={() => setDropdownIsActive(false)} style={{ marginRight: "1vw" }}>
+          {!session && !loading && (
+            <li>
+              <Link href="/auth">
+                <a>Login</a>
+              </Link>
+            </li>
+          )}
+          {session && (
+            <li style={{ height: "100%" }}>
+              <button
+                onClick={() => setDropdownIsActive((prev) => !prev)}
+                className={styles.login}
+                aria-expanded={dropdownIsActive ? "true" : "false"}
+                style={{ height: "100%" }}
+              >
+                <CgProfile />
+                {session.user.email}
+              </button>
+              <div style={{ display: "flex" }}>
+                <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
+                  {session.user.role === "admin" && (
+                    <li className="category" style={{ height: "60px", width: "100%" }}>
+                      <Link href="/admin">
+                        <a style={{ width: "100%", textAlign: "center" }}>Admin</a>
                       </Link>
                     </li>
-                    <li>
-                      <button onClick={logoutHandler}>Logout</button>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            )}
-            <li>
-              <button type="button" className="cart-icon" onClick={() => setShowCart(true)}>
-                <AiOutlineShopping />
-                <span className={styles.navbarCartItemQty}>{total_items}</span>
-              </button>
+                  )}
+                  <li style={{ height: "60px" }}>
+                    <Link href="/account">
+                      <a style={{ height: "60px" }}>My Account</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <button onClick={logoutHandler}>Logout</button>
+                  </li>
+                </ul>
+              </div>
             </li>
-          </div>
-        </ul>
-      </div>
+          )}
+          <li>
+            <button type="button" className="cart-icon" onClick={() => setShowCart(true)}>
+              <AiOutlineShopping />
+              <span className={styles.navbarCartItemQty}>{total_items}</span>
+            </button>
+          </li>
+        </div>
+      </NavList>
+
       {showCart && <CartModal />}
-    </div>
+    </NavContainer>
   );
 };
 

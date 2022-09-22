@@ -10,7 +10,7 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
       <Link href={`${path}/${dropdownSlug}`}>
         <a
           onMouseEnter={() => setDropdownIsActive((prev) => !prev)}
-          className=""
+          className="flex items-center h-full"
           aria-expanded={dropdownIsActive ? "true" : "false"}
           style={{ height: "100%" }}
         >

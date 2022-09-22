@@ -6,6 +6,7 @@ import { useStateContext } from "../context/StateContext";
 
 import Category from "./Category";
 import styles from "../styles/Navbar.module.css";
+import { NavItem } from "./Nav";
 
 export default function CategoryList() {
   const { categories } = useStateContext();
@@ -14,9 +15,9 @@ export default function CategoryList() {
   return (
     <React.Fragment>
       {categories.map((category) => (
-        <li key={category.id} className="category" id={category.slug}>
+        <NavItem key={category.id} id={category.slug}>
           <Category {...category} />
-        </li>
+        </NavItem>
       ))}
     </React.Fragment>
   );
