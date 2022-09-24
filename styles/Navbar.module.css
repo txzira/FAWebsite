@@ -1,24 +1,3 @@
-.navbarHeader {
-  background: rgba(0, 0, 0, 1);
-  color: #ffffff;
-  line-height: 1.3;
-  padding: 10px;
-  position: relative;
-  text-align: center;
-  width: 100vw;
-  z-index: 1;
-}
-.navbarContainer {
-  flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
-  width: 100vw;
-  z-index: 1;
-}
-.navbarLogo {
-  display: flex;
-  /* padding-right: 15vw; */
-}
 .navbarItem {
   font-size: 2vw;
   margin: auto;
@@ -40,16 +19,18 @@
   margin: 1vw;
   padding: 1vw;
 } */
-.links a {
+
+/*.links a {
   padding: 4px;
 }
+*/
 .links li:hover {
   background-color: black !important;
   color: white !important;
 }
-.links {
-  display: flex;
-}
+/* .links {
+  display: block;
+} */
 
 .navbarLinks {
   background-color: #f3f3f3;
@@ -62,12 +43,7 @@
   padding: 0;
   width: 100vw;
 }
-.navbarLinks li {
-  align-items: center;
-  /* flex-grow: 1; */
 
-  width: auto;
-}
 .navbarButtons {
   align-items: center;
   display: flex;

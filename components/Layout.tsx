@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { useStateContext } from "../context/StateContext";
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   const { setShowCart } = useStateContext();
 
   return (

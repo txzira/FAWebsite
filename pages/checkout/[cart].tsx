@@ -6,6 +6,7 @@ import commerce from "../../lib/commerce";
 
 import { Elements } from "@stripe/react-stripe-js";
 import getStripe from "../../lib/getStripe";
+import CartReview from "../../components/CartReview";
 
 export async function getServerSideProps({ params }) {
   const { cart } = params;
@@ -50,9 +51,13 @@ function CheckoutPage({ checkoutToken }) {
   return (
     <React.Fragment>
       {clientSecret && (
-        <Elements stripe={stripePromise} options={options}>
-          <CheckoutForm checkoutTokenId={checkoutToken.id} />
-        </Elements>
+        <div className="flex flex-row mt-8">
+          <Elements stripe={stripePromise} options={options}>
+            <CheckoutForm checkoutTokenId={checkoutToken.id} />
+          </Elements>
+          <div className="border-l-2 border-black"></div>
+          <CartReview lineItems={line_items} />
+        </div>
       )}
     </React.Fragment>
   );

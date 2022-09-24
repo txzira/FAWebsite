@@ -82,9 +82,7 @@ export default function CheckoutForm({ checkoutTokenId }) {
   }, [shippingFormValues.subdivision]);
 
   return (
-    <div>
-      {/* <pre>{JSON.stringify(shippingFormValues)}</pre>
-      <pre>{JSON.stringify(billingFormValues)}</pre> */}
+    <div className="m-0 w-1/2 pl-4 pr-4">
       {step > 0 && (
         <ProgressView step={step} setStep={setStep} shippingFormValues={shippingFormValues} shippingOptionLabel={shippingOptionLabel} />
       )}

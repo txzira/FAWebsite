@@ -129,13 +129,9 @@ span.text-red {
 
 .dropdown {
   background-color: #f3f3f3;
+
   color: black;
   display: none;
-  left: auto;
-  margin: 0;
-  margin-top: 0px;
-  min-width: inherit;
-  padding: 0;
   position: absolute;
   text-align: left;
   z-index: 1;
@@ -889,12 +885,9 @@ td {
 
 .category {
   display: flex;
-  /* padding: 20px; */
 }
 .category a {
   align-items: center;
-  /* box-sizing: border-box; */
   display: flex;
   height: 100%;
-  /* padding: 21px 1vw; */
 }

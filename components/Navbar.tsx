@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+
 import { useSession, signOut } from "next-auth/react";
 
-import { AiOutlineShopping } from "react-icons/ai";
-import { CgProfile } from "react-icons/cg";
 import { useStateContext } from "../context/StateContext";
 import CartModal from "./CartModal";
 import CategoryList from "./CategoryList";
 import { useCartState } from "../context/cart";
-import { NavContainer, NavHead, NavList, NavLogo } from "./Nav";
+import { NavButtons, NavContainer, NavHead, NavList, NavLogo } from "./Nav";
 
 import styles from "../styles/Navbar.module.css";
 
@@ -19,9 +16,9 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   const loading = status === "loading";
   const [dropdownIsActive, setDropdownIsActive] = useState(false);
-  function logoutHandler() {
+  const logoutHandler = () => {
     signOut();
-  }
+  };
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -57,58 +54,22 @@ const Navbar = () => {
     <NavContainer>
       <NavHead>1-800-JESTER</NavHead>
       <NavList>
-        <NavLogo logoSrc="/images/logo_size.png" />
-        <div className={styles.links} id="links">
-          {categories && <CategoryList />}
-        </div>
+        <li className="ml-5">
+          <NavLogo logoSrc="/images/logo_size.png" />
+        </li>
+        <li id="links">{categories && <CategoryList />}</li>
 
-        <div className={styles.navbarButtons} onMouseLeave={() => setDropdownIsActive(false)} style={{ marginRight: "1vw" }}>
-          {!session && !loading && (
-            <li>
-              <Link href="/auth">
-                <a>Login</a>
-              </Link>
-            </li>
-          )}
-          {session && (
-            <li style={{ height: "100%" }}>
-              <button
-                onClick={() => setDropdownIsActive((prev) => !prev)}
-                className={styles.login}
-                aria-expanded={dropdownIsActive ? "true" : "false"}
-                style={{ height: "100%" }}
-              >
-                <CgProfile />
-                {session.user.email}
-              </button>
-              <div style={{ display: "flex" }}>
-                <ul className={`dropdown ${dropdownIsActive ? "show" : ""}`}>
-                  {session.user.role === "admin" && (
-                    <li className="category" style={{ height: "60px", width: "100%" }}>
-                      <Link href="/admin">
-                        <a style={{ width: "100%", textAlign: "center" }}>Admin</a>
-                      </Link>
-                    </li>
-                  )}
-                  <li style={{ height: "60px" }}>
-                    <Link href="/account">
-                      <a style={{ height: "60px" }}>My Account</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <button onClick={logoutHandler}>Logout</button>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          )}
-          <li>
-            <button type="button" className="cart-icon" onClick={() => setShowCart(true)}>
-              <AiOutlineShopping />
-              <span className={styles.navbarCartItemQty}>{total_items}</span>
-            </button>
-          </li>
-        </div>
+        <li className="mr-5" onMouseLeave={() => setDropdownIsActive(false)}>
+          <NavButtons
+            session={session}
+            setActive={setDropdownIsActive}
+            isActive={dropdownIsActive}
+            loading={loading}
+            logoutFn={logoutHandler}
+            total_items={total_items}
+            setShowCart={setShowCart}
+          />
+        </li>
       </NavList>
 
       {showCart && <CartModal />}

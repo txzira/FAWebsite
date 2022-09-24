@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div style={{ display: "flex", justifyContent: "center", paddingTop: "30px", flexDirection: "column", alignItems: "center" }}>
+    <footer style={{ display: "flex", justifyContent: "center", paddingTop: "30px", flexDirection: "column", alignItems: "center" }}>
       <Link href="/">
         <a>
           <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />
@@ -20,7 +20,7 @@ const Footer = () => {
           <li style={{ padding: "10px" }}>Accessibility</li>
         </ul>
       </div>
-    </div>
+    </footer>
   );
 };
 
