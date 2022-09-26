@@ -11,7 +11,7 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <React.StrictMode>
+    <React.Fragment>
       <SessionProvider session={pageProps.session}>
         <StateContext>
           <CartProvider>
@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </CartProvider>
         </StateContext>
       </SessionProvider>
-    </React.StrictMode>
+    </React.Fragment>
   );
 }
 

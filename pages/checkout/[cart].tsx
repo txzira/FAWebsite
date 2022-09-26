@@ -10,20 +10,21 @@ import CartReview from "../../components/CartReview";
 
 export async function getServerSideProps({ params }) {
   const { cart } = params;
-  const checkoutToken = await commerce.checkout.generateTokenFrom("cart", cart);
+  const initCheckoutToken = await commerce.checkout.generateTokenFrom("cart", cart);
 
   return {
     props: {
-      checkoutToken,
+      initCheckoutToken,
     },
   };
 }
 const stripePromise = getStripe();
 
-function CheckoutPage({ checkoutToken }) {
-  const { line_items } = useCartState();
+function CheckoutPage({ initCheckoutToken }) {
+  const { line_items, subtotal } = useCartState();
   const [clientSecret, setClientSecret] = useState("");
   const [paymentIntentId, setPaymentIntentId] = useState("");
+  const [checkoutToken, setCheckoutToken] = useState(initCheckoutToken);
 
   useEffect(() => {
     if (!checkoutToken) return;
@@ -53,10 +54,10 @@ function CheckoutPage({ checkoutToken }) {
       {clientSecret && (
         <div className="flex flex-row mt-8">
           <Elements stripe={stripePromise} options={options}>
-            <CheckoutForm checkoutTokenId={checkoutToken.id} />
+            <CheckoutForm checkoutToken={checkoutToken} setCheckoutToken={setCheckoutToken} />
           </Elements>
           <div className="border-l-2 border-black"></div>
-          <CartReview lineItems={line_items} />
+          <CartReview checkoutToken={checkoutToken} />
         </div>
       )}
     </React.Fragment>

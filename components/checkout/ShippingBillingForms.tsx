@@ -160,10 +160,21 @@ export function ShippingDetails({ shippingFormValues, setShippingFormValues, cou
   );
 }
 
-export function ShippingMethod({ options, setStep, setShippingOption, setShippingOptionLabel }) {
+export function ShippingMethod({ country, options, setStep, setShippingOption, setShippingOptionLabel, checkoutToken, setCheckoutToken }) {
+  const addShippingToChec = async (id) => {
+    await commerce.checkout.checkShippingOption(checkoutToken.id, {
+      shipping_option_id: id,
+      country: country,
+    });
+    const refreshCheckoutToken = await commerce.checkout.getToken(checkoutToken.id);
+    console.log(refreshCheckoutToken);
+    setCheckoutToken(refreshCheckoutToken);
+  };
+
   function handleShippingOption(event, label) {
     setShippingOptionLabel(label);
     setShippingOption(event.target.value);
+    addShippingToChec(event.target.value);
   }
   function defaultOption() {
     if (document.getElementById("option0")) {
@@ -173,6 +184,7 @@ export function ShippingMethod({ options, setStep, setShippingOption, setShippin
   useEffect(() => {
     defaultOption();
   }, []);
+
   return (
     <div style={{ width: "100%" }}>
       <h1 className={styles["form-title"]}>Shipping Method</h1>

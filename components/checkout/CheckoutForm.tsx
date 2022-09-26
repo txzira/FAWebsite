@@ -7,7 +7,7 @@ import commerce from "../../lib/commerce";
 
 import styles from "../../styles/CheckoutForm.module.css";
 
-export default function CheckoutForm({ checkoutTokenId }) {
+export default function CheckoutForm({ checkoutToken, setCheckoutToken }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -47,14 +47,13 @@ export default function CheckoutForm({ checkoutTokenId }) {
 
   const fetchShippingCountry = async (checkoutId) => {
     const { countries } = await commerce.services.localeListShippingCountries(checkoutId);
-    console.log(countries);
     setShippingCountries(countries);
     shippingFormValues.country = Object.keys(countries)[0];
     setShippingFormValues(shippingFormValues);
   };
 
   const fetchSubdivision = async (countryCode) => {
-    const { subdivisions } = await commerce.services.localeListShippingSubdivisions(checkoutTokenId, countryCode);
+    const { subdivisions } = await commerce.services.localeListShippingSubdivisions(checkoutToken.id, countryCode);
     setShippingSubdivisions(subdivisions);
     shippingFormValues.subdivision = Object.keys(subdivisions)[0];
     setShippingFormValues(shippingFormValues);
@@ -70,7 +69,7 @@ export default function CheckoutForm({ checkoutTokenId }) {
   };
 
   useEffect(() => {
-    fetchShippingCountry(checkoutTokenId);
+    fetchShippingCountry(checkoutToken.id);
   }, []);
 
   useEffect(() => {
@@ -78,8 +77,12 @@ export default function CheckoutForm({ checkoutTokenId }) {
   }, [shippingFormValues.country]);
 
   useEffect(() => {
-    if (shippingFormValues.subdivision) fetchShippingOptions(checkoutTokenId, shippingFormValues.country, shippingFormValues.subdivision);
+    if (shippingFormValues.subdivision) fetchShippingOptions(checkoutToken.id, shippingFormValues.country, shippingFormValues.subdivision);
   }, [shippingFormValues.subdivision]);
+
+  useEffect(() => {
+    console.log(checkoutToken);
+  }, [step]);
 
   return (
     <div className="m-0 w-1/2 pl-4 pr-4">
@@ -101,10 +104,13 @@ export default function CheckoutForm({ checkoutTokenId }) {
           )}
           {step === 1 && (
             <ShippingMethod
+              country={shippingFormValues.country}
               options={options}
               setStep={setStep}
               setShippingOption={setShippingOption}
               setShippingOptionLabel={setShippingOptionLabel}
+              checkoutToken={checkoutToken}
+              setCheckoutToken={setCheckoutToken}
             />
           )}
           {step === 2 && (
@@ -113,7 +119,7 @@ export default function CheckoutForm({ checkoutTokenId }) {
               elements={elements}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
-              checkoutTokenId={checkoutTokenId}
+              checkoutTokenId={checkoutToken.id}
               shippingFormValues={shippingFormValues}
               billingFormValues={billingFormValues}
               setBillingFormValues={setBillingFormValues}
