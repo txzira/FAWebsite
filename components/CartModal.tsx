@@ -32,7 +32,7 @@ const CartModal = () => {
         {line_items.map((item) => (
           <CartItem key={item.id} {...item} />
         ))}
-        <div className="">
+        <div>
           <div>
             <Link href="/cart">
               <a>Cart</a>

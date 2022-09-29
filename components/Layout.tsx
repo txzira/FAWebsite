@@ -1,17 +1,14 @@
 import React from "react";
 import Head from "next/head";
-import Footer from "./Footer";
 
+import Footer from "./Footer";
 import Navbar from "./Navbar";
-import { useStateContext } from "../context/StateContext";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { setShowCart } = useStateContext();
-
   return (
     <div className="layout">
       <Head>
-        <title>Cool Skate Shop</title>
+        <title>Jester Shop</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <header>

@@ -3,15 +3,8 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  /* margin: 6em 0em 6em; */
   padding: 10px;
   width: 100%;
-}
-
-.form-title {
-  font-size: 36px;
-  font-weight: 500;
-  margin-bottom: 2.5rem;
 }
 
 .checkout-form {
@@ -22,43 +15,13 @@
   width: 100%;
 }
 
-.input-line {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* margin-bottom: 2rem; */
-  width: 100%;
-}
 .checkout-form label {
   color: black;
   font-size: 20px;
   margin-bottom: 0.5rem;
   width: 1000%;
 }
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -16px;
-}
 
-.col-25 {
-  flex: 25%;
-}
-
-.col-50 {
-  flex: 50%;
-}
-
-.col-75 {
-  flex: 75%;
-}
-
-.col-25,
-.col-50,
-.col-75 {
-  padding: 0 16px;
-}
 .form-container input[type="text"],
 .form-container input[type="radio"],
 .form-container select {
@@ -67,38 +30,4 @@
   margin-bottom: 20px;
   padding: 10px;
   width: 100%;
-}
-
-.test {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-.form-control {
-  border: 1px solid black;
-  border-radius: 8px;
-  padding: 10px;
-  width: 100%;
-}
-
-.progress-view-container {
-  align-items: center;
-  border: 1px solid black;
-  border-radius: 8px;
-  display: block;
-  margin-top: 6rem;
-  padding: 10px;
-  width: 100%;
-}
-
-.progress-view-container label {
-  font-size: 20px;
-}
-.group {
-  display: flex;
-  width: 100%;
-}
-
-.form-error {
-  color: red;
 }

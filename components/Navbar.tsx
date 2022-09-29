@@ -8,8 +8,6 @@ import CategoryList from "./CategoryList";
 import { useCartState } from "../context/cart";
 import { NavButtons, NavContainer, NavHead, NavList, NavLogo } from "./Nav";
 
-import styles from "../styles/Navbar.module.css";
-
 const Navbar = () => {
   const { categories, showCart, setShowCart } = useStateContext();
   const { total_items } = useCartState();

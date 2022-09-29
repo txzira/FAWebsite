@@ -1,4 +1,3 @@
-// components/Category.js
 import React from "react";
 import Dropdown from "./Dropdown";
 import Link from "next/link";

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 
-import { ShippingDetails, BillingDetails, ShippingMethod, ProgressView } from "./ShippingBillingForms";
+import { ShippingDetails, ShippingMethod } from "./ShippingForms";
+import { BillingDetails } from "./BillingForm";
+import { ProgressView } from "./ProgressView";
 
 import commerce from "../../lib/commerce";
-
 import styles from "../../styles/CheckoutForm.module.css";
 
 export default function CheckoutForm({ checkoutToken, setCheckoutToken }) {
@@ -43,6 +44,7 @@ export default function CheckoutForm({ checkoutToken, setCheckoutToken }) {
   const options = shippingOptions.map((sO) => ({
     id: sO.id,
     label: `${sO.description} - (${sO.price.formatted_with_symbol})`,
+    price: sO.price.raw,
   }));
 
   const fetchShippingCountry = async (checkoutId) => {
@@ -80,10 +82,6 @@ export default function CheckoutForm({ checkoutToken, setCheckoutToken }) {
     if (shippingFormValues.subdivision) fetchShippingOptions(checkoutToken.id, shippingFormValues.country, shippingFormValues.subdivision);
   }, [shippingFormValues.subdivision]);
 
-  useEffect(() => {
-    console.log(checkoutToken);
-  }, [step]);
-
   return (
     <div className="m-0 w-1/2 pl-4 pr-4">
       {step > 0 && (
@@ -94,6 +92,8 @@ export default function CheckoutForm({ checkoutToken, setCheckoutToken }) {
         <form className={styles["checkout-form"]} id="payment-form">
           {step === 0 && (
             <ShippingDetails
+              checkoutTokenId={checkoutToken.id}
+              setCheckoutToken={setCheckoutToken}
               shippingFormValues={shippingFormValues}
               setShippingFormValues={setShippingFormValues}
               countries={countries}

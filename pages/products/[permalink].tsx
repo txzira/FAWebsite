@@ -18,6 +18,7 @@ import {
   ProductDesc,
 } from "../../components/product/ProductDetails";
 import toast from "react-hot-toast";
+import { HorizontalDivider } from "../../components/GeneralComponents";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   console.log(params.permalink);
@@ -163,9 +164,7 @@ export default function ProductPage({
           <ProductHeading product={product} />
           <ProductVariantGroups variantGroups={variantGroups} handleColor={handleColor} handleSize={handleSize} />
           {/* highlight selected colors/sizes... */}
-          <br />
-          <hr />
-          <br />
+          <HorizontalDivider tailwindClass="m-6" />
           <ProductQuantity quantity={qty} incFunction={incQty} decFunction={decQty} />
           <br />
           <AddToCart addToCart={addToCart} />
