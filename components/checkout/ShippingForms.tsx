@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { displayFormErrors, validateContactForm } from "../../lib/formvalidation";
 import commerce from "../../lib/commerce";
-import { FormCol33, FormCol50, FormTitle, Row } from "../FormComponents";
+import { FormCol33, FormCol50, FormTitle, Input, Row, Select } from "../FormComponents";
 
 export function ShippingDetails({
   checkoutTokenId,
@@ -52,117 +52,104 @@ export function ShippingDetails({
     <div>
       <FormTitle>Contact Information</FormTitle>
       <div>
-        <label htmlFor="shippingEmail">Email</label>
-        <input
-          required
+        <Input
           id="shippingEmail"
           name="email"
-          type="text"
           placeholder="abc123@example.com"
           value={shippingFormValues.email}
           onChange={handleChange}
+          labelText="Email"
         />
         {formErrors && <p className="text-red-600">{formErrors.email}</p>}
       </div>
       <FormTitle>Shipping Address</FormTitle>
       <div>
-        <label htmlFor="shippingCountry">Country</label>
-        <select id="shippingCountry" name="country" value={shippingFormValues.country} onChange={handleChange}>
-          {countries.map((country) => (
-            <option value={country.id} key={country.id}>
-              {country.label}
-            </option>
-          ))}
-        </select>
+        <Select
+          id="shippingCountry"
+          name="country"
+          value={shippingFormValues.country}
+          onChange={handleChange}
+          options={countries}
+          labelText="Country"
+        />
       </div>
       <Row>
         <FormCol50>
-          <label htmlFor="shippingFirstName">First Name</label>
-          <input
-            required
+          <Input
             id="shippingFirstName"
             name="firstName"
-            type="text"
             placeholder="John"
             value={shippingFormValues.firstName}
             onChange={handleChange}
+            labelText="First Name"
           />
           {formErrors && <p className="text-red-600">{formErrors.firstName}</p>}
         </FormCol50>
         <FormCol50>
-          <label htmlFor="shippingLastName">Last Name</label>
-          <input
-            required
+          <Input
             id="shippingLastName"
             name="lastName"
-            type="text"
             placeholder="Doe"
-            value={shippingFormValues.lastName}
             onChange={handleChange}
+            labelText="Last Name"
+            value={shippingFormValues.lastName}
           />
           {formErrors && <p className="text-red-600">{formErrors.lastName}</p>}
         </FormCol50>
       </Row>
       <Row>
         <FormCol33>
-          <label htmlFor="shippingCity">City</label>
-          <input
-            required
+          <Input
             id="shippingCity"
             name="city"
-            type="text"
-            placeholder="Trenton"
+            placeholder="Trention"
             value={shippingFormValues.city}
             onChange={handleChange}
+            labelText="City"
           />
           {formErrors && <p className="text-red-600">{formErrors.city}</p>}
         </FormCol33>
         <FormCol33>
-          <label htmlFor="shippingState">State/Province</label>
-          <select id="shippingState" name="subdivision" value={shippingFormValues.subdivision} onChange={handleChange}>
-            {subdivisions.map((subdivision) => (
-              <option value={subdivision.id} key={subdivision.id}>
-                {subdivision.label}
-              </option>
-            ))}
-          </select>
+          <Select
+            id="shippingState"
+            name="subdivision"
+            value={shippingFormValues.subdivision}
+            labelText="State/Province"
+            options={subdivisions}
+            onChange={handleChange}
+          />
         </FormCol33>
         <FormCol33>
-          <label htmlFor="shippingZip">Postal Code</label>
-          <input
-            required
+          <Input
             id="shippingZip"
             name="postalCode"
-            type="text"
             placeholder="08608"
             value={shippingFormValues.postalCode}
             onChange={handleChange}
+            labelText="Postal Code"
           />
           {formErrors && <p className="text-red-600">{formErrors.postalCode}</p>}
         </FormCol33>
       </Row>
       <div>
-        <label htmlFor="shippingLine1">Address</label>
-        <input
-          required
+        <Input
           id="shippingLine1"
           name="street"
-          type="text"
-          placeholder="20 S Montgomery St"
+          placeholder="20 S Montgomery St."
           value={shippingFormValues.street}
+          labelText="Address"
           onChange={handleChange}
         />
         {formErrors && <p className="text-red-600">{formErrors.street}</p>}
       </div>
       <div>
-        <label htmlFor="shippingLine2">Apartment, suite, etc.. (optional)</label>
-        <input
+        <Input
           id="shippingLine2"
           name="street_2"
-          type="text"
           placeholder="Apt. 1"
           value={shippingFormValues.street_2}
           onChange={handleChange}
+          labelText="Apartment, suite, etc.. (optional)"
         />
       </div>
       <div className="flex justify-between w-full">
@@ -210,7 +197,9 @@ export function ShippingMethod({ country, options, setStep, setShippingOption, s
             id={`option${index}`}
             onClick={(e) => handleShippingOption(e, option.label)}
           />
-          <label htmlFor={option.id}>{option.label}</label>
+          <label className="text-black text-xl mb-2 w-full" htmlFor={option.id}>
+            {option.label}
+          </label>
         </div>
       ))}
       <div className="flex justify-between w-full">

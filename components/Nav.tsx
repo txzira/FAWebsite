@@ -12,7 +12,7 @@ export const NavHead = ({ children }: { children: React.ReactNode }) => (
 );
 
 export const NavList = ({ children }: { children: React.ReactNode }) => (
-  <ul className="flex bg-custom grow-0 h-14 justify-between list-none m-0 p-0">{children}</ul>
+  <ul className="flex bg-custom-100 grow-0 h-14 justify-between list-none m-0 p-0">{children}</ul>
 );
 
 export const NavLogo = ({ logoSrc }: { logoSrc: string }) => (
@@ -30,7 +30,7 @@ export const NavItem = ({ children, key, id, title = "" }: { children: React.Rea
 );
 
 export const NavDropdown = ({ children, dropdownState }: { children: React.ReactNode; dropdownState: boolean }) => (
-  <ul className={`flex-col bg-custom text-black absolute z-10 list-none  ${dropdownState ? "flex" : "hidden"}`}>{children}</ul>
+  <ul className={`flex-col bg-custom-100 text-black absolute z-10 list-none  ${dropdownState ? "flex" : "hidden"}`}>{children}</ul>
 );
 
 export const NavButtons = ({

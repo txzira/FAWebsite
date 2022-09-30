@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-
 import { useStateContext } from "../context/StateContext";
 
-import Category from "./Category";
 import { NavList, NavItem } from "./Nav";
+import Category from "./Category";
 
 export default function CategoryList() {
   const { categories } = useStateContext();

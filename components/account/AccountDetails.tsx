@@ -51,7 +51,7 @@ export default function AccountDetails() {
       <button>
         <AiOutlineEdit />
       </button>
-      <div className="password">
+      <div>
         <form>
           <h2>Change Password</h2>
           <label htmlFor="oldPassword">Old Password</label>

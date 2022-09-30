@@ -874,20 +874,16 @@ td {
 .modal-content .totals {
   border-top: 3px solid black;
 }
-.addresses {
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 10px;
-}
+
 .date {
   padding-bottom: 10px;
 }
 
-.category {
+/* .category {
   display: flex;
 }
 .category a {
   align-items: center;
   display: flex;
   height: 100%;
-}
+} */

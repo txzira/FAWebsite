@@ -87,9 +87,14 @@ export default function CheckoutForm({ checkoutToken, setCheckoutToken }) {
       {step > 0 && (
         <ProgressView step={step} setStep={setStep} shippingFormValues={shippingFormValues} shippingOptionLabel={shippingOptionLabel} />
       )}
-
-      <div className={styles["form-container"]}>
-        <form className={styles["checkout-form"]} id="payment-form">
+      {/* align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 10px;
+  width: 100%; */}
+      <div className="w-full p-2.5">
+        <form className="w-full" id="payment-form">
           {step === 0 && (
             <ShippingDetails
               checkoutTokenId={checkoutToken.id}

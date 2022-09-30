@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import commerce from "../../lib/commerce";
 import { validateContactForm, displayFormErrors } from "../../lib/formvalidation";
-import { FormCol33, FormCol50, FormCol75, FormTitle, Row } from "../FormComponents";
+import { FormCol33, FormCol50, FormCol75, FormTitle, Input, Row, Select } from "../FormComponents";
 
 export function BillingDetails({
   stripe,
@@ -240,95 +240,102 @@ export function BillingDetails({
         {!shippingAsBillingAddress && billingFormValues !== null && (
           <>
             <div>
-              <label>Email*</label>
-              <input
-                required
+              <Input
+                id="billingEmail"
                 name="email"
-                type="text"
                 placeholder="abc123@example.com"
                 value={billingFormValues.email}
                 onChange={handleChange}
+                labelText="Email*"
               />
               {formErrors && <p className="text-red-600">{formErrors.email}</p>}
             </div>
             <Row>
               <FormCol50>
-                <label>First Name*</label>
-                <input
-                  required
+                <Input
+                  id="billingFirstName"
                   name="firstName"
-                  type="text"
                   placeholder="John"
                   value={billingFormValues.firstName}
                   onChange={handleChange}
+                  labelText="First Name*"
                 />
                 {formErrors && <p className="text-red-600">{formErrors.firstName}</p>}
               </FormCol50>
               <FormCol50>
-                <label>Last Name*</label>
-                <input required name="lastName" type="text" placeholder="Doe" value={billingFormValues.lastName} onChange={handleChange} />
+                <Input
+                  id="billingLastName"
+                  name="lastName"
+                  placeholder="Doe"
+                  value={billingFormValues.lastName}
+                  onChange={handleChange}
+                  labelText="Last Name*"
+                />
                 {formErrors && <p className="text-red-600">{formErrors.lastName}</p>}
               </FormCol50>
             </Row>
-            <label>Country*</label>
-            <select name="country" value={billingFormValues.country} onChange={handleChange}>
-              {countries.map((country) => (
-                <option value={country.id} key={country.id}>
-                  {country.label}
-                </option>
-              ))}
-            </select>
+            <Select
+              id="billingCountry"
+              name="country"
+              value={billingFormValues.country}
+              onChange={handleChange}
+              options={countries}
+              labelText="Country*"
+            />
             <Row>
               <FormCol33>
-                <label>City*</label>
-                <input required name="city" type="text" placeholder="Trenton" value={billingFormValues.city} onChange={handleChange} />
+                <Input
+                  id="billingCity"
+                  name="city"
+                  placeholder="Trenton"
+                  value={billingFormValues.city}
+                  onChange={handleChange}
+                  labelText="City*"
+                />
                 {formErrors && <p className="text-red-600">{formErrors.city}</p>}
               </FormCol33>
               <FormCol33>
-                <label>State*</label>
-                <input
-                  required
+                <Input
+                  id="billingState"
                   name="subdivision"
-                  type="text"
                   placeholder="New Jersey"
                   value={billingFormValues.subdivision}
                   onChange={handleChange}
+                  labelText="State*"
                 />
                 {formErrors && <p className="text-red-600">{formErrors.subdivision}</p>}
               </FormCol33>
               <FormCol33>
-                <label>Postal Code*</label>
-                <input
-                  required
+                <Input
+                  id="billingZip"
                   name="postalCode"
-                  type="text"
                   placeholder="08608"
                   value={billingFormValues.postalCode}
                   onChange={handleChange}
+                  labelText="Postal Code*"
                 />
                 {formErrors && <p className="text-red-600">{formErrors.postalCode}</p>}
               </FormCol33>
             </Row>
             <div>
-              <label>Street Address*</label>
-              <input
-                required
+              <Input
+                id="billingStreet"
                 name="street"
-                type="text"
                 placeholder="20 S Montgomery St"
                 value={billingFormValues.street}
                 onChange={handleChange}
+                labelText="Street Address*"
               />
               {formErrors && <p className="text-red-600">{formErrors.street}</p>}
             </div>
             <div>
-              <label>Apartment, suite, etc...</label>
-              <input
+              <Input
+                id="billingStreet2"
                 name="street_2"
-                type="text"
                 placeholder="Apt. 1 (optional)"
                 value={billingFormValues.street_2}
                 onChange={handleChange}
+                labelText="Apartment, suite, etc..."
               />
             </div>
           </>

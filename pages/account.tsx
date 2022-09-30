@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
-// import { getToken } from "next-auth/jwt";
 import Link from "next/link";
 
 import AccountDetails from "../components/account/AccountDetails";
 import OrderHistory from "../components/account/OrderHistory";
-
-import styles from "../styles/Account.module.css";
 
 // export async function getServerSideProps({ req }) {
 //   const session = await getSession({ req });
@@ -50,15 +47,19 @@ export default function AccountPage() {
   if (session) {
     return (
       <div>
-        <h1 className={styles["title"]}>My Account</h1>
-        <h1 className={styles["subtitle"]}>Welcome {session.user.email}</h1>
+        <h1 className="text-4xl font-medium mb-10">My Account</h1>
+        <h1 className="text-xl font-medium">Welcome {session.user.email}</h1>
 
-        <ul className={styles.navigation}>
+        <ul className="flex list-none">
           <li>
-            <button onClick={() => setViewState("account-details")}>Account Details</button>
+            <button className="bg-transparent mr-2.5" onClick={() => setViewState("account-details")}>
+              Account Details
+            </button>
           </li>
           <li>
-            <button onClick={() => setViewState("my-orders")}>My Orders</button>
+            <button className="bg-transparent mr-2.5" onClick={() => setViewState("my-orders")}>
+              My Orders
+            </button>
           </li>
         </ul>
 
@@ -70,9 +71,9 @@ export default function AccountPage() {
     return (
       <div>
         <span>Unauthorized User. Please </span>
-        <button style={{ border: "0px", background: "none" }}>
+        <button className="bg-transparent border-none">
           <Link href="/auth">
-            <a style={{ textDecoration: "underline" }}>login</a>
+            <a className="underline">login</a>
           </Link>
         </button>
       </div>
