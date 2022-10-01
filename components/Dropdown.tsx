@@ -10,7 +10,7 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
       <Link href={`${path}/${dropdownSlug}`}>
         <a
           onMouseEnter={() => setDropdownIsActive((prev) => !prev)}
-          className="flex items-center h-14 w-full p-3"
+          className="flex items-center text-sm md:text-base h-8 md:h-14 w-full md:p-3"
           aria-expanded={dropdownIsActive ? "true" : "false"}
         >
           {dropdownName}+
@@ -21,7 +21,7 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
           {submenuItems.map((item) => (
             <NavItem key={item.id} id={item.slug} title={dropdownSlug}>
               <Link href={`${path}/${item.slug}`}>
-                <a className="flex items-center h-14 p-3">{item.name}</a>
+                <a className="flex items-center text-sm md:text-base h-8 md:h-14 md:p-3">{item.name}</a>
               </Link>
             </NavItem>
           ))}

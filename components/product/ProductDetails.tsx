@@ -5,20 +5,23 @@ import React, { useState } from "react";
 import type { ProductVariantGroup } from "@chec/commerce.js/types/product-variant-group";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import DOMPurify from "isomorphic-dompurify";
+import { VerticalDivider } from "../GeneralComponents";
 
 export const ProductImg = ({ image }: { image: string }) => (
-  <div>
-    <Image className="bg-neutral-200 cursor-pointer ease-in-out" height={400} width={400} alt="selected-variant" src={image} />
+  <div className="relative w-32 h-32 md:w-96 md:h-96">
+    <Image className="bg-custom-100 cursor-pointer ease-in-out" layout="fill" alt="selected-variant" src={image} />
   </div>
 );
 
-export const ProductContainer = ({ children }: { children: React.ReactNode }) => <div className="flex m-10 mt-14 gap-10">{children}</div>;
+export const ProductContainer = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex md:m-10 md:mt-14 md:gap-10">{children}</div>
+);
 
 export const ProductImages = ({ images, setImage }: { images: Array<string>; setImage: React.Dispatch<React.SetStateAction<string>> }) => (
   <div className="flex flex-col gap-2.5">
     {images.map((image: string, i) => (
-      <button key={i} type="button" onClick={() => setImage(image)}>
-        <Image className="small-image" src={image} height={70} width={70} alt="variant-image" />
+      <button className="relative w-14 h-14 md:w-20 md:h-20" key={i} type="button" onClick={() => setImage(image)}>
+        <Image className="bg-custom-100" src={image} layout="fill" alt="variant-image" />
       </button>
     ))}
   </div>
@@ -47,7 +50,7 @@ export const ProductVariantGroups = ({
       variantGroups.map((variantGroup) => (
         <div key={variantGroup.id}>
           <h2 id={variantGroup.id}>{variantGroup.name}:</h2>
-          <ul className="flex list-none small-images-container">
+          <ul className="flex gap-2.5 mt-5">
             {variantGroup.options.map((option, i) => {
               return variantGroup.name === "Color" ? (
                 <li id={option.id} key={option.id} className="flex gap-8">
@@ -87,26 +90,30 @@ export const ProductQuantity = ({
   incFunction: () => void;
   decFunction: () => void;
 }) => (
-  <div className="flex items-center gap-5 mt-2.5">
-    <h3>Quantity</h3>
-    <p className="quantity-desc">
-      <span className="minus" onClick={decFunction}>
+  <div className="block max-w-fit">
+    <h3 className="text-lg">Qty</h3>
+    <div className="flex border-2 border-black">
+      <button className="text-red-600 align-middle py-1.5 px-3" onClick={decFunction}>
         <AiOutlineMinus />
-      </span>
-      <span className="num">{quantity}</span>
-      <span className="plus" onClick={incFunction}>
+      </button>
+      <VerticalDivider tailwindClass="border-black" />
+      <span className="text-xl py-1.5 px-3">{quantity}</span>
+      <VerticalDivider tailwindClass="border-black" />
+      <button className="text-green-500 align-middle py-1.5 px-3" onClick={incFunction}>
         <AiOutlinePlus />
-      </span>
-    </p>
+      </button>
+    </div>
   </div>
 );
 
 export const AddToCart = ({ addToCart }: { addToCart: () => void }) => (
-  <div className="buttons">
-    <button type="button" className="add-to-cart" onClick={addToCart}>
-      Add to Cart
-    </button>
-  </div>
+  <button
+    type="button"
+    className="bg-black text-white border border-black rounded-3xl text-lg font-medium mt-10 py-2.5 px-5 hover:scale-110 hover:ease-in duration-300 w-48"
+    onClick={addToCart}
+  >
+    Add to Cart
+  </button>
 );
 
 export const ProductDesc = ({ product }: { product: Product }) => {

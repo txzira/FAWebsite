@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="layout">
+    <>
       <Head>
         <title>Jester Shop</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,9 +14,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <header>
         <Navbar />
       </header>
-      <main className="main-container">{children}</main>
+      <main className="w-full max-w-1400 m-auto">{children}</main>
       <Footer />
-    </div>
+    </>
   );
 };
 

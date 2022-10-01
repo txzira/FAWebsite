@@ -21,7 +21,6 @@ import toast from "react-hot-toast";
 import { HorizontalDivider } from "../../components/GeneralComponents";
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log(params.permalink);
   const permalink: string = params.permalink.toString();
   const product = await commerce.products.retrieve(permalink, {
     type: "permalink",
@@ -163,7 +162,6 @@ export default function ProductPage({
         <ProductDetailsContainer>
           <ProductHeading product={product} />
           <ProductVariantGroups variantGroups={variantGroups} handleColor={handleColor} handleSize={handleSize} />
-          {/* highlight selected colors/sizes... */}
           <HorizontalDivider tailwindClass="m-6" />
           <ProductQuantity quantity={qty} incFunction={incQty} decFunction={decQty} />
           <br />

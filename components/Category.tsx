@@ -8,7 +8,7 @@ export default function Category({ name, children, slug }) {
         <Dropdown dropdownName={name} dropdownSlug={slug} submenuItems={children} path={"/categories"} />
       ) : (
         <Link href={`/categories/${slug}`}>
-          <a className="flex items-center h-full w-full p-3">{name}</a>
+          <a className="flex items-center text-sm md:text-base h-full w-full md:p-3">{name}</a>
         </Link>
       )}
     </>

@@ -28,21 +28,3 @@
 .orders th {
   font-size: 20px;
 }
-/* .orders td,
-.orders th {
-  border-left: solid black 1px;
-  border-top: solid black 1px;
-  padding: 10px;
-  text-align: center;
-}
-
-.orders th {
-  border-top: none;
-  padding: 10px;
-}
-
-.orders td:first-child,
-.orders th:first-child {
-  border-left: none;
-  padding: 10px;
-} */

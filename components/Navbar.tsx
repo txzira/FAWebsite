@@ -46,21 +46,23 @@ const Navbar = () => {
     <NavContainer>
       <NavHead>1-800-JESTER</NavHead>
       <NavList>
-        <li className="ml-5">
+        <div className="mr-3 md:ml-5 md:mr-0 w-2/3 flex flex-col md:flex-row md:justify-between">
           <NavLogo logoSrc="/images/logo_size.png" />
-        </li>
-        <li id="links">{categories && <CategoryList />}</li>
-        <li className="mr-5" onMouseLeave={() => setDropdownIsActive(false)}>
-          <NavButtons
-            session={session}
-            setActive={setDropdownIsActive}
-            isActive={dropdownIsActive}
-            loading={loading}
-            logoutFn={logoutHandler}
-            total_items={total_items}
-            setShowCart={setShowCart}
-          />
-        </li>
+          <div id="links">{categories && <CategoryList />}</div>
+        </div>
+        <div className="flex justify-end w-1/3 ml-3 md:ml-0 md:mr-5">
+          <div className="" onMouseLeave={() => setDropdownIsActive(false)}>
+            <NavButtons
+              session={session}
+              setActive={setDropdownIsActive}
+              isActive={dropdownIsActive}
+              loading={loading}
+              logoutFn={logoutHandler}
+              total_items={total_items}
+              setShowCart={setShowCart}
+            />
+          </div>
+        </div>
       </NavList>
       {showCart && <CartModal />}
     </NavContainer>

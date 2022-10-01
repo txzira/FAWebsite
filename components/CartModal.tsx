@@ -22,13 +22,13 @@ const CartModal = () => {
     };
   }, []);
   return (
-    <div className="cart-wrapper" ref={cartRef} onClick={() => setShowCart(false)}>
-      <div className="cart-container" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed bg-opacity-50 bg-black right-0 top-0 w-screen z-50 " ref={cartRef} onClick={() => setShowCart(false)}>
+      <div className="bg-white float-right h-screen py-10 px-2.5 relative w-3/5 " onClick={(e) => e.stopPropagation()}>
         <button type="button" onClick={() => setShowCart(false)}>
           <AiOutlineLeft />
         </button>
-        <span className="heading">Your Cart</span>
-        <span className="cart-num-items">({total_items} items)</span>
+        <span>Your Cart</span>
+        <span className="text-red-600 ml-2.5">({total_items} items)</span>
         {line_items.map((item) => (
           <CartItem key={item.id} {...item} />
         ))}

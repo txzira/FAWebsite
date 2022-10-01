@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import commerce from "../lib/commerce";
 import toast from "react-hot-toast";
+import { VerticalDivider } from "../components/GeneralComponents";
 
 export function CartItem({ id, name, quantity, line_total, image, selected_options }) {
   const { setCart } = useCartDispatch();
@@ -31,28 +32,30 @@ export function CartItem({ id, name, quantity, line_total, image, selected_optio
   const incrementQuantity = () => commerce.cart.update(id, { quantity: quantity + 1 }).then(handleUpdateCart);
 
   return (
-    <div className="">
+    <div>
       <h4>{name}</h4>
       {selected_options.map((option) => (
         <p key={option.option_id}>{option.option_name}</p>
       ))}
-      <div className="small-images-container">
-        <Image className="medium-image" src={image.url} height={150} width={150} alt="Product Image" />
+      <div className="flex gap-2.5 mt-5">
+        <Image className="bg-custom-200 rounded-lg cursor-pointer" src={image.url} height={150} width={150} alt="Product Image" />
       </div>
       <p>{line_total.formatted_with_symbol}</p>
-      <div className="quantity">
-        <p className="quantity-desc">
-          <span className="minus" onClick={decrementQuantity}>
+      <div className="flex max-w-fit">
+        <div className="flex border-2 border-black">
+          <button className="text-red-600 align-middle py-1.5 px-3" onClick={decrementQuantity}>
             <AiOutlineMinus />
-          </span>
-          <span className="num">{quantity}</span>
-          <span className="plus" onClick={incrementQuantity}>
+          </button>
+          <VerticalDivider tailwindClass="border-black" />
+          <span className="text-xl py-1.5 px-3">{quantity}</span>
+          <VerticalDivider tailwindClass="border-black" />
+          <button className="text-green-500 align-middle py-1.5 px-3" onClick={incrementQuantity}>
             <AiOutlinePlus />
-          </span>
-          <span className="remove" onClick={removeItem}>
-            <AiOutlineCloseCircle size={16} />
-          </span>
-        </p>
+          </button>
+        </div>
+        <button className="text-red-600 p-2" onClick={removeItem}>
+          <AiOutlineCloseCircle size={16} />
+        </button>
       </div>
     </div>
   );
@@ -65,9 +68,8 @@ export default function CartPage() {
   if (isEmpty) return <p>Your cart is empty</p>;
 
   return (
-    <div className="">
+    <div>
       <h1>Your Cart</h1>
-
       {line_items.map((item) => (
         <CartItem key={item.id} {...item} />
       ))}

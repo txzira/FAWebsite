@@ -33,7 +33,7 @@ const OrderModal = ({ show, setShow, orderDetails, setOrderDetails }) => {
                     <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />
                   </span>
                 </div>
-                <div className="date">
+                <div className="pb-2.5">
                   <p>Order Placed:</p>
                   <p>{new Date(orderDetails.created * 1000).toLocaleDateString()}</p>
                 </div>
@@ -79,7 +79,13 @@ const OrderModal = ({ show, setShow, orderDetails, setOrderDetails }) => {
                           <tr key={line_item.id}>
                             <td>
                               {" "}
-                              <Image className="small-image" src={line_item.image.url} height={70} width={70} alt="Product Image" />
+                              <Image
+                                className="bg-custom-200 rounded-lg cursor-pointer"
+                                src={line_item.image.url}
+                                height={70}
+                                width={70}
+                                alt="Product Image"
+                              />
                             </td>
                             <td>
                               {" "}
