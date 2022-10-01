@@ -84,7 +84,7 @@ export const NavButtons = ({
           )}
           <li className="h-8 md:h-14 hover:bg-black hover:text-white">
             <Link href="/account">
-              <a className="flex items-center h-8 md:h-14 md:p-2">{session.user.email.toUpperCase()}'s Account</a>
+              <a className="flex items-center h-8 md:h-14 md:p-2">{session.user.email.toUpperCase()}&apos;s Account</a>
             </Link>
           </li>
           <li className="h-8 md:h-14 hover:bg-black hover:text-white">
