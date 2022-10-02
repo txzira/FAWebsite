@@ -16,7 +16,7 @@ import {
   ProductQuantity,
   AddToCart,
   ProductDesc,
-} from "../../components/product/ProductDetails";
+} from "../../components/products/ProductDetails";
 import toast from "react-hot-toast";
 import { HorizontalDivider } from "../../components/GeneralComponents";
 

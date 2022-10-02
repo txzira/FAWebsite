@@ -9,7 +9,7 @@ export default function CategoryList() {
   if (!categories) return null;
 
   return (
-    <NavList>
+    <NavList isLinks={true}>
       {categories.map((category) => (
         <NavItem key={category.id} id={category.slug}>
           <Category {...category} />

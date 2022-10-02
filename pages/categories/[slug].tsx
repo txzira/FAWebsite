@@ -30,7 +30,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
   async function getNthSubcategories(SubcategoryId) {
     //retrieve category details using their "id"
     const nthSubcategory: any = await commerce.categories.retrieve(SubcategoryId);
-    console.log(nthSubcategory);
     if (nthSubcategory.children.length) {
       //if subcategories exist within the category details return them
       return nthSubcategory.children;

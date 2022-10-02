@@ -11,9 +11,15 @@ export const NavHead = ({ children }: { children: React.ReactNode }) => (
   <div className="text-center w-screen md:p-2.5 bg-black text-white ">{children}</div>
 );
 
-export const NavList = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex  md:flex-row bg-custom-100 grow-0 h-8 md:h-14  m-0 p-0">{children}</div>
-);
+export const NavList = ({ children, isLinks = false }: { children: React.ReactNode; isLinks?: boolean }) => {
+  if (isLinks)
+    return (
+      <div id="links" className="flex  md:flex-row bg-custom-100 grow-0 h-8 md:h-14  m-0 p-0">
+        {children}
+      </div>
+    );
+  else return <div className="flex  md:flex-row bg-custom-100 grow-0 h-8 md:h-14  m-0 p-0">{children}</div>;
+};
 
 export const NavLogo = ({ logoSrc }: { logoSrc: string }) => (
   <div className="w-14 h-8 md:w-28 md:h-14 relative">
