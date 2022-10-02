@@ -12,7 +12,7 @@ import {
   ProductQuantity,
   AddToCart,
   ProductDesc,
-} from "../components/product/ProductDetails";
+} from "../components/products/ProductDetails";
 import toast from "react-hot-toast";
 import { Product } from "@chec/commerce.js/types/product";
 import { VariantCollection } from "@chec/commerce.js/features/products";
