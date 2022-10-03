@@ -1,7 +1,7 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import OrderHistory from "../components/account/OrderHistory";
+import OrderHistory from "../../components/account/OrderHistory";
 
 export async function getServerSideProps() {
   const url = new URL("https://api.chec.io/v1/orders");
