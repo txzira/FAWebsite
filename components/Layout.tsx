@@ -14,7 +14,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <header>
         <Navbar />
       </header>
-      <main className="w-full max-w-1400 m-auto">{children}</main>
+      <main>{children}</main>
       <Footer />
     </>
   );

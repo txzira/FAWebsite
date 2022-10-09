@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useStateContext } from "../context/StateContext";
 
-import { NavList, NavItem } from "./Nav";
+import { HorizontalNavList, NavItem } from "./Nav";
 import Category from "./Category";
 
 export default function CategoryList() {
@@ -9,12 +9,12 @@ export default function CategoryList() {
   if (!categories) return null;
 
   return (
-    <NavList isLinks={true}>
+    <HorizontalNavList isLinks={true} listId="links">
       {categories.map((category) => (
         <NavItem key={category.id} id={category.slug}>
           <Category {...category} />
         </NavItem>
       ))}
-    </NavList>
+    </HorizontalNavList>
   );
 }

@@ -3,7 +3,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useStateContext } from "../context/StateContext";
 import { useCartState } from "../context/cart";
 import CategoryList from "./CategoryList";
-import { NavButtons, NavContainer, NavHead, NavList, NavLogo } from "./Nav";
+import { NavButtons, NavContainer, NavHead, HorizontalNavList, NavLogo } from "./Nav";
 import CartModal from "./CartModal";
 
 const Navbar = () => {
@@ -46,7 +46,7 @@ const Navbar = () => {
   return (
     <NavContainer>
       <NavHead>1-800-JESTER</NavHead>
-      <NavList>
+      <HorizontalNavList>
         <div className="mr-3 md:ml-5 md:mr-0 w-3/5 flex flex-col md:flex-row md:justify-between">
           <NavLogo logoSrc="/images/logo_size.png" />
           <div>{categories && <CategoryList />}</div>
@@ -64,7 +64,7 @@ const Navbar = () => {
             />
           </div>
         </div>
-      </NavList>
+      </HorizontalNavList>
       {showCart && <CartModal />}
     </NavContainer>
   );

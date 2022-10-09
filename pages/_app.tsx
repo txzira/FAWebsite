@@ -8,8 +8,10 @@ import { StateContext } from "../context/StateContext";
 import { CartProvider } from "../context/cart";
 
 import "../styles/globals.css";
+import AccountLayout from "../components/AccountLayout";
+import { MainBox } from "../components/GeneralComponents";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <React.Fragment>
       <SessionProvider session={pageProps.session}>
@@ -17,7 +19,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           <CartProvider>
             <Layout>
               <Toaster />
-              <Component {...pageProps} />
+              {router.pathname.startsWith("/admin") ? (
+                <AccountLayout>
+                  <Component {...pageProps} />
+                </AccountLayout>
+              ) : (
+                <MainBox>
+                  <Component {...pageProps} />
+                </MainBox>
+              )}
             </Layout>
           </CartProvider>
         </StateContext>

@@ -27,7 +27,7 @@ const OrderModal = ({ show, setShow, orderDetails, setOrderDetails }) => {
           {orderDetails && (
             <>
               <div className="modal-header">
-                <div style={{ justifyContent: "space-between", display: "flex", alignItems: "center" }}>
+                <div className="flex justify-between items-center">
                   <span className="modal-title">Order - {orderDetails.customer_reference}</span>{" "}
                   <span>
                     <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />

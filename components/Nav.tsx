@@ -11,14 +11,39 @@ export const NavHead = ({ children }: { children: React.ReactNode }) => (
   <div className="text-center w-screen md:p-2.5 bg-black text-white ">{children}</div>
 );
 
-export const NavList = ({ children, isLinks = false }: { children: React.ReactNode; isLinks?: boolean }) => {
+export const HorizontalNavList = ({
+  children,
+  isLinks = false,
+  listId = "",
+}: {
+  children: React.ReactNode;
+  isLinks?: boolean;
+  listId?: string;
+}) => {
   if (isLinks)
     return (
-      <div id="links" className="flex  md:flex-row bg-custom-100 grow-0 h-8 md:h-14  m-0 p-0">
+      <div id={listId} className="flex md:flex-row bg-custom-100 grow-0 h-8 md:h-14 m-0 p-0">
         {children}
       </div>
     );
-  else return <div className="flex  md:flex-row bg-custom-100 grow-0 h-8 md:h-14  m-0 p-0">{children}</div>;
+  else return <div className="flex md:flex-row bg-custom-100 grow-0 h-8 md:h-14 m-0 p-0">{children}</div>;
+};
+export const VerticalNavList = ({
+  children,
+  isLinks = false,
+  listId = "",
+}: {
+  children: React.ReactNode;
+  isLinks?: boolean;
+  listId?: string;
+}) => {
+  if (isLinks)
+    return (
+      <div id={listId} className="flex md:flex-col bg-custom-100 grow-0 h-8 md:h-screen m-0 p-0">
+        {children}
+      </div>
+    );
+  else return <div className="flex md:flex-col bg-custom-100 grow-0 h-8 md:h-screen m-0 p-0">{children}</div>;
 };
 
 export const NavLogo = ({ logoSrc }: { logoSrc: string }) => (
@@ -31,14 +56,22 @@ export const NavLogo = ({ logoSrc }: { logoSrc: string }) => (
   </div>
 );
 
-export const NavItem = ({ children, key, id, title = "" }: { children: React.ReactNode; key: string; id: string; title?: string }) => (
-  <div key={key} id={id} title={title} className="hover:bg-black hover:text-white">
+export const NavItem = ({ children, id, title = "" }: { children: React.ReactNode; id: string; title?: string }) => (
+  <div id={id} title={title} className="hover:bg-black hover:text-white">
     {children}
   </div>
 );
 
+export const NavLink = ({ href, aId, aTag }: { href: string; aId: string; aTag: string }) => (
+  <Link href={href}>
+    <a id={aId} className="text-center p-2 hover:!bg-black hover:!text-white ">
+      {aTag}
+    </a>
+  </Link>
+);
+
 export const NavDropdown = ({ children, dropdownState }: { children: React.ReactNode; dropdownState: boolean }) => (
-  <ul className={`flex-col w-full left-3/4 bg-custom-100 text-black absolute z-10 list-none  ${dropdownState ? "flex" : "hidden"}`}>
+  <ul className={`flex-col w-full left-3/4 bg-custom-100 text-black absolute z-10 list-none ${dropdownState ? "flex" : "hidden"}`}>
     {children}
   </ul>
 );

@@ -25,7 +25,7 @@ export const Input = ({
   id: string;
   name: string;
   value: any;
-  onChange: (e: any) => void;
+  onChange?: (e: any) => void;
   labelText: string;
   required?: boolean;
   type?: string;

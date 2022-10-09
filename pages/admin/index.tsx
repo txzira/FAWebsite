@@ -2,8 +2,9 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import OrderHistory from "../../components/account/OrderHistory";
+import type { GetServerSideProps } from "next";
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async () => {
   const url = new URL("https://api.chec.io/v1/orders");
 
   const params = {
@@ -17,7 +18,7 @@ export async function getServerSideProps() {
     "Content-Type": "application/json",
   };
 
-  const orders = await fetch(url.toString(), {
+  const orders = await fetch(url, {
     method: "GET",
     headers: headers,
   });
@@ -28,7 +29,7 @@ export async function getServerSideProps() {
       orders: ordersData.data,
     },
   };
-}
+};
 
 export default function Admin({ orders }) {
   const { data: session, status } = useSession();
