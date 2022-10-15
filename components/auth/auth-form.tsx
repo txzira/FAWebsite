@@ -3,11 +3,6 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import classes from "./auth-form.module.css";
 import toast from "react-hot-toast";
-import { useCartDispatch } from "../../context/cart";
-import type { NextApiResponse } from "next";
-type Data = {
-  customer_id: string;
-};
 
 async function createUser(email, password, customer_id) {
   const response = await fetch("/api/auth/signup", {
