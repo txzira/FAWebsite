@@ -146,7 +146,7 @@ const OrderModal = ({ show, setShow, orderDetails, setOrderDetails }) => {
         </div>
       </div>
     </CSSTransition>,
-    document.getElementById("__next")
+    document.getElementById("__next")!
   );
 };
 

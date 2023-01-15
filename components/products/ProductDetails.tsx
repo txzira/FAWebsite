@@ -116,8 +116,8 @@ export const AddToCart = ({ addToCart }: { addToCart: () => void }) => (
   </button>
 );
 
-export const ProductDesc = ({ product }: { product: Product }) => {
-  const [showDesc, setShowDesc] = useState();
+// export const ProductDesc = ({ product }: { product: Product }) => {
+//   const [showDesc, setShowDesc] = useState();
 
-  return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}></div>;
-};
+//   return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}></div>;
+// };

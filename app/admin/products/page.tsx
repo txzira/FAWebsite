@@ -1,9 +1,10 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { Product } from "@chec/commerce.js/types/product";
 import Image from "next/image";
-import ProductDetailModal from "../../components/products/ProductDetailModal";
+import ProductDetailModal from "../../../components/products/ProductDetailModal";
 // import useSWR from "swr";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {

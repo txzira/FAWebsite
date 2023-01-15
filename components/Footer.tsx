@@ -6,9 +6,7 @@ const Footer = () => {
   return (
     <footer className="flex flex-col justify-center items-center pt-8">
       <Link href="/">
-        <a>
-          <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />
-        </a>
+        <Image alt="logo" width="120" height="60" src="/images/logo_size.png" />
       </Link>
       <ul className="flex list-none">
         <li className="p-2.5">Contact</li>

@@ -1,11 +1,11 @@
-import { useCartDispatch, useCartState } from "../context/cart";
+import { useCartDispatch, useCartState } from "../../context/cart";
 import { AiOutlineMinus, AiOutlinePlus, AiOutlineCloseCircle } from "react-icons/ai";
 import Link from "next/link";
 import Image from "next/image";
 
-import commerce from "../lib/commerce";
+import commerce from "../../lib/commerce";
 import toast from "react-hot-toast";
-import { VerticalDivider } from "../components/GeneralComponents";
+import { VerticalDivider } from "../../components/GeneralComponents";
 
 export function CartItem({ id, name, quantity, line_total, image, selected_options }) {
   const { setCart } = useCartDispatch();

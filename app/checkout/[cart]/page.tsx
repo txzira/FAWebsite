@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 
-import { useCartState } from "../../context/cart";
-import { VerticalDivider } from "../../components/GeneralComponents";
-import CheckoutForm from "../../components/checkout/CheckoutForm";
-import CartSummary from "../../components/checkout/CartSummary";
+import { useCartState } from "../../../context/cart";
+import { VerticalDivider } from "../../../components/GeneralComponents";
+import CheckoutForm from "../../../components/checkout/CheckoutForm";
+import CartSummary from "../../../components/checkout/CartSummary";
 
-import commerce from "../../lib/commerce";
-import getStripe from "../../lib/getStripe";
+import commerce from "../../../lib/commerce";
+import getStripe from "../../../lib/getStripe";
 
 export async function getServerSideProps({ params }) {
   const { cart } = params;

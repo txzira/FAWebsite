@@ -1,11 +1,8 @@
-// pages/products/[permalink].js
-import commerce from "../../lib/commerce";
+"use client";
+import commerce from "../../../lib/commerce";
 import React, { useState, useEffect } from "react";
-import { useCartDispatch } from "../../context/cart";
-import { GetStaticProps, GetStaticPaths } from "next";
-import { ProductVariantGroup } from "@chec/commerce.js/types/product-variant-group";
-import { Product } from "@chec/commerce.js/types/product";
-import { VariantCollection } from "@chec/commerce.js/features/products";
+import { useCartDispatch } from "../../../context/cart";
+
 import {
   ProductImg,
   ProductContainer,
@@ -15,12 +12,20 @@ import {
   ProductVariantGroups,
   ProductQuantity,
   AddToCart,
-  ProductDesc,
-} from "../../components/products/ProductDetails";
+  // ProductDesc,
+} from "../../../components/products/ProductDetails";
 import toast from "react-hot-toast";
-import { HorizontalDivider } from "../../components/GeneralComponents";
+import { HorizontalDivider } from "../../../components/GeneralComponents";
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export async function generateStaticParams() {
+  const { data: products } = await commerce.products.list();
+
+  return products.map((product) => ({
+    permalink: product.permalink,
+  }));
+}
+
+export default async function ProductPage({ params }) {
   const permalink: string = params.permalink.toString();
   const product = await commerce.products.retrieve(permalink, {
     type: "permalink",
@@ -56,38 +61,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     })
   );
 
-  return {
-    props: {
-      product,
-      variants,
-      variantGroups,
-    },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const { data: products } = await commerce.products.list();
-
-  return {
-    paths: products.map((product) => ({
-      params: {
-        permalink: product.permalink,
-      },
-    })),
-    fallback: false,
-  };
-};
-
-export default function ProductPage({
-  product,
-  variants,
-  variantGroups,
-}: {
-  product: Product;
-  variants: VariantCollection;
-  variantGroups: ProductVariantGroup;
-}) {
-  const { setCart } = useCartDispatch();
+  const setCart = useCartDispatch();
   const [options, setOptions] = useState({});
   const [image, setImage] = useState<string>(product.image.url);
   const [assetImages, setAssetImages] = useState<Array<string>>([]);
@@ -166,7 +140,7 @@ export default function ProductPage({
           <ProductQuantity quantity={qty} incFunction={incQty} decFunction={decQty} />
           <br />
           <AddToCart addToCart={addToCart} />
-          <ProductDesc product={product} />
+          {/* <ProductDesc product={product} /> */}
         </ProductDetailsContainer>
       </ProductContainer>
     </React.Fragment>

@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import OrderModal from "./OrderModal";
 import { BiDetail } from "react-icons/bi";
@@ -136,7 +137,7 @@ export default function OrderHistory() {
     <>
       {
         <div className={styles["orders"]}>
-          <OrderModal show={showModal} setShow={setShowModal} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />
+          {/* <OrderModal show={showModal} setShow={setShowModal} orderDetails={orderDetails} setOrderDetails={setOrderDetails} /> */}
           <table id="orderTable">
             <thead>
               <tr>

@@ -1,29 +1,10 @@
 // pages/categories/[slug].js
-import React, { useState } from "react";
-import commerce from "../../lib/commerce";
-import ProductList from "../../components/ProductList";
+import React from "react";
+import commerce from "../../../lib/commerce";
+import ProductList from "../../../components/ProductList";
 import { GetStaticProps, GetStaticPaths } from "next";
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const slug: string = params.slug.toString();
-
-  const category = await commerce.categories.retrieve(slug, {
-    type: "slug",
-  });
-
-  const { data: products } = await commerce.products.list({
-    category_slug: [slug],
-  });
-
-  return {
-    props: {
-      category,
-      products,
-    },
-  };
-};
-// pages/categories/[slug].js
-export const getStaticPaths: GetStaticPaths = async () => {
+export async function generateStaticParams() {
   const { data: categoryList } = await commerce.categories.list();
   const allCategories = [];
 
@@ -58,17 +39,24 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
   await getSubcategories(categoryList);
 
-  return {
-    paths: allCategories.map((category) => ({
-      params: {
-        slug: category,
-      },
-    })),
-    fallback: false,
-  };
-};
+  return allCategories.map((category) => ({
+    slug: category,
+  }));
+}
+
 // pages/categories/[slug].js
-export default function CategoryPage({ category, products }) {
+export default async function CategoryPage({ params }) {
+  console.log(params);
+  const slug: string = params.slug.toString();
+
+  const category = await commerce.categories.retrieve(slug, {
+    type: "slug",
+  });
+
+  const { data: products } = await commerce.products.list({
+    category_slug: [slug],
+  });
+
   return (
     <React.Fragment>
       <h1>{category.name}</h1>
