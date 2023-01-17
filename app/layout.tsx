@@ -21,9 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <header>
                 <Navbar />
               </header>
-              <main>
+              <main className="w-full max-w-1400 m-auto">
                 <Toaster />
-                {usePathname()?.startsWith("/admin") ? <>{children}</> : <MainBox>{children}</MainBox>}
+                {children}
               </main>
               <Footer />
             </CartProvider>

@@ -1,6 +1,7 @@
+"use client";
 import { useState, useRef } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import classes from "./auth-form.module.css";
 import toast from "react-hot-toast";
 
@@ -72,7 +73,7 @@ function AuthForm() {
 
         const result = await createUser(enteredEmail, enteredPassword, customerJSON.customer_id);
         toast.success(result.message);
-        router.reload();
+        router.refresh();
       } catch (error) {
         console.log(error);
       }
