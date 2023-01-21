@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { NavDropdown, NavItem } from "./Nav";
+import { NavDropdown, NavItem } from "../app/(navigation)/NavComponents";
 
 const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
   const [dropdownIsActive, setDropdownIsActive] = useState(false);

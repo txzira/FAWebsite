@@ -1,10 +1,3 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useSession, signOut } from "next-auth/react";
-import { useStateContext } from "../context/StateContext";
-import { useCartState } from "../context/cart";
-import CategoryList from "./CategoryList";
-import CartModal from "./CartModal";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -69,8 +62,8 @@ export const NavItem = ({ children, id, title = "" }: { children: React.ReactNod
 );
 
 export const NavLink = ({ href, aId, aTag }: { href: string; aId: string; aTag: string }) => {
-  // const segment = useSelectedLayoutSegment();
-  // console.log(segment);
+  const segment = useSelectedLayoutSegment();
+  console.log(segment);
 
   return (
     <Link id={aId} href={href} className="text-center p-2 hover:!bg-black hover:!text-white ">
@@ -155,67 +148,3 @@ export const NavButtons = ({
     </li>
   </ul>
 );
-
-export default function Navbar() {
-  const { categories, showCart, setShowCart } = useStateContext();
-  const { total_items } = useCartState();
-  const { data: session, status } = useSession();
-  const loading = status === "loading";
-  const [dropdownIsActive, setDropdownIsActive] = useState(false);
-  const logoutHandler = () => {
-    signOut();
-  };
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    if (path == "/") {
-      const linksElement = document.getElementById("links").childNodes;
-      linksElement.forEach((link: HTMLElement) => {
-        link.style.backgroundColor = "#f3f3f3";
-        link.style.color = "black";
-      });
-    } else {
-      const linksElement = document.getElementById("links").childNodes;
-
-      linksElement.forEach((link: HTMLElement) => {
-        link.style.backgroundColor = "#f3f3f3";
-        link.style.color = "black";
-      });
-      const pathSlug = path.split("/")[2];
-      let navBtn = document.getElementById(pathSlug);
-      if (navBtn) {
-        if (navBtn.getAttribute("title")) {
-          navBtn = document.getElementById(navBtn.getAttribute("title"));
-        }
-        navBtn.style.backgroundColor = "black";
-        navBtn.style.color = "white";
-      }
-    }
-  });
-
-  return (
-    <NavContainer>
-      <NavHead>1-800-JESTER</NavHead>
-      <HorizontalNavList>
-        <div className="mr-3 md:ml-5 md:mr-0 w-3/5 flex flex-col md:flex-row md:justify-between">
-          <NavLogo logoSrc="/images/logo_size.png" />
-          <div>{categories && <CategoryList />}</div>
-        </div>
-        <div className="flex justify-end w-2/5 ml-3 md:ml-0 md:mr-5">
-          <div className="" onMouseLeave={() => setDropdownIsActive(false)}>
-            <NavButtons
-              session={session}
-              setActive={setDropdownIsActive}
-              isActive={dropdownIsActive}
-              loading={loading}
-              logoutFn={logoutHandler}
-              total_items={total_items}
-              setShowCart={setShowCart}
-            />
-          </div>
-        </div>
-      </HorizontalNavList>
-      {showCart && <CartModal />}
-    </NavContainer>
-  );
-}

@@ -1,4 +1,5 @@
-import { createContext, useReducer, useContext, useEffect, useState } from "react";
+"use client";
+import { createContext, useReducer, useContext, useEffect } from "react";
 import commerce from "../lib/commerce";
 const CartStateContext = createContext(null);
 const CartDispatchContext = createContext(null);

@@ -2,7 +2,6 @@
 import React from "react";
 import commerce from "../../../lib/commerce";
 import ProductList from "../../../components/ProductList";
-import { GetStaticProps, GetStaticPaths } from "next";
 
 export async function generateStaticParams() {
   const { data: categoryList } = await commerce.categories.list();
@@ -38,7 +37,6 @@ export async function generateStaticParams() {
     }
   }
   await getSubcategories(categoryList);
-
   return allCategories.map((category) => ({
     slug: category,
   }));
@@ -53,9 +51,11 @@ export default async function CategoryPage({ params }) {
     type: "slug",
   });
 
-  const { data: products } = await commerce.products.list({
-    category_slug: [slug],
-  });
+  const { data: products } = await Promise.resolve(
+    commerce.products.list({
+      category_slug: [slug],
+    })
+  );
 
   return (
     <React.Fragment>
