@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { NavDropdown, NavItem } from "../app/(navigation)/NavComponents";
 
 const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
   const [dropdownIsActive, setDropdownIsActive] = useState(false);
@@ -16,15 +15,15 @@ const Dropdown = ({ dropdownName, dropdownSlug, submenuItems, path }) => {
         {dropdownName}+
       </Link>
       <div>
-        <NavDropdown dropdownState={dropdownIsActive}>
+        <ul className={`flex-col w-full left-3/4 bg-custom-100 text-black absolute z-10 list-none ${dropdownIsActive ? "flex" : "hidden"}`}>
           {submenuItems.map((item) => (
-            <NavItem key={item.id} id={item.slug} title={dropdownSlug}>
+            <div key={item.id} id={item.slug} title={dropdownSlug} className="hover:bg-black hover:text-white">
               <Link className="flex items-center text-sm md:text-base h-8 md:h-14 md:p-3" href={`${path}/${item.slug}`}>
                 {item.name}
               </Link>
-            </NavItem>
+            </div>
           ))}
-        </NavDropdown>
+        </ul>
       </div>
     </div>
   );
