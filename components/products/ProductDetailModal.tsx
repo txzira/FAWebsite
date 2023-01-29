@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import { Input } from "../FormComponents";
 
-const ProductDetailModal = ({
+function ProductDetailModal({
   show,
   setShow,
   productObj,
@@ -12,7 +12,7 @@ const ProductDetailModal = ({
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   productObj: Product;
-}) => {
+}) {
   const [name, setName] = useState(productObj.name);
 
   function closeProductDetails() {
@@ -30,7 +30,7 @@ const ProductDetailModal = ({
     };
   }, []);
 
-  return ReactDOM.createPortal(
+  return (
     <CSSTransition in={show} unmountOnExit timeout={{ enter: 0, exit: 300 }}>
       <div className="modal" onClick={() => closeProductDetails()}>
         <div className="modal-content" onClick={(event) => event.stopPropagation()}>
@@ -57,9 +57,8 @@ const ProductDetailModal = ({
           )}
         </div>
       </div>
-    </CSSTransition>,
-    document.getElementById("__next")
+    </CSSTransition>
   );
-};
+}
 
 export default ProductDetailModal;

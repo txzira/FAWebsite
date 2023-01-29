@@ -10,6 +10,7 @@ type Data = {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
+  console.log(session);
   if (session) {
     const query: object = req.query;
     const url = new URL(`https://api.chec.io/v1/customers/${session.user.customer_id}/orders`);
@@ -24,6 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       headers: headers,
     });
     orders = await orders.json();
+    console.log(orders);
     res.status(200).json(orders);
   }
 };

@@ -1,6 +1,6 @@
 import { CardElement } from "@stripe/react-stripe-js";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import commerce from "../../lib/commerce";
@@ -219,10 +219,10 @@ export function BillingDetails({
   return (
     <>
       <FormTitle>Payment</FormTitle>
-      <div className="w-full p-2.5 border border-black rounded-lg">
-        <FormCol75>
+      <div className="w-full h-20 p-2.5 border border-black rounded-lg">
+        <div>
           <CardElement onChange={handleCard} id="card-element" options={cardStyle} />
-        </FormCol75>
+        </div>
       </div>
       {formErrors && <p className="text-red-600">{formErrors.payment}</p>}
       <div>

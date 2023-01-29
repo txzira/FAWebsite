@@ -1,15 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { useSession, getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-import AccountDetails from "../../components/account/AccountDetails";
-import OrderHistory from "../../components/account/OrderHistory";
-
-const { data: session, status } = useSession();
-const [viewState, setViewState] = useState("account-details");
+import AccountDetails from "./AccountDetails";
+import OrderHistory from "./OrderHistory";
 
 export default function Main() {
+  const { data: session, status } = useSession();
+  const [viewState, setViewState] = useState("account-details");
   if (session) {
     return (
       <div>

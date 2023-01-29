@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { AiOutlineEdit } from "react-icons/ai";
-import { validatePassword } from "../../lib/formvalidation";
+import { validatePassword } from "../../../lib/formvalidation";
 
 export default function AccountDetails() {
   const [oldPassword, setOldPassword] = useState("");

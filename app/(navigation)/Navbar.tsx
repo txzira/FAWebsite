@@ -29,7 +29,13 @@ export default function Navbar({ categories }: { categories: Category[] }) {
         <div className="mr-3 md:ml-5 md:mr-0 w-3/5 flex flex-col md:flex-row md:justify-between">
           <div className="w-14 h-8 md:w-28 md:h-14 relative">
             <Link href="/">
-              <Image alt="logo" className="object-cover" fill={true} src="/images/logo_size.png" />
+              <Image
+                alt="logo"
+                className="object-cover"
+                fill={true}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src="/images/logo_size.png"
+              />
             </Link>
           </div>
           <CategoryList categories={categories} />
@@ -74,7 +80,7 @@ export function NavButtons({
     <ul className="flex items-center h-8 md:h-14 flex-row">
       {!session && !loading && (
         <li>
-          <Link href="/auth">Login</Link>
+          <Link href="/auth/login">Login</Link>
         </li>
       )}
       {session && (

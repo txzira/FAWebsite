@@ -1,12 +1,15 @@
 import { getToken } from "next-auth/jwt";
+
 import { getSession } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 import React from "react";
+import { authOptions } from "../../../pages/api/auth/[...nextauth]";
 
-async function Orders(context) {
+async function Orders() {
   const nxtCookies = cookies().getAll();
-  console.log(context.res);
+
+  // console.log(session);
   // const session = await unstable_getServerSession(req, res);
   // if (session) {
   //   const url = new URL(`https://api.chec.io/v1/orders`);

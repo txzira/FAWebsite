@@ -1,6 +1,6 @@
 // pages/index.js
 import commerce from "../../lib/commerce";
-import ProductList from "../../components/ProductList";
+import ProductList from "../ProductList";
 import React from "react";
 
 async function IndexPage() {

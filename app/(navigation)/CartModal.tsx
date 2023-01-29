@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
-import { useStateContext } from "../context/StateContext";
+import { useStateContext } from "../../context/StateContext";
 import { AiOutlineLeft } from "react-icons/ai";
-import { useCartState } from "../context/cart";
+import { useCartState } from "../../context/cart";
 import Link from "next/link";
-import { CartItem } from "../app/cart/page";
+import { CartItem } from "../cart/page";
 
 const CartModal = () => {
   const cartRef = useRef();

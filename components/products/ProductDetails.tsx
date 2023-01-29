@@ -9,7 +9,7 @@ import { VerticalDivider } from "../GeneralComponents";
 
 export const ProductImg = ({ image }: { image: string }) => (
   <div className="relative w-32 h-32 md:w-96 md:h-96">
-    <Image className="bg-custom-100 cursor-pointer ease-in-out" layout="fill" alt="selected-variant" src={image} />
+    <Image className="bg-custom-100 cursor-pointer ease-in-out" fill={true} alt="selected-variant" src={image} />
   </div>
 );
 
@@ -21,7 +21,7 @@ export const ProductImages = ({ images, setImage }: { images: Array<string>; set
   <div className="flex flex-col gap-2.5">
     {images.map((image: string, i) => (
       <button className="relative w-14 h-14 md:w-20 md:h-20" key={i} type="button" onClick={() => setImage(image)}>
-        <Image className="bg-custom-100" src={image} layout="fill" alt="variant-image" />
+        <Image className="bg-custom-100" src={image} fill={true} alt="variant-image" />
       </button>
     ))}
   </div>

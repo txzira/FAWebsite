@@ -1,6 +1,6 @@
 // "use client";
 import commerce from "../lib/commerce";
-import ProductList from "../components/ProductList";
+import ProductList from "./ProductList";
 import React from "react";
 
 export default async function IndexPage() {

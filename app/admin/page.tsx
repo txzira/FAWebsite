@@ -1,12 +1,12 @@
 import React from "react";
-import OrderHistory from "../../components/account/OrderHistory";
+import OrderHistory from "../(account)/account/OrderHistory";
 
 export default async function Admin() {
   const url = new URL("https://api.chec.io/v1/orders");
-
   const params = {
     limit: "100",
   };
+
   Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
 
   const headers = {
@@ -20,7 +20,7 @@ export default async function Admin() {
     headers: headers,
   });
   const ordersData = await orders.json();
-  console.log(orders);
+  // console.log(ordersData);
   return (
     <div>
       <OrderHistory />

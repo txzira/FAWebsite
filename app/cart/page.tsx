@@ -1,3 +1,4 @@
+"use client";
 import { useCartDispatch, useCartState } from "../../context/cart";
 import { AiOutlineMinus, AiOutlinePlus, AiOutlineCloseCircle } from "react-icons/ai";
 import Link from "next/link";
@@ -8,7 +9,7 @@ import toast from "react-hot-toast";
 import { VerticalDivider } from "../../components/GeneralComponents";
 
 export function CartItem({ id, name, quantity, line_total, image, selected_options }) {
-  const { setCart } = useCartDispatch();
+  const setCart = useCartDispatch();
 
   const handleUpdateCart = ({ cart }) => setCart(cart);
 
@@ -78,9 +79,7 @@ export default function CartPage() {
         <strong>Sub total: </strong>
         {subtotal.formatted_with_symbol}
       </p>
-      <Link href={`/checkout/${id}`}>
-        <a>Checkout</a>
-      </Link>
+      <Link href={`/checkout/${id}`}>Checkout</Link>
     </div>
   );
 }

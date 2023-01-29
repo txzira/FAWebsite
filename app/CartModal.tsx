@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useEffect } from "react";
 import { useStateContext } from "../context/StateContext";
 import { AiOutlineLeft } from "react-icons/ai";

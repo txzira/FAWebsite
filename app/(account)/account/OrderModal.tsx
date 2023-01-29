@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import Image from "next/image";
@@ -20,7 +22,7 @@ const OrderModal = ({ show, setShow, orderDetails, setOrderDetails }) => {
     };
   }, []);
 
-  return ReactDOM.createPortal(
+  return (
     <CSSTransition in={show} unmountOnExit timeout={{ enter: 0, exit: 300 }}>
       <div className="modal" onClick={() => closeOrderDetails()}>
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -145,8 +147,7 @@ const OrderModal = ({ show, setShow, orderDetails, setOrderDetails }) => {
           )}
         </div>
       </div>
-    </CSSTransition>,
-    document.getElementById("__next")!
+    </CSSTransition>
   );
 };
 

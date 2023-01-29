@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import OrderModal from "./OrderModal";
 import { BiDetail } from "react-icons/bi";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
-import styles from "../../styles/Orders.module.css";
+import styles from "./Orders.module.css";
 import useSWR from "swr";
 
 export default function OrderHistory() {
@@ -19,8 +19,9 @@ export default function OrderHistory() {
   const { data, error } = useSWR(`/api/commercejs/getorders?page=${pageNum}&limit=${limit}`, fetcher);
   useEffect(() => {
     if (data) setOrders(data);
+    console.log(orders);
   }, [data]);
-
+  console.log(data);
   function getShippingStatus(paymentStatus, fulfillStatus) {
     if (paymentStatus === "paid" && fulfillStatus === "fulfilled") {
       return "Shipped";
@@ -137,7 +138,7 @@ export default function OrderHistory() {
     <>
       {
         <div className={styles["orders"]}>
-          {/* <OrderModal show={showModal} setShow={setShowModal} orderDetails={orderDetails} setOrderDetails={setOrderDetails} /> */}
+          <OrderModal show={showModal} setShow={setShowModal} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />
           <table id="orderTable">
             <thead>
               <tr>

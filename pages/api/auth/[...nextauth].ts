@@ -1,13 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
-import { connectToDatabase } from "../../../lib/mongodb";
 import { verifyPassword } from "../../../lib/hash";
-
-// async function http(url: URL, init: RequestInit): Promise<any> {
-//   const response = await fetch(url, init);
-//   const body = await response.json();
-//   return body;
-// }
+import prisma from "../../../lib/prisma";
 
 async function getJwt(customerId) {
   const url = new URL(`https://api.chec.io/v1/customers/${customerId}/issue-token`);
@@ -26,8 +20,7 @@ async function getJwt(customerId) {
 
   return commerceJsCustomer.jwt;
 }
-
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   //Configure JWT
   session: {
     strategy: "jwt",
@@ -35,61 +28,61 @@ export default NextAuth({
   },
   providers: [
     CredentialProvider({
-      async authorize(credentials: any) {
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text", placeholder: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
         try {
-          //Connect to DB
-          const client = await connectToDatabase();
-          //Get all the users
-          const users = await client.db().collection("users");
           //Find user with the email
-          const user = await users.findOne({
-            email: credentials.email,
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials?.email,
+            },
           });
-          //Not found - send error res
-          if (!user) {
-            client.close();
+          // If user exist
+          if (user) {
+            const checkPassword = await verifyPassword(credentials?.password, user.password);
+            // If entered password matches with password in database
+            if (checkPassword) {
+              //get and attach commerceJs JWT for commerce.customer's function usage
+              user.jwt = await getJwt(user.id);
+              return user;
+            }
+            // Error invalid password
             return null;
-            throw new Error("No user found with the email");
           }
-          const checkPassword = verifyPassword(credentials.password, user.password);
-          //Incorrect password - send response
-          if (!checkPassword) {
-            client.close();
-            return null;
-            throw new Error("Password doesnt match");
-          }
-          //Else send success response
-          //get and attach commerceJs JWT for commerce.customer's function usage
-          user.jwt = await getJwt(user.customer_id);
-
-          client.close();
-          return user;
+          //not found send error
+          return null;
+          //throw new Error("No user found with the email");
         } catch (err: any) {
           return null;
         }
-      },
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
+      console.log(user);
       if (user) {
         token.accessToken = user.jwt;
         token.email = user.email;
-        token.customer_id = user.customer_id;
+        token.id = user.id;
         token.role = user.role;
+        token.name = user.firstName + " " + user.lastName;
       }
       return token;
     },
     async session({ session, token }) {
       // session.accessToken = token.accessToken;
-      session.user.customer_id = token.customer_id;
+      session.user.id = token.id;
       session.user.role = token.role;
+      session.user.name = token.name;
       return session;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);
